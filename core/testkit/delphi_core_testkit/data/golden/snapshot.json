@@ -1,0 +1,4755 @@
+{
+ "/api/chat/conversations?scope=document&project_id=<id:3>&paper_id=goldenpapera": {
+  "json": {
+   "defaultId": null,
+   "items": [],
+   "limit": 10
+  },
+  "status": 200
+ },
+ "/api/chat/conversations?scope=document&project_id=<id:3>&paper_id=goldenpaperb": {
+  "json": {
+   "defaultId": null,
+   "items": [],
+   "limit": 10
+  },
+  "status": 200
+ },
+ "/api/chat/conversations?scope=document&project_id=<id:3>&paper_id=goldenpaperc": {
+  "json": {
+   "defaultId": "<id:36>",
+   "items": [
+    {
+     "createdAt": "<time>",
+     "empty": false,
+     "generation": 0,
+     "id": "<id:36>",
+     "kind": "document_chat",
+     "lastChatModel": "gpt-6.1-sol",
+     "lastEngagedAt": "<time>",
+     "manualTitle": false,
+     "paperId": "goldenpaperc",
+     "personaId": "mentor",
+     "projectId": "<id:3>",
+     "title": "Worth keeping: does the prefix survive a new question?"
+    }
+   ],
+   "limit": 10
+  },
+  "status": 200
+ },
+ "/api/chat/conversations?scope=general": {
+  "json": {
+   "defaultId": "<id:6>",
+   "items": [
+    {
+     "createdAt": "<time>",
+     "empty": false,
+     "generation": 0,
+     "id": "<id:6>",
+     "kind": "memory_chat",
+     "lastChatModel": "gpt-6.1-sol",
+     "lastEngagedAt": "<time>",
+     "manualTitle": false,
+     "paperId": null,
+     "personaId": "mentor",
+     "projectId": null,
+     "title": "What have I read about prefix reuse?"
+    }
+   ],
+   "limit": 10
+  },
+  "status": 200
+ },
+ "/api/chat?scope=document&project_id=<id:3>&paper_id=goldenpaperc&conversation_id=<id:36>&generation=0": {
+  "json": {
+   "conversationId": "<id:36>",
+   "generation": 0,
+   "images": [],
+   "messages": [
+    {
+     "content": "Worth keeping: does the prefix survive a new question?",
+     "createdAt": "<time>",
+     "model": "gpt-6.1-sol",
+     "reasoningEffort": "medium",
+     "referencedImages": [],
+     "referencedPapers": [],
+     "requestId": "golden_ask_document",
+     "role": "user",
+     "selectedText": null
+    },
+    {
+     "content": "Prefix caching reuses the unchanged token prefix. A different question suffix leaves that prefix reusable. Keep source ordering stable and measure hit rate separately from latency. [[shared-idea-g7]]",
+     "createdAt": "<time>",
+     "model": "gpt-6.1-sol",
+     "reasoningEffort": "medium",
+     "requestId": "golden_ask_document",
+     "role": "assistant",
+     "trace": [
+      {
+       "context": {
+        "given": [
+         {
+          "kind": "concept",
+          "slug": "shared-idea-g7",
+          "title": "Shared idea g7"
+         }
+        ],
+        "index": {
+         "documents": 3,
+         "pages": 6,
+         "projects": 1
+        },
+        "memoryMs": "<ms>",
+        "start": {
+         "kind": "document",
+         "paperId": "goldenpaperc",
+         "title": "Cache Notes"
+        }
+       },
+       "endedAt": "<ms>",
+       "entries": [
+        {
+         "at": "<ms>",
+         "kind": "thought",
+         "text": "I will check the stored evidence and distinguish reuse from latency."
+        },
+        {
+         "args": {},
+         "at": "<ms>",
+         "kind": "tool",
+         "ms": "<ms>",
+         "ok": true,
+         "results": [
+          {
+           "kind": "concept",
+           "slug": "shared-idea-g7",
+           "title": "Shared idea g7"
+          }
+         ],
+         "tool": "open_memory"
+        },
+        {
+         "at": "<ms>",
+         "kind": "thought",
+         "text": "I will check the stored evidence and distinguish reuse from latency."
+        }
+       ],
+       "offset": 0,
+       "startedAt": 0
+      }
+     ]
+    }
+   ],
+   "personaId": "mentor"
+  },
+  "status": 200
+ },
+ "/api/chat?scope=general&conversation_id=<id:6>&generation=0": {
+  "json": {
+   "conversationId": "<id:6>",
+   "generation": 0,
+   "images": [],
+   "messages": [
+    {
+     "content": "What have I read about prefix reuse?",
+     "createdAt": "<time>",
+     "model": "gpt-6.1-sol",
+     "reasoningEffort": "medium",
+     "referencedImages": [],
+     "referencedPapers": [],
+     "requestId": "golden_ask_memory",
+     "role": "user",
+     "selectedText": null
+    },
+    {
+     "content": "Prefix caching reuses the unchanged token prefix. A different question suffix leaves that prefix reusable. Keep source ordering stable and measure hit rate separately from latency. [[shared-idea-g7]]",
+     "createdAt": "<time>",
+     "model": "gpt-6.1-sol",
+     "reasoningEffort": "medium",
+     "requestId": "golden_ask_memory",
+     "role": "assistant",
+     "trace": [
+      {
+       "context": {
+        "index": {
+         "chats": 2,
+         "documents": 3,
+         "pages": 6,
+         "projects": 1
+        },
+        "start": {
+         "kind": "question"
+        }
+       },
+       "endedAt": "<ms>",
+       "entries": [
+        {
+         "at": "<ms>",
+         "kind": "thought",
+         "text": "I will check the stored evidence and distinguish reuse from latency."
+        },
+        {
+         "args": {},
+         "at": "<ms>",
+         "kind": "tool",
+         "ms": "<ms>",
+         "ok": true,
+         "results": [
+          {
+           "kind": "concept",
+           "slug": "shared-idea-g7",
+           "title": "Shared idea g7"
+          }
+         ],
+         "tool": "open_memory"
+        },
+        {
+         "at": "<ms>",
+         "kind": "thought",
+         "text": "I will check the stored evidence and distinguish reuse from latency."
+        }
+       ],
+       "offset": 0,
+       "startedAt": 0
+      }
+     ]
+    },
+    {
+     "content": "Plan an experiment that measures prefix reuse.",
+     "createdAt": "<time>",
+     "model": "gpt-6.1-sol",
+     "reasoningEffort": "medium",
+     "referencedImages": [],
+     "referencedPapers": [],
+     "requestId": "golden_ask_plan",
+     "role": "user",
+     "selectedText": null
+    },
+    {
+     "content": "Saved [Measure prefix cache reuse](/api/plans/<id:37>/view).\n\nThis plan is ready for your coding agent. Review its Table 1 and Setup before implementation.",
+     "createdAt": "<time>",
+     "model": "gpt-6.1-sol",
+     "plan": {
+      "archived": false,
+      "createdAt": "<time>",
+      "id": "<id:37>",
+      "revision": 1,
+      "title": "Measure prefix cache reuse",
+      "url": "/api/plans/<id:37>/view"
+     },
+     "reasoningEffort": "medium",
+     "requestId": "golden_ask_plan",
+     "role": "assistant",
+     "trace": [
+      {
+       "context": {
+        "index": {
+         "chats": 2,
+         "documents": 3,
+         "pages": 6,
+         "projects": 1
+        },
+        "start": {
+         "kind": "question"
+        }
+       },
+       "endedAt": "<ms>",
+       "entries": [
+        {
+         "at": "<ms>",
+         "kind": "thought",
+         "text": "I will check the stored evidence and distinguish reuse from latency."
+        }
+       ],
+       "offset": 0,
+       "startedAt": 0
+      }
+     ]
+    }
+   ],
+   "personaId": "mentor"
+  },
+  "status": 200
+ },
+ "/api/conversations": {
+  "json": [
+   {
+    "createdAt": "<time>",
+    "creationKey": "golden_memory_chat",
+    "id": "<id:6>",
+    "kind": "memory_chat",
+    "lastChatModel": "gpt-6.1-sol",
+    "lastEngagedAt": "<time>",
+    "memoryFiledThrough": "golden_ask_memory",
+    "paperId": null,
+    "paperSlug": null,
+    "paperTitle": null,
+    "personaId": "mentor",
+    "projectId": null,
+    "projectName": null,
+    "projectSlug": null,
+    "threadKey": "conversation-<id:6>-0",
+    "title": "What have I read about prefix reuse?"
+   },
+   {
+    "createdAt": "<time>",
+    "creationKey": "golden_document_chat",
+    "id": "<id:36>",
+    "kind": "document_chat",
+    "lastChatModel": "gpt-6.1-sol",
+    "lastEngagedAt": "<time>",
+    "memoryFiledThrough": "golden_ask_document",
+    "paperId": "goldenpaperc",
+    "paperSlug": "cache-notes",
+    "paperTitle": "Cache Notes",
+    "personaId": "mentor",
+    "projectId": "<id:3>",
+    "projectName": "Reading",
+    "projectSlug": "reading",
+    "threadKey": "conversation-<id:36>-0",
+    "title": "Worth keeping: does the prefix survive a new question?"
+   }
+  ],
+  "status": 200
+ },
+ "/api/export": {
+  "entries": {
+   "delphi-export-<date>/README.md": "# Your Delphi library\n\nEverything you added, read, wrote and asked in Delphi, as plain files.\nNothing here needs Delphi to open. Open `index.html` in a browser for an\noverview with links to every file; `manifest.json` lists the same thing for a\nprogram. Paths below are relative to this folder.\n\n## Layout\n\n```\nindex.html                     an overview of everything, opens from disk\nmanifest.json                  every project, document, page, chat, persona and plan, with its path\nlibrary/<project>/<document>/\n  document.md                  the document's details, then Delphi's digest of it\n  source.pdf                   the PDF you added (PDF documents)\n  page.html                    the saved copy of the web page (web documents)\n  text.md                      the document's text as Delphi read it; PDF pages\n                               are marked `--- Page N ---`\n  annotations.md               your highlights, each with the notes you wrote on it\n  annotations.json             the same, with exact positions (PDF rectangles\n                               normalised 0..1 to the page; HTML text anchors)\n  assets/                      the figures the digest shows\n  chats/<date>-<title>.txt     your conversations about this document\nmemory/<domain>/<page>.md      the Memory wiki, one file per page, by domain\nmemory/figures/                figures Memory pages show\nmemory/evidence/               pages from outside your library that Memory cites,\n                               as Delphi captured them\nchats/<date>-<title>.txt       Memory conversations, not tied to one document\npersonas/<name>.md             the personas you wrote or installed\nplans/<title>.html             your research plans, each a self-contained page\n```\n\n## Conventions\n\n- Markdown files start with YAML front matter (`title`, `kind`, dates, ...).\n  Dates are ISO 8601 in UTC.\n- Links between files are ordinary relative Markdown links.\n- A claim's citation is a footnote (`[^3]`) that names the source and links to\n  it: the cited page of the PDF (`source.pdf#page=19`), a section of a saved\n  web page, your annotations, or a captured outside page. \"inference\" marks a\n  claim Delphi drew rather than found; \"your note\" one that rests on a note.\n- Memory pages come in three kinds: `source` (one document, written from its\n  digest), `concept` (an idea across documents) and `domain` (an overview of a\n  domain's pages).\n- A chat file reads top to bottom as the conversation happened: `>` is you,\n  `⏺` is Delphi's answer or a tool call it made (`⎿` is what came back),\n  `✻ Thinking…` is a summary of its reasoning, and `│` a passage you\n  selected to ask about.\n\nThis is a copy. Editing these files changes nothing in Delphi.\n",
+   "delphi-export-<date>/chats/<date>-what-have-i-read-about-prefix-reuse.txt": "✻ Delphi · What have I read about prefix reuse?\n  Memory chat\n  Started <date> 06:57 UTC\n\n> What have I read about prefix reuse?\n\n✻ Thinking… I will check the stored evidence and distinguish reuse from latency.\n\n⏺ open_memory()\n  ⎿  Shared idea g7\n\n✻ Thinking… I will check the stored evidence and distinguish reuse from latency.\n\n⏺ Prefix caching reuses the unchanged token prefix. A different question suffix leaves that prefix reusable. Keep source ordering stable and measure hit rate separately from latency. [Shared idea g7](../memory/cache-research/shared-idea-g7.md)\n\n> Plan an experiment that measures prefix reuse.\n\n✻ Thinking… I will check the stored evidence and distinguish reuse from latency.\n\n⏺ Saved [Measure prefix cache reuse](../plans/measure-prefix-cache-reuse.html).\n\n  This plan is ready for your coding agent. Review its Table 1 and Setup before implementation.\n",
+   "delphi-export-<date>/index.html": "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>Delphi library</title>\n<style>\n:root { --bg: #faf9f6; --panel: #fff; --text: #1d1b18; --muted: #6f6a62; --line: #e4e0d8; --accent: #3a5fae; }\n@media (prefers-color-scheme: dark) {\n  :root { --bg: #171614; --panel: #201f1c; --text: #ece8e1; --muted: #9c968c; --line: #34312c; --accent: #8fb0ef; }\n}\n* { box-sizing: border-box; }\nbody { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.5 -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif; }\nmain { max-width: 980px; margin: 0 auto; padding: 32px 16px 64px; }\nh1 { font-size: 26px; margin: 0 0 4px; }\nh2 { font-size: 18px; margin: 36px 0 10px; }\nh3 { font-size: 15px; margin: 20px 0 6px; color: var(--muted); font-weight: 600; }\n.meta, .muted { color: var(--muted); font-size: 13px; }\na { color: var(--accent); text-decoration: none; }\na:hover { text-decoration: underline; }\ninput { width: 100%; margin: 20px 0 0; padding: 10px 12px; font: inherit; color: inherit; background: var(--panel);\n  border: 1px solid var(--line); border-radius: 8px; }\nnav { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 12px; font-size: 14px; }\n.list { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; }\n.row { padding: 10px 14px; border-top: 1px solid var(--line); }\n.row:first-child { border-top: 0; }\n.row .title { font-weight: 600; overflow-wrap: anywhere; }\n.links { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; margin-top: 2px; }\n.empty { padding: 10px 14px; }\n[hidden] { display: none !important; }\n</style>\n</head>\n<body>\n<main>\n<h1>Delphi library</h1>\n<div class=\"meta\" id=\"meta\"></div>\n<nav id=\"nav\"></nav>\n<input id=\"filter\" type=\"search\" placeholder=\"Filter by title\" aria-label=\"Filter by title\">\n<div id=\"sections\"></div>\n</main>\n<script id=\"data\" type=\"application/json\">{\"format\": \"delphi-export/1\", \"exportedAt\": \"<time>\", \"account\": \"reader\", \"projects\": [{\"id\": \"<id:3>\", \"name\": \"Reading\", \"createdAt\": \"<time>\", \"path\": \"library/reading\", \"documents\": [{\"id\": \"goldenpapera\", \"title\": \"Shared Idea Study g7 A\", \"kind\": \"pdf\", \"url\": null, \"pages\": 2, \"addedAt\": \"<time>\", \"readAt\": null, \"path\": \"library/reading/shared-idea-study-g7-a\", \"files\": {\"text\": \"library/reading/shared-idea-study-g7-a/text.md\", \"document\": \"library/reading/shared-idea-study-g7-a/document.md\"}, \"highlights\": 0, \"notes\": 0, \"chats\": []}, {\"id\": \"goldenpaperb\", \"title\": \"Shared Idea Study g7 B\", \"kind\": \"pdf\", \"url\": null, \"pages\": 2, \"addedAt\": \"<time>\", \"readAt\": null, \"path\": \"library/reading/shared-idea-study-g7-b\", \"files\": {\"text\": \"library/reading/shared-idea-study-g7-b/text.md\", \"document\": \"library/reading/shared-idea-study-g7-b/document.md\"}, \"highlights\": 0, \"notes\": 0, \"chats\": []}, {\"id\": \"goldenpaperc\", \"title\": \"Cache Notes\", \"kind\": \"pdf\", \"url\": null, \"pages\": 2, \"addedAt\": \"<time>\", \"readAt\": null, \"path\": \"library/reading/cache-notes\", \"files\": {\"text\": \"library/reading/cache-notes/text.md\", \"annotations\": \"library/reading/cache-notes/annotations.md\", \"document\": \"library/reading/cache-notes/document.md\"}, \"highlights\": 1, \"notes\": 1, \"chats\": [\"library/reading/cache-notes/chats/<date>-worth-keeping-does-the-prefix-survive-a-new-question.txt\"]}]}], \"memory\": {\"domains\": [{\"slug\": \"cache-research\", \"title\": \"Cache research\", \"pages\": [{\"slug\": \"cache-notes\", \"title\": \"Cache Notes\", \"kind\": \"source\", \"summary\": \"A matching token prefix is reusable even when the question suffix changes.\", \"updatedAt\": \"<time>\", \"path\": \"memory/cache-research/cache-notes.md\"}, {\"slug\": \"cache-research\", \"title\": \"Cache research\", \"kind\": \"domain\", \"summary\": \"How the pages of this domain connect.\", \"updatedAt\": \"<time>\", \"path\": \"memory/cache-research/cache-research.md\"}, {\"slug\": \"prefix-reuse-goldenpaperc\", \"title\": \"Prefix reuse goldenpaperc\", \"kind\": \"concept\", \"summary\": \"Understand exact prefix reuse and test its limitations.\", \"updatedAt\": \"<time>\", \"path\": \"memory/cache-research/prefix-reuse-goldenpaperc.md\"}, {\"slug\": \"shared-idea-g7\", \"title\": \"Shared idea g7\", \"kind\": \"concept\", \"summary\": \"Understand exact prefix reuse and test its limitations.\", \"updatedAt\": \"<time>\", \"path\": \"memory/cache-research/shared-idea-g7.md\"}, {\"slug\": \"shared-idea-study-g7-a\", \"title\": \"Shared Idea Study g7 A\", \"kind\": \"source\", \"summary\": \"A matching token prefix is reusable even when the question suffix changes.\", \"updatedAt\": \"<time>\", \"path\": \"memory/cache-research/shared-idea-study-g7-a.md\"}, {\"slug\": \"shared-idea-study-g7-b\", \"title\": \"Shared Idea Study g7 B\", \"kind\": \"source\", \"summary\": \"A matching token prefix is reusable even when the question suffix changes.\", \"updatedAt\": \"<time>\", \"path\": \"memory/cache-research/shared-idea-study-g7-b.md\"}]}]}, \"chats\": [{\"id\": \"<id:36>\", \"title\": \"Worth keeping: does the prefix survive a new question?\", \"scope\": \"document\", \"document\": \"goldenpaperc\", \"path\": \"library/reading/cache-notes/chats/<date>-worth-keeping-does-the-prefix-survive-a-new-question.txt\", \"startedAt\": \"<time>\", \"lastAt\": \"<time>\", \"messages\": 2}, {\"id\": \"<id:6>\", \"title\": \"What have I read about prefix reuse?\", \"scope\": \"memory\", \"document\": null, \"path\": \"chats/<date>-what-have-i-read-about-prefix-reuse.txt\", \"startedAt\": \"<time>\", \"lastAt\": \"<time>\", \"messages\": 4}], \"personas\": [], \"plans\": [{\"id\": \"<id:37>\", \"title\": \"Measure prefix cache reuse\", \"createdAt\": \"<time>\", \"path\": \"plans/measure-prefix-cache-reuse.html\"}]}</script>\n<script>\n(function () {\n  \"use strict\";\n  var data = JSON.parse(document.getElementById(\"data\").textContent);\n  var root = document.getElementById(\"sections\");\n  function el(tag, cls, text) {\n    var node = document.createElement(tag);\n    if (cls) node.className = cls;\n    if (text != null) node.textContent = text;\n    return node;\n  }\n  function link(label, path) {\n    var a = el(\"a\", null, label);\n    a.href = path.split(\"/\").map(encodeURIComponent).join(\"/\");\n    return a;\n  }\n  function day(iso) { return iso ? String(iso).slice(0, 10) : \"\"; }\n  function row(title, href, meta, links) {\n    var r = el(\"div\", \"row\");\n    r.dataset.search = (title || \"\").toLowerCase();\n    var t = el(\"div\", \"title\");\n    t.appendChild(href ? link(title || \"Untitled\", href) : document.createTextNode(title || \"Untitled\"));\n    r.appendChild(t);\n    if (meta) r.appendChild(el(\"div\", \"muted\", meta));\n    if (links && links.length) {\n      var l = el(\"div\", \"links\");\n      links.forEach(function (pair) { l.appendChild(link(pair[0], pair[1])); });\n      r.appendChild(l);\n    }\n    return r;\n  }\n  function section(id, title, count) {\n    var s = el(\"section\");\n    s.id = id;\n    s.appendChild(el(\"h2\", null, title + \" (\" + count + \")\"));\n    root.appendChild(s);\n    var a = link(title, \"\");\n    a.href = \"#\" + id;\n    document.getElementById(\"nav\").appendChild(a);\n    return s;\n  }\n  function list(parent, rows) {\n    var box = el(\"div\", \"list\");\n    if (!rows.length) box.appendChild(el(\"div\", \"empty muted\", \"Nothing here.\"));\n    rows.forEach(function (r) { box.appendChild(r); });\n    parent.appendChild(box);\n  }\n\n  var documents = 0, pages = 0;\n  data.projects.forEach(function (p) { documents += p.documents.length; });\n  data.memory.domains.forEach(function (d) { pages += d.pages.length; });\n  document.getElementById(\"meta\").textContent = \"Exported \" + day(data.exportedAt) + \" · \" + documents + \" documents · \"\n    + pages + \" Memory pages · \" + data.chats.length + \" chats. See README.md for what each file is.\";\n\n  var library = section(\"library\", \"Library\", documents);\n  data.projects.forEach(function (p) {\n    library.appendChild(el(\"h3\", null, p.name || \"Untitled project\"));\n    list(library, p.documents.map(function (d) {\n      var f = d.files, links = [];\n      if (f.source) links.push([\"PDF\", f.source]);\n      if (f.page) links.push([\"Saved page\", f.page]);\n      if (f.text) links.push([\"Text\", f.text]);\n      if (f.annotations) links.push([\"Annotations (\" + d.highlights + \")\", f.annotations]);\n      d.chats.forEach(function (c, i) { links.push([\"Chat \" + (i + 1), c]); });\n      var meta = [d.kind === \"web\" ? \"Web page\" : \"PDF\", d.kind !== \"web\" && d.pages ? d.pages + \" pages\" : \"\", \"added \" + day(d.addedAt),\n        d.readAt ? \"read \" + day(d.readAt) : \"\", d.url || \"\"].filter(Boolean).join(\" · \");\n      return row(d.title, f.document, meta, links);\n    }));\n  });\n\n  var memory = section(\"memory\", \"Memory\", pages);\n  data.memory.domains.forEach(function (d) {\n    memory.appendChild(el(\"h3\", null, d.title));\n    list(memory, d.pages.map(function (p) {\n      return row(p.title, p.path, p.kind + (p.summary ? \" · \" + p.summary : \"\"));\n    }));\n  });\n\n  var chats = section(\"chats\", \"Chats\", data.chats.length);\n  var titles = {};\n  data.projects.forEach(function (p) { p.documents.forEach(function (d) { titles[d.id] = d.title; }); });\n  list(chats, data.chats.slice().reverse().map(function (c) {\n    var scope = c.document ? \"About \" + (titles[c.document] || \"a document\") : \"Memory chat\";\n    return row(c.title, c.path, [day(c.lastAt || c.startedAt), scope, c.messages + \" messages\"].join(\" · \"));\n  }));\n\n  if (data.personas.length) {\n    list(section(\"personas\", \"Personas\", data.personas.length), data.personas.map(function (p) { return row(p.name, p.path); }));\n  }\n  if (data.plans.length) {\n    list(section(\"plans\", \"Plans\", data.plans.length), data.plans.map(function (p) { return row(p.title, p.path, day(p.createdAt)); }));\n  }\n\n  document.getElementById(\"filter\").addEventListener(\"input\", function (event) {\n    var q = event.target.value.trim().toLowerCase();\n    Array.prototype.forEach.call(document.querySelectorAll(\".row\"), function (r) {\n      r.hidden = q !== \"\" && r.dataset.search.indexOf(q) === -1;\n    });\n  });\n})();\n</script>\n</body>\n</html>\n",
+   "delphi-export-<date>/library/reading/cache-notes/annotations.json": {
+    "highlights": [
+     {
+      "color": "yellow",
+      "createdAt": "<time>",
+      "id": "<id:38>",
+      "page": 2,
+      "rects": [
+       {
+        "h": 0.03,
+        "w": 0.5,
+        "x": 0.1,
+        "y": 0.2
+       }
+      ],
+      "text": "Stable prefix: 120 ms. Shuffled prefix: 240 ms.",
+      "type": "pdf"
+     }
+    ],
+    "notes": [
+     {
+      "anchorY": 0.2,
+      "body": "One comparison, twenty requests: too few to call it a speedup.",
+      "createdAt": "<time>",
+      "filedAt": "<time>",
+      "highlightId": "<id:38>",
+      "id": "<id:10>",
+      "page": 2,
+      "quotedText": "Stable prefix: 120 ms. Shuffled prefix: 240 ms.",
+      "updatedAt": "<time>"
+     }
+    ]
+   },
+   "delphi-export-<date>/library/reading/cache-notes/annotations.md": "# Annotations: Cache Notes\n\n## p. 2\n\n> Stable prefix: 120 ms. Shuffled prefix: 240 ms.\n\n**Note** (<date>):\n\nOne comparison, twenty requests: too few to call it a speedup.\n",
+   "delphi-export-<date>/library/reading/cache-notes/chats/<date>-worth-keeping-does-the-prefix-survive-a-new-question.txt": "✻ Delphi · Worth keeping: does the prefix survive a new question?\n  Document chat · Cache Notes\n  Started <date> 06:57 UTC\n\n> Worth keeping: does the prefix survive a new question?\n\n✻ Thinking… I will check the stored evidence and distinguish reuse from latency.\n\n⏺ open_memory()\n  ⎿  Shared idea g7\n\n✻ Thinking… I will check the stored evidence and distinguish reuse from latency.\n\n⏺ Prefix caching reuses the unchanged token prefix. A different question suffix leaves that prefix reusable. Keep source ordering stable and measure hit rate separately from latency. [Shared idea g7](../../../../memory/cache-research/shared-idea-g7.md)\n",
+   "delphi-export-<date>/library/reading/cache-notes/document.md": "---\ntitle: \"Cache Notes\"\nid: \"goldenpaperc\"\nkind: \"pdf\"\nproject: \"Reading\"\npages: 2\nadded: \"<time>\"\n---\n\n# Cache Notes\n\n## Prefix reuse\n\nA matching token prefix is reusable even when the question suffix changes. [^1]\n\n## Controlled comparison\n\nKeep the model, suffix length and timing fixed. Compare stable and shuffled prefixes and report latency distributions.\n\n## Limits\n\nA small example does not establish a universal speedup.\n\n[^1]: [Cache Notes, p. 1](document.md)\n",
+   "delphi-export-<date>/library/reading/cache-notes/text.md": "--- Page 1 ---\n\nPrefix caching reuses the unchanged beginning of a prompt. Token equality matters.\n\n--- Page 2 ---\n\nStable prefix: 120 ms. Shuffled prefix: 240 ms.",
+   "delphi-export-<date>/library/reading/shared-idea-study-g7-a/document.md": "---\ntitle: \"Shared Idea Study g7 A\"\nid: \"goldenpapera\"\nkind: \"pdf\"\nproject: \"Reading\"\npages: 2\nadded: \"<time>\"\n---\n\n# Shared Idea Study g7 A\n\n## Prefix reuse\n\nA matching token prefix is reusable even when the question suffix changes. [^1]\n\n## Controlled comparison\n\nKeep the model, suffix length and timing fixed. Compare stable and shuffled prefixes and report latency distributions.\n\n## Limits\n\nA small example does not establish a universal speedup.\n\n[^1]: [Shared Idea Study g7 A, p. 1](document.md)\n",
+   "delphi-export-<date>/library/reading/shared-idea-study-g7-a/text.md": "--- Page 1 ---\n\nPrefix caching reuses the unchanged beginning of a prompt. Token equality matters.\n\n--- Page 2 ---\n\nStable prefix: 120 ms. Shuffled prefix: 240 ms.",
+   "delphi-export-<date>/library/reading/shared-idea-study-g7-b/assets/goldenfigurone.webp": {
+    "bytes": 70,
+    "sha256": "0376ecf998994c97e030a997971de2066d58e7ea4c70d5de2ce5fa395ab641df"
+   },
+   "delphi-export-<date>/library/reading/shared-idea-study-g7-b/document.md": "---\ntitle: \"Shared Idea Study g7 B\"\nid: \"goldenpaperb\"\nkind: \"pdf\"\nproject: \"Reading\"\npages: 2\nadded: \"<time>\"\n---\n\n# Shared Idea Study g7 B\n\n## Prefix reuse\n\nA matching token prefix is reusable even when the question suffix changes. [^1]\n\n![Median latency, stable against shuffled prefix.](assets/goldenfigurone.webp)\n\n## Controlled comparison\n\nKeep the model, suffix length and timing fixed. Compare stable and shuffled prefixes and report latency distributions.\n\n## Limits\n\nA small example does not establish a universal speedup.\n\n[^1]: [Shared Idea Study g7 B, p. 1](document.md)\n",
+   "delphi-export-<date>/library/reading/shared-idea-study-g7-b/text.md": "--- Page 1 ---\n\nPrefix caching reuses the unchanged beginning of a prompt. Token equality matters.\n\n--- Page 2 ---\n\nStable prefix: 120 ms. Shuffled prefix: 240 ms.",
+   "delphi-export-<date>/manifest.json": {
+    "account": "reader",
+    "chats": [
+     {
+      "document": "goldenpaperc",
+      "id": "<id:36>",
+      "lastAt": "<time>",
+      "messages": 2,
+      "path": "library/reading/cache-notes/chats/<date>-worth-keeping-does-the-prefix-survive-a-new-question.txt",
+      "scope": "document",
+      "startedAt": "<time>",
+      "title": "Worth keeping: does the prefix survive a new question?"
+     },
+     {
+      "document": null,
+      "id": "<id:6>",
+      "lastAt": "<time>",
+      "messages": 4,
+      "path": "chats/<date>-what-have-i-read-about-prefix-reuse.txt",
+      "scope": "memory",
+      "startedAt": "<time>",
+      "title": "What have I read about prefix reuse?"
+     }
+    ],
+    "exportedAt": "<time>",
+    "format": "delphi-export/1",
+    "memory": {
+     "domains": [
+      {
+       "pages": [
+        {
+         "kind": "source",
+         "path": "memory/cache-research/cache-notes.md",
+         "slug": "cache-notes",
+         "summary": "A matching token prefix is reusable even when the question suffix changes.",
+         "title": "Cache Notes",
+         "updatedAt": "<time>"
+        },
+        {
+         "kind": "domain",
+         "path": "memory/cache-research/cache-research.md",
+         "slug": "cache-research",
+         "summary": "How the pages of this domain connect.",
+         "title": "Cache research",
+         "updatedAt": "<time>"
+        },
+        {
+         "kind": "concept",
+         "path": "memory/cache-research/prefix-reuse-goldenpaperc.md",
+         "slug": "prefix-reuse-goldenpaperc",
+         "summary": "Understand exact prefix reuse and test its limitations.",
+         "title": "Prefix reuse goldenpaperc",
+         "updatedAt": "<time>"
+        },
+        {
+         "kind": "concept",
+         "path": "memory/cache-research/shared-idea-g7.md",
+         "slug": "shared-idea-g7",
+         "summary": "Understand exact prefix reuse and test its limitations.",
+         "title": "Shared idea g7",
+         "updatedAt": "<time>"
+        },
+        {
+         "kind": "source",
+         "path": "memory/cache-research/shared-idea-study-g7-a.md",
+         "slug": "shared-idea-study-g7-a",
+         "summary": "A matching token prefix is reusable even when the question suffix changes.",
+         "title": "Shared Idea Study g7 A",
+         "updatedAt": "<time>"
+        },
+        {
+         "kind": "source",
+         "path": "memory/cache-research/shared-idea-study-g7-b.md",
+         "slug": "shared-idea-study-g7-b",
+         "summary": "A matching token prefix is reusable even when the question suffix changes.",
+         "title": "Shared Idea Study g7 B",
+         "updatedAt": "<time>"
+        }
+       ],
+       "slug": "cache-research",
+       "title": "Cache research"
+      }
+     ]
+    },
+    "personas": [],
+    "plans": [
+     {
+      "createdAt": "<time>",
+      "id": "<id:37>",
+      "path": "plans/measure-prefix-cache-reuse.html",
+      "title": "Measure prefix cache reuse"
+     }
+    ],
+    "projects": [
+     {
+      "createdAt": "<time>",
+      "documents": [
+       {
+        "addedAt": "<time>",
+        "chats": [],
+        "files": {
+         "document": "library/reading/shared-idea-study-g7-a/document.md",
+         "text": "library/reading/shared-idea-study-g7-a/text.md"
+        },
+        "highlights": 0,
+        "id": "goldenpapera",
+        "kind": "pdf",
+        "notes": 0,
+        "pages": 2,
+        "path": "library/reading/shared-idea-study-g7-a",
+        "readAt": null,
+        "title": "Shared Idea Study g7 A",
+        "url": null
+       },
+       {
+        "addedAt": "<time>",
+        "chats": [],
+        "files": {
+         "document": "library/reading/shared-idea-study-g7-b/document.md",
+         "text": "library/reading/shared-idea-study-g7-b/text.md"
+        },
+        "highlights": 0,
+        "id": "goldenpaperb",
+        "kind": "pdf",
+        "notes": 0,
+        "pages": 2,
+        "path": "library/reading/shared-idea-study-g7-b",
+        "readAt": null,
+        "title": "Shared Idea Study g7 B",
+        "url": null
+       },
+       {
+        "addedAt": "<time>",
+        "chats": [
+         "library/reading/cache-notes/chats/<date>-worth-keeping-does-the-prefix-survive-a-new-question.txt"
+        ],
+        "files": {
+         "annotations": "library/reading/cache-notes/annotations.md",
+         "document": "library/reading/cache-notes/document.md",
+         "text": "library/reading/cache-notes/text.md"
+        },
+        "highlights": 1,
+        "id": "goldenpaperc",
+        "kind": "pdf",
+        "notes": 1,
+        "pages": 2,
+        "path": "library/reading/cache-notes",
+        "readAt": null,
+        "title": "Cache Notes",
+        "url": null
+       }
+      ],
+      "id": "<id:3>",
+      "name": "Reading",
+      "path": "library/reading"
+     }
+    ]
+   },
+   "delphi-export-<date>/memory/cache-research/cache-notes.md": "---\ntitle: \"Cache Notes\"\nslug: \"cache-notes\"\nkind: \"source\"\ndomain: \"cache-research\"\nsummary: \"A matching token prefix is reusable even when the question suffix changes.\"\ncreated: \"<time>\"\nupdated: \"<time>\"\n---\n\n## Prefix reuse\n\nA matching token prefix is reusable even when the question suffix changes. [^1]\n\n## Controlled comparison\n\nKeep the model, suffix length and timing fixed. Compare stable and shuffled prefixes and report latency distributions.\n\n## Limits\n\nA small example does not establish a universal speedup.\n\n[^1]: [Cache Notes, p. 1](../../library/reading/cache-notes/document.md)\n",
+   "delphi-export-<date>/memory/cache-research/cache-research.md": "---\ntitle: \"Cache research\"\nslug: \"cache-research\"\nkind: \"domain\"\ndomain: \"cache-research\"\nsummary: \"How the pages of this domain connect.\"\ncreated: \"<time>\"\nupdated: \"<time>\"\n---\n\n## How these pages connect\n\n[Cache Notes](cache-notes.md) and [Shared Idea Study g7 B](shared-idea-study-g7-b.md) and [Shared Idea Study g7 A](shared-idea-study-g7-a.md) report on the same question, and [Prefix reuse goldenpaperc](prefix-reuse-goldenpaperc.md), [Shared idea g7](shared-idea-g7.md) is where what they share is explained.\n\n## Reading paths\n\nStart with [Prefix reuse goldenpaperc](prefix-reuse-goldenpaperc.md), then read the sources against it.\n",
+   "delphi-export-<date>/memory/cache-research/prefix-reuse-goldenpaperc.md": "---\ntitle: \"Prefix reuse goldenpaperc\"\nslug: \"prefix-reuse-goldenpaperc\"\nkind: \"concept\"\ndomain: \"cache-research\"\nsummary: \"Understand exact prefix reuse and test its limitations.\"\ncreated: \"<time>\"\nupdated: \"<time>\"\n---\n\n## Problem and approach\n\nPrefix caching reuses exact matching tokens before the changing question. [^1]\n\n## Evidence and limitations\n\nA stable prefix can reduce repeated work. Measure hit rate and repeated latency rather than assuming a universal speedup.\n\n## Reading route\n\nInspect the controlled comparison in [Cache Notes](cache-notes.md) and ask which confounders remain.\n\nAsked again in a session: a matching prefix is reused when only the question changes. [^2]\n\nThe reader noted a doubt about this comparison. [^3]\n\n[^1]: [Cache Notes, p. 1](../../library/reading/cache-notes/document.md)\n[^2]: [Cache Notes, p. 1](../../library/reading/cache-notes/document.md)\n[^3]: your note: [Cache Notes, annotations](../../library/reading/cache-notes/annotations.md)\n",
+   "delphi-export-<date>/memory/cache-research/shared-idea-g7.md": "---\ntitle: \"Shared idea g7\"\nslug: \"shared-idea-g7\"\nkind: \"concept\"\ndomain: \"cache-research\"\nsummary: \"Understand exact prefix reuse and test its limitations.\"\ncreated: \"<time>\"\nupdated: \"<time>\"\n---\n\n## Problem and approach\n\nPrefix caching reuses exact matching tokens before the changing question. [^1]\n\n## Evidence and limitations\n\nA stable prefix can reduce repeated work. Measure hit rate and repeated latency rather than assuming a universal speedup.\n\n## Reading route\n\nInspect the controlled comparison in [Shared Idea Study g7 A](shared-idea-study-g7-a.md) and ask which confounders remain.\n\nThe same reuse is reported again. A stable prefix can reduce repeated work. [^2] The document that reports it has its own page, [Shared Idea Study g7 B](shared-idea-study-g7-b.md).\n\n[^1]: [Shared Idea Study g7 A, p. 1](../../library/reading/shared-idea-study-g7-a/document.md)\n[^2]: [Shared Idea Study g7 B, p. 1](../../library/reading/shared-idea-study-g7-b/document.md)\n",
+   "delphi-export-<date>/memory/cache-research/shared-idea-study-g7-a.md": "---\ntitle: \"Shared Idea Study g7 A\"\nslug: \"shared-idea-study-g7-a\"\nkind: \"source\"\ndomain: \"cache-research\"\nsummary: \"A matching token prefix is reusable even when the question suffix changes.\"\ncreated: \"<time>\"\nupdated: \"<time>\"\n---\n\n## Prefix reuse\n\nA matching token prefix is reusable even when the question suffix changes. [^1]\n\n## Controlled comparison\n\nKeep the model, suffix length and timing fixed. Compare stable and shuffled prefixes and report latency distributions.\n\n## Limits\n\nA small example does not establish a universal speedup.\n\n[^1]: [Shared Idea Study g7 A, p. 1](../../library/reading/shared-idea-study-g7-a/document.md)\n",
+   "delphi-export-<date>/memory/cache-research/shared-idea-study-g7-b.md": "---\ntitle: \"Shared Idea Study g7 B\"\nslug: \"shared-idea-study-g7-b\"\nkind: \"source\"\ndomain: \"cache-research\"\nsummary: \"A matching token prefix is reusable even when the question suffix changes.\"\ncreated: \"<time>\"\nupdated: \"<time>\"\n---\n\n## Prefix reuse\n\nA matching token prefix is reusable even when the question suffix changes. [^1]\n\n![Median latency, stable against shuffled prefix.](../figures/<id:1>.webp)\n\n## Controlled comparison\n\nKeep the model, suffix length and timing fixed. Compare stable and shuffled prefixes and report latency distributions.\n\n## Limits\n\nA small example does not establish a universal speedup.\n\n[^1]: [Shared Idea Study g7 B, p. 1](../../library/reading/shared-idea-study-g7-b/document.md)\n",
+   "delphi-export-<date>/memory/figures/<id:1>.webp": {
+    "bytes": 70,
+    "sha256": "0376ecf998994c97e030a997971de2066d58e7ea4c70d5de2ce5fa395ab641df"
+   },
+   "delphi-export-<date>/plans/measure-prefix-cache-reuse.html": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width\"><title>Measure prefix cache reuse · Delphi</title><style>:root{--ink:#241412;--text:#2e1f1c;--muted:#6e5953;--faint:#9a8581;--line:#e6e0dd;--hair:#eee8e5;--wash:#fbfaf9;--sand:#f4f1ef;--clay:#5a2620;--link:#a8423a;--dawn:#ee9d66;--dawn-soft:#fef1e6}\n*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--text);font:16px/1.7 -apple-system,BlinkMacSystemFont,\"Segoe UI\",system-ui,sans-serif;-webkit-font-smoothing:antialiased}\n.page{display:grid;grid-template-columns:160px minmax(0,780px);gap:72px;justify-content:center;padding:72px 40px 96px}\nnav{position:sticky;top:72px;align-self:start;padding-top:96px;display:flex;flex-direction:column}\nnav a{padding:5px 0;font-size:13px;color:var(--muted)}nav a:hover{color:var(--ink)}\nmain{min-width:0;display:flex;flex-direction:column;gap:52px}\nheader{display:flex;flex-direction:column;gap:16px}.title{display:flex;align-items:flex-start;gap:24px}\nh1{margin:0;flex:1;color:var(--ink);font-size:38px;font-weight:650;line-height:1.15;letter-spacing:-.025em}\nh2{margin:0 0 16px;color:var(--ink);font-size:21px;font-weight:650;letter-spacing:-.015em}\np{margin:0 0 14px;white-space:pre-wrap}.byline{margin:0;font-size:13px;color:var(--muted)}\na{color:var(--link);text-decoration:none}a:hover{color:var(--clay)}b{color:var(--ink);font-weight:650}\nsection{scroll-margin-top:24px}.muted{color:var(--faint);font-size:13px}.ref{font-size:.82em;font-weight:600;color:var(--link)}\n.handoff{position:relative;flex-shrink:0;margin-top:6px}\n.handoff summary{height:36px;padding:0 14px;display:flex;align-items:center;list-style:none;cursor:pointer;border:1px solid var(--line);border-radius:6px;font-size:13px;font-weight:600;color:var(--ink)}\n.handoff summary::-webkit-details-marker{display:none}.handoff[open] summary{background:var(--ink);border-color:var(--ink);color:#fff}\n.handoff-panel{position:absolute;right:0;top:44px;z-index:1;width:min(560px,86vw);padding:20px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 18px 48px rgba(36,20,18,.14);display:flex;flex-direction:column;gap:16px;font-size:13px;line-height:1.5}\n.handoff-panel p{margin:6px 0 0;color:var(--muted)}.label{font-size:12px;font-weight:600;color:var(--muted)}\npre{margin:6px 0 0;padding:10px 12px;background:var(--sand);border:1px solid var(--line);border-radius:6px;font:12px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink);white-space:pre-wrap;overflow-wrap:anywhere}\ntable{width:100%;border-collapse:collapse;font-size:13.5px;line-height:1.5;font-variant-numeric:tabular-nums}\nth,td{padding:10px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--hair);overflow-wrap:break-word}\nthead th{font-size:12px;font-weight:600;color:var(--muted);border-bottom:1.5px solid var(--ink)}\n.design th,.design td{text-align:center}.design th+th,.design td+td{box-shadow:inset 1px 0 0 var(--line)}\n.design th:first-child,.design td:first-child{text-align:left}.design thead th{color:var(--ink);font-weight:700}\n.design thead small{display:block;font-weight:400;color:var(--muted)}.run{font-weight:600;color:var(--ink)}\n.design tr.group td{background:var(--wash);box-shadow:none;text-align:left;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}\n.design td.none{color:#c9bcb8}.design td.decisive{background:var(--dawn-soft);box-shadow:inset 0 0 0 1.5px var(--dawn)}\n.setup td:first-child,.readings td:first-child{width:160px;font-weight:600;color:var(--ink)}.setup td:last-child{width:130px;color:var(--muted)}\nfigure{margin:28px 0 0}figure img{max-width:100%;border:1px solid var(--line);border-radius:6px}\nfigcaption,.caption{margin:12px 0 0;font-size:14px;line-height:1.55;color:#3a2925}\n.flow{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}\n.flow li{flex:1 1 120px;padding:10px 12px;border:1px solid #cfc5c2;border-radius:6px;font-size:12.5px;line-height:1.35;text-align:center}\n.flow li b{display:block}.flow li span{color:var(--muted)}.flow li.key{background:var(--dawn-soft);border-color:var(--dawn)}\n.bars{display:grid;grid-template-columns:minmax(0,160px) minmax(0,1fr) minmax(0,200px);gap:8px 14px;align-items:center;font-size:13px}\n.bar{display:flex;align-items:center;gap:8px}.bar i{height:14px;min-width:2px;border-radius:2px;background:var(--clay)}.bar em{font-style:normal;color:var(--ink);white-space:nowrap}\n.bars small{color:var(--muted);font-size:12px}\n.order{margin:16px 0 0;padding-left:22px}.order li+li{margin-top:4px}\ndetails summary{cursor:pointer;color:var(--muted);font-size:13px}details pre{margin-top:10px}\n#references{padding-top:20px;border-top:1px solid var(--line)}#references h2{font-size:17px}\n#references ol{margin:0;padding-left:22px;font-size:14px;line-height:1.6;color:#3a2925}#references li+li{margin-top:12px}\n#references p{margin:4px 0 0}.quote{font-style:italic}.conversation{margin-top:24px}.conversation p{font-size:13px}\n@media(max-width:900px){.page{grid-template-columns:1fr;gap:24px;padding:32px 20px 64px}nav{display:none}h1{font-size:30px}.design{display:block;overflow-x:auto}.bars{grid-template-columns:1fr}}\n@media print{.handoff,nav{display:none}.page{display:block;padding:0}}</style></head><body><div class=\"page\"><nav aria-label=\"Sections\"><a href=\"#question\">Question</a><a href=\"#design\">Design</a><a href=\"#method\">Method</a><a href=\"#setup\">Setup</a><a href=\"#reading\">Reading the result</a><a href=\"#limits\">Limits</a><a href=\"#references\">References</a></nav><main><header><div class=\"title\"><h1>Measure prefix cache reuse</h1><details class=\"handoff\"><summary>Hand off</summary><div class=\"handoff-panel\"><div><span class=\"label\">1 · Connect Delphi once</span><p>Create read-only access in Delphi Settings → Plans, or download the plan and its captured sources from the line under the title.</p></div><div><span class=\"label\">2 · Point at runs from Table 1</span><pre>Use Delphi MCP plan <id:37>. Implement runs (1) in setting (a). Hold Setup fixed and ask before changing it.</pre></div></div></details></div><p class=\"byline\">Research plan · revision 1 · <a href=\"/api/plans/<id:37>/export\">Download plan and captured sources</a></p></header><section id=\"question\" aria-labelledby=\"question-title\"><h2 id=\"question-title\">Question</h2><p>Does a stable prefix reduce repeated processing?</p><p>A bounded 20-request comparison on one endpoint.</p></section><section id=\"design\" aria-labelledby=\"design-title\"><h2 id=\"design-title\">Design</h2><table class=\"design\"><thead><tr><th scope=\"col\">Run</th><th scope=\"col\">(a) Stable prefix<small>20 requests</small></th><th scope=\"col\">(b) Shuffled prefix<small>20 requests</small></th></tr></thead><tbody><tr class=\"group\"><td colspan=\"3\">Latency</td></tr><tr><td><span class=\"run\">(1)</span> Equal token counts</td><td class=\"decisive\">hit rate, median latency</td><td class=\"decisive\">hit rate, median latency</td></tr></tbody></table><p class=\"caption\"><b>Table 1. Planned runs.</b> The two cells of run (1) decide the claim.</p></section><section id=\"method\" aria-labelledby=\"method-title\"><h2 id=\"method-title\">Method</h2><p>Compare stable and shuffled prefixes with fixed suffix length and request timing.</p><ol class=\"order\"><li>Build the request generator</li><li>Run (1) in (a) and (b)</li></ol><details><summary>Pseudocode</summary><pre>for condition in conditions:\n    record(run(condition))</pre></details></section><section id=\"setup\" aria-labelledby=\"setup-title\"><h2 id=\"setup-title\">Setup</h2><table class=\"setup\"><thead><tr><th scope=\"col\">Component</th><th scope=\"col\">Setting</th><th scope=\"col\">Basis</th></tr></thead><tbody><tr><td>Trial count</td><td>20 requests per condition</td><td>proposed</td></tr></tbody></table></section><section id=\"reading\" aria-labelledby=\"reading-title\"><h2 id=\"reading-title\">Reading the result</h2><table class=\"readings\"><thead><tr><th scope=\"col\">If</th><th scope=\"col\">Then</th></tr></thead><tbody><tr><td>(a) beats (b) in repeated runs</td><td>Prefix reuse improves latency here.</td></tr></tbody></table></section><section id=\"limits\" aria-labelledby=\"limits-title\"><h2 id=\"limits-title\">Limits</h2><p>One endpoint and one prefix length.</p></section><section id=\"references\" aria-labelledby=\"references-title\"><h2 id=\"references-title\">References</h2><ol></ol><details class=\"conversation\"><summary>Conversation captured with this plan</summary><p><b>User</b><br>What have I read about prefix reuse?</p><p><b>Assistant</b><br>Prefix caching reuses the unchanged token prefix. A different question suffix leaves that prefix reusable. Keep source ordering stable and measure hit rate separately from latency. [[shared-idea-g7]]</p><p><b>User</b><br>Plan an experiment that measures prefix reuse.</p></details></section></main></div></body></html>"
+  },
+  "status": 200,
+  "type": "application/zip"
+ },
+ "/api/memory": {
+  "json": {
+   "domains": [
+    {
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "origin": "model",
+     "pages": 5,
+     "position": 0,
+     "slug": "cache-research",
+     "summary": null,
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    }
+   ],
+   "events": [
+    {
+     "createdAt": "<time>",
+     "edits": [
+      {
+       "action": "revised",
+       "kind": "source",
+       "note": "Rewritten from its document's regenerated digest.",
+       "slug": "shared-idea-study-g7-b",
+       "title": "Shared Idea Study g7 B"
+      }
+     ],
+     "figures": [
+      "<id:1>"
+     ],
+     "id": "<id:2>",
+     "kind": "digest-refresh",
+     "method": "Derived from the digest; no model call.",
+     "pages": [
+      "shared-idea-study-g7-b"
+     ],
+     "paperId": "goldenpaperb",
+     "projectId": "<id:3>",
+     "summary": "Refreshed the page for Shared Idea Study g7 B from its regenerated digest.",
+     "version": "knowledge-v6"
+    },
+    {
+     "advisory": {
+      "count": 0,
+      "objections": []
+     },
+     "blocked": [],
+     "createdAt": "<time>",
+     "distinct": [],
+     "dropped": [],
+     "edits": [],
+     "fingerprint": "<id:4>",
+     "id": "<id:5>",
+     "kind": "session",
+     "marker": "session:conversation:<id:6>",
+     "notes": {},
+     "operationId": "[\"<id:7>\",\"knowledge-v6\",\"<id:4>\"]",
+     "outcome": "nothing",
+     "pages": [],
+     "paperId": null,
+     "projectId": null,
+     "recited": [],
+     "requestId": "session:conversation:<id:6>",
+     "requestIds": [
+      "golden_ask_memory"
+     ],
+     "selection": null,
+     "summary": "Every exchange of this session rested on Memory alone, and no note changed.",
+     "telemetry": {
+      "asked": [],
+      "ended": null,
+      "maintain": {},
+      "rounds": 0,
+      "select": {},
+      "tools": {},
+      "verify": {}
+     },
+     "version": "knowledge-v6"
+    },
+    {
+     "advisory": {
+      "count": 0,
+      "objections": []
+     },
+     "blocked": [],
+     "createdAt": "<time>",
+     "distinct": [],
+     "dropped": [],
+     "edits": [
+      {
+       "action": "revised",
+       "kind": "concept",
+       "note": "Added what the reader's note says.",
+       "slug": "prefix-reuse-goldenpaperc",
+       "title": "Prefix reuse goldenpaperc"
+      }
+     ],
+     "fingerprint": "<id:8>",
+     "id": "<id:9>",
+     "kind": "session",
+     "marker": "session:paper:goldenpaperc",
+     "notes": {
+      "<id:10>": "<time>"
+     },
+     "operationId": "[\"<id:11>\",\"knowledge-v6\",\"<id:12>\"]",
+     "outcome": "filed",
+     "pages": [
+      "prefix-reuse-goldenpaperc"
+     ],
+     "paperId": "goldenpaperc",
+     "projectId": "<id:3>",
+     "recited": [],
+     "requestId": "session:paper:goldenpaperc",
+     "requestIds": [],
+     "selection": {
+      "needsOutside": null,
+      "nothingToFile": false,
+      "pages": [
+       "prefix-reuse-goldenpaperc"
+      ],
+      "reason": "The session adds to a page Memory holds."
+     },
+     "summary": "Filed what the session left on the page it bears on.",
+     "telemetry": {
+      "asked": [],
+      "ended": "completed",
+      "maintain": {
+       "cache_write_tokens": 0,
+       "cached_tokens": 0,
+       "input_tokens": 200,
+       "output_tokens": 120,
+       "reasoning_tokens": 0
+      },
+      "rounds": 2,
+      "select": {
+       "cacheReadTokens": 0,
+       "cacheWriteTokens": 0,
+       "inputTokens": 100,
+       "outputTokens": 60,
+       "reasoningTokens": 0
+      },
+      "tools": {
+       "edit_memory": 1
+      },
+      "verify": {
+       "cache_write_tokens": 0,
+       "cached_tokens": 0,
+       "input_tokens": 100,
+       "output_tokens": 60,
+       "reasoning_tokens": 0
+      }
+     },
+     "version": "knowledge-v6"
+    },
+    {
+     "advisory": {
+      "count": 0,
+      "objections": []
+     },
+     "blocked": [],
+     "createdAt": "<time>",
+     "distinct": [],
+     "dropped": [],
+     "edits": [
+      {
+       "action": "revised",
+       "kind": "concept",
+       "note": "Added what a session worked out about prefix reuse.",
+       "slug": "prefix-reuse-goldenpaperc",
+       "title": "Prefix reuse goldenpaperc"
+      }
+     ],
+     "fingerprint": "<id:13>",
+     "id": "<id:14>",
+     "kind": "session",
+     "marker": "session:paper:goldenpaperc",
+     "notes": {},
+     "operationId": "[\"<id:11>\",\"knowledge-v6\",\"<id:13>\"]",
+     "outcome": "filed",
+     "pages": [
+      "prefix-reuse-goldenpaperc"
+     ],
+     "paperId": "goldenpaperc",
+     "projectId": "<id:3>",
+     "recited": [],
+     "requestId": "session:paper:goldenpaperc",
+     "requestIds": [
+      "golden_ask_document"
+     ],
+     "selection": {
+      "needsOutside": null,
+      "nothingToFile": false,
+      "pages": [
+       "prefix-reuse-goldenpaperc"
+      ],
+      "reason": "The session adds to a page Memory holds."
+     },
+     "summary": "Filed what the session left on the page it bears on.",
+     "telemetry": {
+      "asked": [],
+      "ended": "completed",
+      "maintain": {
+       "cache_write_tokens": 0,
+       "cached_tokens": 0,
+       "input_tokens": 200,
+       "output_tokens": 120,
+       "reasoning_tokens": 0
+      },
+      "rounds": 2,
+      "select": {
+       "cacheReadTokens": 0,
+       "cacheWriteTokens": 0,
+       "inputTokens": 100,
+       "outputTokens": 60,
+       "reasoningTokens": 0
+      },
+      "tools": {
+       "edit_memory": 1
+      },
+      "verify": {
+       "cache_write_tokens": 0,
+       "cached_tokens": 0,
+       "input_tokens": 100,
+       "output_tokens": 60,
+       "reasoning_tokens": 0
+      }
+     },
+     "version": "knowledge-v6"
+    },
+    {
+     "advisory": {
+      "count": 0,
+      "objections": []
+     },
+     "blocked": [],
+     "createdAt": "<time>",
+     "distinct": [],
+     "dropped": [],
+     "edits": [
+      {
+       "action": "created",
+       "kind": "domain",
+       "note": "Composed from the domain's members.",
+       "slug": "cache-research",
+       "title": "Cache research"
+      }
+     ],
+     "fingerprint": "<id:15>",
+     "id": "<id:16>",
+     "kind": "domain",
+     "marker": "domain:cache-research",
+     "notes": {},
+     "operationId": "[\"<id:17>\",null,\"<id:15>\"]",
+     "outcome": "filed",
+     "pages": [
+      "cache-research"
+     ],
+     "paperId": null,
+     "projectId": null,
+     "read": {
+      "domain": "cache-research",
+      "members": {
+       "cache-notes": 1,
+       "prefix-reuse-goldenpaperc": 1,
+       "shared-idea-g7": 2,
+       "shared-idea-study-g7-a": 1,
+       "shared-idea-study-g7-b": 1
+      },
+      "title": "Cache research"
+     },
+     "recited": [],
+     "requestId": "domain:cache-research",
+     "requestIds": [],
+     "selection": null,
+     "summary": "Composed from the domain's members.",
+     "telemetry": {
+      "asked": [],
+      "ended": "completed",
+      "maintain": {
+       "cache_write_tokens": 0,
+       "cached_tokens": 0,
+       "input_tokens": 100,
+       "output_tokens": 60,
+       "reasoning_tokens": 0
+      },
+      "rounds": 1,
+      "select": {},
+      "tools": {},
+      "verify": {
+       "cache_write_tokens": 0,
+       "cached_tokens": 0,
+       "input_tokens": 100,
+       "output_tokens": 60,
+       "reasoning_tokens": 0
+      }
+     },
+     "version": "knowledge-v6"
+    },
+    {
+     "advisory": {
+      "count": 0,
+      "objections": []
+     },
+     "blocked": [],
+     "createdAt": "<time>",
+     "distinct": [],
+     "dropped": [],
+     "edits": [
+      {
+       "action": "created",
+       "kind": "concept",
+       "note": "Filed an evidence-bound page on prefix reuse.",
+       "slug": "prefix-reuse-goldenpaperc",
+       "title": "Prefix reuse goldenpaperc"
+      }
+     ],
+     "fingerprint": "<id:18>",
+     "id": "<id:19>",
+     "kind": "document",
+     "marker": "paper:goldenpaperc",
+     "notes": {},
+     "operationId": "[\"<id:20>\",\"knowledge-v6\",\"<id:18>\"]",
+     "outcome": "filed",
+     "pages": [
+      "prefix-reuse-goldenpaperc"
+     ],
+     "paperId": "goldenpaperc",
+     "projectId": "<id:3>",
+     "recited": [],
+     "requestId": "paper:goldenpaperc",
+     "requestIds": [],
+     "selection": {
+      "needsOutside": null,
+      "nothingToFile": false,
+      "pages": [],
+      "reason": "No page covers what this document says."
+     },
+     "summary": "Filed what Cache Notes says about prefix reuse on [[prefix-reuse-goldenpaperc]].",
+     "telemetry": {
+      "asked": [],
+      "ended": "completed",
+      "maintain": {
+       "cache_write_tokens": 0,
+       "cached_tokens": 0,
+       "input_tokens": 200,
+       "output_tokens": 120,
+       "reasoning_tokens": 0
+      },
+      "rounds": 2,
+      "select": {
+       "cacheReadTokens": 0,
+       "cacheWriteTokens": 0,
+       "inputTokens": 100,
+       "outputTokens": 60,
+       "reasoningTokens": 0
+      },
+      "tools": {
+       "create_memory": 1
+      },
+      "verify": {
+       "cache_write_tokens": 0,
+       "cached_tokens": 0,
+       "input_tokens": 100,
+       "output_tokens": 60,
+       "reasoning_tokens": 0
+      }
+     },
+     "version": "knowledge-v6"
+    },
+    {
+     "createdAt": "<time>",
+     "edits": [
+      {
+       "action": "created",
+       "kind": "source",
+       "note": "Written from its document's digest.",
+       "slug": "cache-notes",
+       "title": "Cache Notes"
+      }
+     ],
+     "figures": [],
+     "id": "<id:21>",
+     "kind": "digest-refresh",
+     "method": "Derived from the digest; no model call.",
+     "pages": [
+      "cache-notes"
+     ],
+     "paperId": "goldenpaperc",
+     "projectId": "<id:3>",
+     "summary": "Wrote the page for Cache Notes from its digest.",
+     "version": "knowledge-v6"
+    },
+    {
+     "advisory": {
+      "count": 0,
+      "objections": []
+     },
+     "blocked": [],
+     "createdAt": "<time>",
+     "distinct": [],
+     "dropped": [],
+     "edits": [
+      {
+       "action": "revised",
+       "kind": "concept",
+       "note": "Added what another document reports about prefix reuse.",
+       "slug": "shared-idea-g7",
+       "title": "Shared idea g7"
+      }
+     ],
+     "fingerprint": "<id:18>",
+     "id": "<id:22>",
+     "kind": "document",
+     "marker": "paper:goldenpaperb",
+     "notes": {},
+     "operationId": "[\"<id:23>\",\"knowledge-v6\",\"<id:18>\"]",
+     "outcome": "filed",
+     "pages": [
+      "shared-idea-g7"
+     ],
+     "paperId": "goldenpaperb",
+     "projectId": "<id:3>",
+     "recited": [],
+     "requestId": "paper:goldenpaperb",
+     "requestIds": [],
+     "selection": {
+      "needsOutside": null,
+      "nothingToFile": false,
+      "pages": [
+       "shared-idea-g7"
+      ],
+      "reason": "It adds to Shared idea g7."
+     },
+     "summary": "Filed what Shared Idea Study g7 B says about prefix reuse on [[shared-idea-g7]].",
+     "telemetry": {
+      "asked": [],
+      "ended": "completed",
+      "maintain": {
+       "cache_write_tokens": 0,
+       "cached_tokens": 0,
+       "input_tokens": 200,
+       "output_tokens": 120,
+       "reasoning_tokens": 0
+      },
+      "rounds": 2,
+      "select": {
+       "cacheReadTokens": 0,
+       "cacheWriteTokens": 0,
+       "inputTokens": 100,
+       "outputTokens": 60,
+       "reasoningTokens": 0
+      },
+      "tools": {
+       "edit_memory": 1
+      },
+      "verify": {
+       "cache_write_tokens": 0,
+       "cached_tokens": 0,
+       "input_tokens": 100,
+       "output_tokens": 60,
+       "reasoning_tokens": 0
+      }
+     },
+     "version": "knowledge-v6"
+    },
+    {
+     "createdAt": "<time>",
+     "edits": [
+      {
+       "action": "created",
+       "kind": "source",
+       "note": "Written from its document's digest.",
+       "slug": "shared-idea-study-g7-b",
+       "title": "Shared Idea Study g7 B"
+      }
+     ],
+     "figures": [],
+     "id": "<id:24>",
+     "kind": "digest-refresh",
+     "method": "Derived from the digest; no model call.",
+     "pages": [
+      "shared-idea-study-g7-b"
+     ],
+     "paperId": "goldenpaperb",
+     "projectId": "<id:3>",
+     "summary": "Wrote the page for Shared Idea Study g7 B from its digest.",
+     "version": "knowledge-v6"
+    },
+    {
+     "advisory": {
+      "count": 0,
+      "objections": []
+     },
+     "blocked": [],
+     "createdAt": "<time>",
+     "distinct": [],
+     "dropped": [],
+     "edits": [
+      {
+       "action": "created",
+       "kind": "concept",
+       "note": "Filed an evidence-bound page on prefix reuse.",
+       "slug": "shared-idea-g7",
+       "title": "Shared idea g7"
+      }
+     ],
+     "fingerprint": "<id:18>",
+     "id": "<id:25>",
+     "kind": "document",
+     "marker": "paper:goldenpapera",
+     "notes": {},
+     "operationId": "[\"<id:26>\",\"knowledge-v6\",\"<id:18>\"]",
+     "outcome": "filed",
+     "pages": [
+      "shared-idea-g7"
+     ],
+     "paperId": "goldenpapera",
+     "projectId": "<id:3>",
+     "recited": [],
+     "requestId": "paper:goldenpapera",
+     "requestIds": [],
+     "selection": {
+      "needsOutside": null,
+      "nothingToFile": false,
+      "pages": [],
+      "reason": "No page covers what this document says."
+     },
+     "summary": "Filed what Shared Idea Study g7 A says about prefix reuse on [[shared-idea-g7]].",
+     "telemetry": {
+      "asked": [],
+      "ended": "completed",
+      "maintain": {
+       "cache_write_tokens": 0,
+       "cached_tokens": 0,
+       "input_tokens": 200,
+       "output_tokens": 120,
+       "reasoning_tokens": 0
+      },
+      "rounds": 2,
+      "select": {
+       "cacheReadTokens": 0,
+       "cacheWriteTokens": 0,
+       "inputTokens": 100,
+       "outputTokens": 60,
+       "reasoningTokens": 0
+      },
+      "tools": {
+       "create_memory": 1
+      },
+      "verify": {
+       "cache_write_tokens": 0,
+       "cached_tokens": 0,
+       "input_tokens": 100,
+       "output_tokens": 60,
+       "reasoning_tokens": 0
+      }
+     },
+     "version": "knowledge-v6"
+    },
+    {
+     "createdAt": "<time>",
+     "edits": [
+      {
+       "action": "created",
+       "kind": "source",
+       "note": "Written from its document's digest.",
+       "slug": "shared-idea-study-g7-a",
+       "title": "Shared Idea Study g7 A"
+      }
+     ],
+     "figures": [],
+     "id": "<id:27>",
+     "kind": "digest-refresh",
+     "method": "Derived from the digest; no model call.",
+     "pages": [
+      "shared-idea-study-g7-a"
+     ],
+     "paperId": "goldenpapera",
+     "projectId": "<id:3>",
+     "summary": "Wrote the page for Shared Idea Study g7 A from its digest.",
+     "version": "knowledge-v6"
+    }
+   ],
+   "links": [
+    {
+     "from": "cache-research",
+     "to": "cache-notes"
+    },
+    {
+     "from": "cache-research",
+     "to": "prefix-reuse-goldenpaperc"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-g7"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-study-g7-a"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-study-g7-b"
+    },
+    {
+     "from": "prefix-reuse-goldenpaperc",
+     "to": "cache-notes"
+    },
+    {
+     "from": "shared-idea-g7",
+     "to": "shared-idea-study-g7-a"
+    },
+    {
+     "from": "shared-idea-g7",
+     "to": "shared-idea-study-g7-b"
+    }
+   ],
+   "pages": [
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:28>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 2,
+     "slug": "shared-idea-study-g7-b",
+     "sourcePaperId": "goldenpaperb",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Shared Idea Study g7 B",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:29>",
+     "kind": "concept",
+     "linkDegree": 2,
+     "revision": 3,
+     "slug": "prefix-reuse-goldenpaperc",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Prefix reuse goldenpaperc",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:30>",
+     "kind": "domain",
+     "linkDegree": 5,
+     "revision": 1,
+     "slug": "cache-research",
+     "summary": "How the pages of this domain connect.",
+     "tags": [],
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:31>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 1,
+     "slug": "cache-notes",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Cache Notes",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:32>",
+     "kind": "concept",
+     "linkDegree": 3,
+     "revision": 2,
+     "slug": "shared-idea-g7",
+     "sourcePaperId": "goldenpapera",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Shared idea g7",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:33>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 1,
+     "slug": "shared-idea-study-g7-a",
+     "sourcePaperId": "goldenpapera",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Shared Idea Study g7 A",
+     "updatedAt": "<time>"
+    }
+   ],
+   "revision": "<graph revision>",
+   "statistics": {
+    "domains": 2,
+    "links": 8,
+    "pages": 6,
+    "unresolvedTargets": 0
+   },
+   "version": "knowledge-v6"
+  },
+  "status": 200
+ },
+ "/api/memory/backfill/papers": {
+  "json": {
+   "papers": [
+    {
+     "digestReady": true,
+     "dropped": [],
+     "filed": true,
+     "filedVersion": "knowledge-v6",
+     "paperId": "goldenpapera",
+     "projectId": "<id:3>",
+     "projectName": "Reading",
+     "stale": false,
+     "title": "Shared Idea Study g7 A"
+    },
+    {
+     "digestReady": true,
+     "dropped": [],
+     "filed": true,
+     "filedVersion": "knowledge-v6",
+     "paperId": "goldenpaperb",
+     "projectId": "<id:3>",
+     "projectName": "Reading",
+     "stale": false,
+     "title": "Shared Idea Study g7 B"
+    },
+    {
+     "digestReady": true,
+     "dropped": [],
+     "filed": true,
+     "filedVersion": "knowledge-v6",
+     "paperId": "goldenpaperc",
+     "projectId": "<id:3>",
+     "projectName": "Reading",
+     "stale": false,
+     "title": "Cache Notes"
+    }
+   ],
+   "version": "knowledge-v6"
+  },
+  "status": 200
+ },
+ "/api/memory/documents/goldenpapera/filing": {
+  "json": {
+   "dropped": [],
+   "filed": true,
+   "filedVersion": "knowledge-v6",
+   "queued": false,
+   "sameAs": null,
+   "stale": false,
+   "stuck": false,
+   "version": "knowledge-v6"
+  },
+  "status": 200
+ },
+ "/api/memory/documents/goldenpapera/neighborhood": {
+  "json": {
+   "center": {
+    "aliases": [],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "id": "<id:33>",
+    "kind": "source",
+    "linkDegree": 2,
+    "revision": 1,
+    "slug": "shared-idea-study-g7-a",
+    "sourcePaperId": "goldenpapera",
+    "summary": "A matching token prefix is reusable even when the question suffix changes.",
+    "tags": [],
+    "title": "Shared Idea Study g7 A",
+    "updatedAt": "<time>"
+   },
+   "distances": {
+    "cache-notes": 2,
+    "cache-research": 1,
+    "prefix-reuse-goldenpaperc": 2,
+    "shared-idea-g7": 1,
+    "shared-idea-study-g7-a": 0,
+    "shared-idea-study-g7-b": 2
+   },
+   "domains": [
+    {
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "origin": "model",
+     "pages": 6,
+     "position": 0,
+     "slug": "cache-research",
+     "summary": null,
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    }
+   ],
+   "filing": {
+    "dropped": [],
+    "filed": true,
+    "filedVersion": "knowledge-v6",
+    "queued": false,
+    "sameAs": null,
+    "stale": false,
+    "stuck": false,
+    "version": "knowledge-v6"
+   },
+   "links": [
+    {
+     "from": "cache-research",
+     "to": "cache-notes"
+    },
+    {
+     "from": "cache-research",
+     "to": "prefix-reuse-goldenpaperc"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-g7"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-study-g7-a"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-study-g7-b"
+    },
+    {
+     "from": "prefix-reuse-goldenpaperc",
+     "to": "cache-notes"
+    },
+    {
+     "from": "shared-idea-g7",
+     "to": "shared-idea-study-g7-a"
+    },
+    {
+     "from": "shared-idea-g7",
+     "to": "shared-idea-study-g7-b"
+    }
+   ],
+   "pages": [
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:28>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 2,
+     "slug": "shared-idea-study-g7-b",
+     "sourcePaperId": "goldenpaperb",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Shared Idea Study g7 B",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:29>",
+     "kind": "concept",
+     "linkDegree": 2,
+     "revision": 3,
+     "slug": "prefix-reuse-goldenpaperc",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Prefix reuse goldenpaperc",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:30>",
+     "kind": "domain",
+     "linkDegree": 5,
+     "revision": 1,
+     "slug": "cache-research",
+     "summary": "How the pages of this domain connect.",
+     "tags": [],
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:31>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 1,
+     "slug": "cache-notes",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Cache Notes",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:32>",
+     "kind": "concept",
+     "linkDegree": 3,
+     "revision": 2,
+     "slug": "shared-idea-g7",
+     "sourcePaperId": "goldenpapera",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Shared idea g7",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:33>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 1,
+     "slug": "shared-idea-study-g7-a",
+     "sourcePaperId": "goldenpapera",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Shared Idea Study g7 A",
+     "updatedAt": "<time>"
+    }
+   ],
+   "paperId": "goldenpapera",
+   "revision": "<graph revision>",
+   "sourcePage": {
+    "aliases": [],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "id": "<id:33>",
+    "kind": "source",
+    "linkDegree": 2,
+    "revision": 1,
+    "slug": "shared-idea-study-g7-a",
+    "sourcePaperId": "goldenpapera",
+    "summary": "A matching token prefix is reusable even when the question suffix changes.",
+    "tags": [],
+    "title": "Shared Idea Study g7 A",
+    "updatedAt": "<time>"
+   },
+   "statistics": {
+    "domains": 2,
+    "links": 8,
+    "pages": 6,
+    "unresolvedTargets": 0
+   }
+  },
+  "status": 200
+ },
+ "/api/memory/documents/goldenpaperb/filing": {
+  "json": {
+   "dropped": [],
+   "filed": true,
+   "filedVersion": "knowledge-v6",
+   "queued": true,
+   "sameAs": null,
+   "stale": false,
+   "stuck": false,
+   "version": "knowledge-v6"
+  },
+  "status": 200
+ },
+ "/api/memory/documents/goldenpaperb/neighborhood": {
+  "json": {
+   "center": {
+    "aliases": [],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "id": "<id:28>",
+    "kind": "source",
+    "linkDegree": 2,
+    "revision": 2,
+    "slug": "shared-idea-study-g7-b",
+    "sourcePaperId": "goldenpaperb",
+    "summary": "A matching token prefix is reusable even when the question suffix changes.",
+    "tags": [],
+    "title": "Shared Idea Study g7 B",
+    "updatedAt": "<time>"
+   },
+   "distances": {
+    "cache-notes": 2,
+    "cache-research": 1,
+    "prefix-reuse-goldenpaperc": 2,
+    "shared-idea-g7": 1,
+    "shared-idea-study-g7-a": 2,
+    "shared-idea-study-g7-b": 0
+   },
+   "domains": [
+    {
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "origin": "model",
+     "pages": 6,
+     "position": 0,
+     "slug": "cache-research",
+     "summary": null,
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    }
+   ],
+   "filing": {
+    "dropped": [],
+    "filed": true,
+    "filedVersion": "knowledge-v6",
+    "queued": true,
+    "sameAs": null,
+    "stale": false,
+    "stuck": false,
+    "version": "knowledge-v6"
+   },
+   "links": [
+    {
+     "from": "cache-research",
+     "to": "cache-notes"
+    },
+    {
+     "from": "cache-research",
+     "to": "prefix-reuse-goldenpaperc"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-g7"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-study-g7-a"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-study-g7-b"
+    },
+    {
+     "from": "prefix-reuse-goldenpaperc",
+     "to": "cache-notes"
+    },
+    {
+     "from": "shared-idea-g7",
+     "to": "shared-idea-study-g7-a"
+    },
+    {
+     "from": "shared-idea-g7",
+     "to": "shared-idea-study-g7-b"
+    }
+   ],
+   "pages": [
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:28>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 2,
+     "slug": "shared-idea-study-g7-b",
+     "sourcePaperId": "goldenpaperb",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Shared Idea Study g7 B",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:29>",
+     "kind": "concept",
+     "linkDegree": 2,
+     "revision": 3,
+     "slug": "prefix-reuse-goldenpaperc",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Prefix reuse goldenpaperc",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:30>",
+     "kind": "domain",
+     "linkDegree": 5,
+     "revision": 1,
+     "slug": "cache-research",
+     "summary": "How the pages of this domain connect.",
+     "tags": [],
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:31>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 1,
+     "slug": "cache-notes",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Cache Notes",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:32>",
+     "kind": "concept",
+     "linkDegree": 3,
+     "revision": 2,
+     "slug": "shared-idea-g7",
+     "sourcePaperId": "goldenpapera",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Shared idea g7",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:33>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 1,
+     "slug": "shared-idea-study-g7-a",
+     "sourcePaperId": "goldenpapera",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Shared Idea Study g7 A",
+     "updatedAt": "<time>"
+    }
+   ],
+   "paperId": "goldenpaperb",
+   "revision": "<graph revision>",
+   "sourcePage": {
+    "aliases": [],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "id": "<id:28>",
+    "kind": "source",
+    "linkDegree": 2,
+    "revision": 2,
+    "slug": "shared-idea-study-g7-b",
+    "sourcePaperId": "goldenpaperb",
+    "summary": "A matching token prefix is reusable even when the question suffix changes.",
+    "tags": [],
+    "title": "Shared Idea Study g7 B",
+    "updatedAt": "<time>"
+   },
+   "statistics": {
+    "domains": 2,
+    "links": 8,
+    "pages": 6,
+    "unresolvedTargets": 0
+   }
+  },
+  "status": 200
+ },
+ "/api/memory/documents/goldenpaperc/filing": {
+  "json": {
+   "dropped": [],
+   "filed": true,
+   "filedVersion": "knowledge-v6",
+   "queued": false,
+   "sameAs": null,
+   "stale": false,
+   "stuck": false,
+   "version": "knowledge-v6"
+  },
+  "status": 200
+ },
+ "/api/memory/documents/goldenpaperc/neighborhood": {
+  "json": {
+   "center": {
+    "aliases": [],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "id": "<id:31>",
+    "kind": "source",
+    "linkDegree": 2,
+    "revision": 1,
+    "slug": "cache-notes",
+    "sourcePaperId": "goldenpaperc",
+    "summary": "A matching token prefix is reusable even when the question suffix changes.",
+    "tags": [],
+    "title": "Cache Notes",
+    "updatedAt": "<time>"
+   },
+   "distances": {
+    "cache-notes": 0,
+    "cache-research": 1,
+    "prefix-reuse-goldenpaperc": 1,
+    "shared-idea-g7": 2,
+    "shared-idea-study-g7-a": 2,
+    "shared-idea-study-g7-b": 2
+   },
+   "domains": [
+    {
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "origin": "model",
+     "pages": 6,
+     "position": 0,
+     "slug": "cache-research",
+     "summary": null,
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    }
+   ],
+   "filing": {
+    "dropped": [],
+    "filed": true,
+    "filedVersion": "knowledge-v6",
+    "queued": false,
+    "sameAs": null,
+    "stale": false,
+    "stuck": false,
+    "version": "knowledge-v6"
+   },
+   "links": [
+    {
+     "from": "cache-research",
+     "to": "cache-notes"
+    },
+    {
+     "from": "cache-research",
+     "to": "prefix-reuse-goldenpaperc"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-g7"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-study-g7-a"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-study-g7-b"
+    },
+    {
+     "from": "prefix-reuse-goldenpaperc",
+     "to": "cache-notes"
+    },
+    {
+     "from": "shared-idea-g7",
+     "to": "shared-idea-study-g7-a"
+    },
+    {
+     "from": "shared-idea-g7",
+     "to": "shared-idea-study-g7-b"
+    }
+   ],
+   "pages": [
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:28>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 2,
+     "slug": "shared-idea-study-g7-b",
+     "sourcePaperId": "goldenpaperb",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Shared Idea Study g7 B",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:29>",
+     "kind": "concept",
+     "linkDegree": 2,
+     "revision": 3,
+     "slug": "prefix-reuse-goldenpaperc",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Prefix reuse goldenpaperc",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:30>",
+     "kind": "domain",
+     "linkDegree": 5,
+     "revision": 1,
+     "slug": "cache-research",
+     "summary": "How the pages of this domain connect.",
+     "tags": [],
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:31>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 1,
+     "slug": "cache-notes",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Cache Notes",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:32>",
+     "kind": "concept",
+     "linkDegree": 3,
+     "revision": 2,
+     "slug": "shared-idea-g7",
+     "sourcePaperId": "goldenpapera",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Shared idea g7",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:33>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 1,
+     "slug": "shared-idea-study-g7-a",
+     "sourcePaperId": "goldenpapera",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Shared Idea Study g7 A",
+     "updatedAt": "<time>"
+    }
+   ],
+   "paperId": "goldenpaperc",
+   "revision": "<graph revision>",
+   "sourcePage": {
+    "aliases": [],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "id": "<id:31>",
+    "kind": "source",
+    "linkDegree": 2,
+    "revision": 1,
+    "slug": "cache-notes",
+    "sourcePaperId": "goldenpaperc",
+    "summary": "A matching token prefix is reusable even when the question suffix changes.",
+    "tags": [],
+    "title": "Cache Notes",
+    "updatedAt": "<time>"
+   },
+   "statistics": {
+    "domains": 2,
+    "links": 8,
+    "pages": 6,
+    "unresolvedTargets": 0
+   }
+  },
+  "status": 200
+ },
+ "/api/memory/domains": {
+  "json": {
+   "domains": [
+    {
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "origin": "model",
+     "pages": 6,
+     "position": 0,
+     "slug": "cache-research",
+     "summary": null,
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    }
+   ]
+  },
+  "status": 200
+ },
+ "/api/memory/figures/<id:1>": {
+  "bytes": 70,
+  "sha256": "0376ecf998994c97e030a997971de2066d58e7ea4c70d5de2ce5fa395ab641df",
+  "status": 200,
+  "type": "image/webp"
+ },
+ "/api/memory/graph": {
+  "json": {
+   "domains": [
+    {
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "origin": "model",
+     "pages": 5,
+     "position": 0,
+     "slug": "cache-research",
+     "summary": null,
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    }
+   ],
+   "links": [
+    {
+     "from": "cache-research",
+     "to": "cache-notes"
+    },
+    {
+     "from": "cache-research",
+     "to": "prefix-reuse-goldenpaperc"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-g7"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-study-g7-a"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-study-g7-b"
+    },
+    {
+     "from": "prefix-reuse-goldenpaperc",
+     "to": "cache-notes"
+    },
+    {
+     "from": "shared-idea-g7",
+     "to": "shared-idea-study-g7-a"
+    },
+    {
+     "from": "shared-idea-g7",
+     "to": "shared-idea-study-g7-b"
+    }
+   ],
+   "pages": [
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:28>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 2,
+     "slug": "shared-idea-study-g7-b",
+     "sourcePaperId": "goldenpaperb",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Shared Idea Study g7 B",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:29>",
+     "kind": "concept",
+     "linkDegree": 2,
+     "revision": 3,
+     "slug": "prefix-reuse-goldenpaperc",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Prefix reuse goldenpaperc",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:30>",
+     "kind": "domain",
+     "linkDegree": 5,
+     "revision": 1,
+     "slug": "cache-research",
+     "summary": "How the pages of this domain connect.",
+     "tags": [],
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:31>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 1,
+     "slug": "cache-notes",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Cache Notes",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:32>",
+     "kind": "concept",
+     "linkDegree": 3,
+     "revision": 2,
+     "slug": "shared-idea-g7",
+     "sourcePaperId": "goldenpapera",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Shared idea g7",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:33>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 1,
+     "slug": "shared-idea-study-g7-a",
+     "sourcePaperId": "goldenpapera",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Shared Idea Study g7 A",
+     "updatedAt": "<time>"
+    }
+   ],
+   "revision": "<graph revision>",
+   "statistics": {
+    "domains": 2,
+    "links": 8,
+    "pages": 6,
+    "unresolvedTargets": 0
+   }
+  },
+  "status": 200
+ },
+ "/api/memory/health": {
+  "json": {
+   "computedAt": "<time>",
+   "droppedTargets": [],
+   "lastCheck": null,
+   "orphans": [],
+   "pages": 6,
+   "uncapturedFigures": []
+  },
+  "status": 200
+ },
+ "/api/memory/maintenance": {
+  "json": {
+   "cancellable": 1,
+   "due": 1,
+   "failed": 0,
+   "jobs": [
+    {
+     "attempts": 0,
+     "context": "Filing a document",
+     "createdAt": "<time>",
+     "failure": null,
+     "id": "<id:34>",
+     "kind": "document",
+     "label": "Shared Idea Study g7 B",
+     "lastError": null,
+     "leaseExpiresAt": null,
+     "marker": "paper:goldenpaperb",
+     "payload": {
+      "fingerprint": "<id:35>",
+      "paperId": "goldenpaperb",
+      "projectId": "<id:3>",
+      "targetVersion": "knowledge-v6"
+     },
+     "retryAt": null,
+     "status": "pending",
+     "updatedAt": "<time>"
+    }
+   ],
+   "leased": 0,
+   "maxAttempts": 3,
+   "pending": 1
+  },
+  "status": 200
+ },
+ "/api/memory/neighborhood?slug=cache-notes": {
+  "json": {
+   "center": {
+    "aliases": [],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "id": "<id:31>",
+    "kind": "source",
+    "linkDegree": 2,
+    "revision": 1,
+    "slug": "cache-notes",
+    "sourcePaperId": "goldenpaperc",
+    "summary": "A matching token prefix is reusable even when the question suffix changes.",
+    "tags": [],
+    "title": "Cache Notes",
+    "updatedAt": "<time>"
+   },
+   "distances": {
+    "cache-notes": 0,
+    "cache-research": 1,
+    "prefix-reuse-goldenpaperc": 1,
+    "shared-idea-g7": 2,
+    "shared-idea-study-g7-a": 2,
+    "shared-idea-study-g7-b": 2
+   },
+   "domains": [
+    {
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "origin": "model",
+     "pages": 6,
+     "position": 0,
+     "slug": "cache-research",
+     "summary": null,
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    }
+   ],
+   "links": [
+    {
+     "from": "cache-research",
+     "to": "cache-notes"
+    },
+    {
+     "from": "cache-research",
+     "to": "prefix-reuse-goldenpaperc"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-g7"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-study-g7-a"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-study-g7-b"
+    },
+    {
+     "from": "prefix-reuse-goldenpaperc",
+     "to": "cache-notes"
+    },
+    {
+     "from": "shared-idea-g7",
+     "to": "shared-idea-study-g7-a"
+    },
+    {
+     "from": "shared-idea-g7",
+     "to": "shared-idea-study-g7-b"
+    }
+   ],
+   "pages": [
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:28>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 2,
+     "slug": "shared-idea-study-g7-b",
+     "sourcePaperId": "goldenpaperb",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Shared Idea Study g7 B",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:29>",
+     "kind": "concept",
+     "linkDegree": 2,
+     "revision": 3,
+     "slug": "prefix-reuse-goldenpaperc",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Prefix reuse goldenpaperc",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:30>",
+     "kind": "domain",
+     "linkDegree": 5,
+     "revision": 1,
+     "slug": "cache-research",
+     "summary": "How the pages of this domain connect.",
+     "tags": [],
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:31>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 1,
+     "slug": "cache-notes",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Cache Notes",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:32>",
+     "kind": "concept",
+     "linkDegree": 3,
+     "revision": 2,
+     "slug": "shared-idea-g7",
+     "sourcePaperId": "goldenpapera",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Shared idea g7",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:33>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 1,
+     "slug": "shared-idea-study-g7-a",
+     "sourcePaperId": "goldenpapera",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Shared Idea Study g7 A",
+     "updatedAt": "<time>"
+    }
+   ],
+   "revision": "<graph revision>",
+   "statistics": {
+    "domains": 2,
+    "links": 8,
+    "pages": 6,
+    "unresolvedTargets": 0
+   }
+  },
+  "status": 200
+ },
+ "/api/memory/neighborhood?slug=cache-research": {
+  "json": {
+   "center": {
+    "aliases": [],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "id": "<id:30>",
+    "kind": "domain",
+    "linkDegree": 5,
+    "revision": 1,
+    "slug": "cache-research",
+    "summary": "How the pages of this domain connect.",
+    "tags": [],
+    "title": "Cache research",
+    "updatedAt": "<time>"
+   },
+   "distances": {
+    "cache-notes": 1,
+    "cache-research": 0,
+    "prefix-reuse-goldenpaperc": 1,
+    "shared-idea-g7": 1,
+    "shared-idea-study-g7-a": 1,
+    "shared-idea-study-g7-b": 1
+   },
+   "domains": [
+    {
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "origin": "model",
+     "pages": 6,
+     "position": 0,
+     "slug": "cache-research",
+     "summary": null,
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    }
+   ],
+   "links": [
+    {
+     "from": "cache-research",
+     "to": "cache-notes"
+    },
+    {
+     "from": "cache-research",
+     "to": "prefix-reuse-goldenpaperc"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-g7"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-study-g7-a"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-study-g7-b"
+    },
+    {
+     "from": "prefix-reuse-goldenpaperc",
+     "to": "cache-notes"
+    },
+    {
+     "from": "shared-idea-g7",
+     "to": "shared-idea-study-g7-a"
+    },
+    {
+     "from": "shared-idea-g7",
+     "to": "shared-idea-study-g7-b"
+    }
+   ],
+   "pages": [
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:28>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 2,
+     "slug": "shared-idea-study-g7-b",
+     "sourcePaperId": "goldenpaperb",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Shared Idea Study g7 B",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:29>",
+     "kind": "concept",
+     "linkDegree": 2,
+     "revision": 3,
+     "slug": "prefix-reuse-goldenpaperc",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Prefix reuse goldenpaperc",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:30>",
+     "kind": "domain",
+     "linkDegree": 5,
+     "revision": 1,
+     "slug": "cache-research",
+     "summary": "How the pages of this domain connect.",
+     "tags": [],
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:31>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 1,
+     "slug": "cache-notes",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Cache Notes",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:32>",
+     "kind": "concept",
+     "linkDegree": 3,
+     "revision": 2,
+     "slug": "shared-idea-g7",
+     "sourcePaperId": "goldenpapera",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Shared idea g7",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:33>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 1,
+     "slug": "shared-idea-study-g7-a",
+     "sourcePaperId": "goldenpapera",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Shared Idea Study g7 A",
+     "updatedAt": "<time>"
+    }
+   ],
+   "revision": "<graph revision>",
+   "statistics": {
+    "domains": 2,
+    "links": 8,
+    "pages": 6,
+    "unresolvedTargets": 0
+   }
+  },
+  "status": 200
+ },
+ "/api/memory/neighborhood?slug=prefix-reuse-goldenpaperc": {
+  "json": {
+   "center": {
+    "aliases": [],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "id": "<id:29>",
+    "kind": "concept",
+    "linkDegree": 2,
+    "revision": 3,
+    "slug": "prefix-reuse-goldenpaperc",
+    "sourcePaperId": "goldenpaperc",
+    "summary": "Understand exact prefix reuse and test its limitations.",
+    "tags": [],
+    "title": "Prefix reuse goldenpaperc",
+    "updatedAt": "<time>"
+   },
+   "distances": {
+    "cache-notes": 1,
+    "cache-research": 1,
+    "prefix-reuse-goldenpaperc": 0,
+    "shared-idea-g7": 2,
+    "shared-idea-study-g7-a": 2,
+    "shared-idea-study-g7-b": 2
+   },
+   "domains": [
+    {
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "origin": "model",
+     "pages": 6,
+     "position": 0,
+     "slug": "cache-research",
+     "summary": null,
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    }
+   ],
+   "links": [
+    {
+     "from": "cache-research",
+     "to": "cache-notes"
+    },
+    {
+     "from": "cache-research",
+     "to": "prefix-reuse-goldenpaperc"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-g7"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-study-g7-a"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-study-g7-b"
+    },
+    {
+     "from": "prefix-reuse-goldenpaperc",
+     "to": "cache-notes"
+    },
+    {
+     "from": "shared-idea-g7",
+     "to": "shared-idea-study-g7-a"
+    },
+    {
+     "from": "shared-idea-g7",
+     "to": "shared-idea-study-g7-b"
+    }
+   ],
+   "pages": [
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:28>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 2,
+     "slug": "shared-idea-study-g7-b",
+     "sourcePaperId": "goldenpaperb",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Shared Idea Study g7 B",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:29>",
+     "kind": "concept",
+     "linkDegree": 2,
+     "revision": 3,
+     "slug": "prefix-reuse-goldenpaperc",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Prefix reuse goldenpaperc",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:30>",
+     "kind": "domain",
+     "linkDegree": 5,
+     "revision": 1,
+     "slug": "cache-research",
+     "summary": "How the pages of this domain connect.",
+     "tags": [],
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:31>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 1,
+     "slug": "cache-notes",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Cache Notes",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:32>",
+     "kind": "concept",
+     "linkDegree": 3,
+     "revision": 2,
+     "slug": "shared-idea-g7",
+     "sourcePaperId": "goldenpapera",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Shared idea g7",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:33>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 1,
+     "slug": "shared-idea-study-g7-a",
+     "sourcePaperId": "goldenpapera",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Shared Idea Study g7 A",
+     "updatedAt": "<time>"
+    }
+   ],
+   "revision": "<graph revision>",
+   "statistics": {
+    "domains": 2,
+    "links": 8,
+    "pages": 6,
+    "unresolvedTargets": 0
+   }
+  },
+  "status": 200
+ },
+ "/api/memory/neighborhood?slug=shared-idea-g7": {
+  "json": {
+   "center": {
+    "aliases": [],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "id": "<id:32>",
+    "kind": "concept",
+    "linkDegree": 3,
+    "revision": 2,
+    "slug": "shared-idea-g7",
+    "sourcePaperId": "goldenpapera",
+    "summary": "Understand exact prefix reuse and test its limitations.",
+    "tags": [],
+    "title": "Shared idea g7",
+    "updatedAt": "<time>"
+   },
+   "distances": {
+    "cache-notes": 2,
+    "cache-research": 1,
+    "prefix-reuse-goldenpaperc": 2,
+    "shared-idea-g7": 0,
+    "shared-idea-study-g7-a": 1,
+    "shared-idea-study-g7-b": 1
+   },
+   "domains": [
+    {
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "origin": "model",
+     "pages": 6,
+     "position": 0,
+     "slug": "cache-research",
+     "summary": null,
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    }
+   ],
+   "links": [
+    {
+     "from": "cache-research",
+     "to": "cache-notes"
+    },
+    {
+     "from": "cache-research",
+     "to": "prefix-reuse-goldenpaperc"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-g7"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-study-g7-a"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-study-g7-b"
+    },
+    {
+     "from": "prefix-reuse-goldenpaperc",
+     "to": "cache-notes"
+    },
+    {
+     "from": "shared-idea-g7",
+     "to": "shared-idea-study-g7-a"
+    },
+    {
+     "from": "shared-idea-g7",
+     "to": "shared-idea-study-g7-b"
+    }
+   ],
+   "pages": [
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:28>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 2,
+     "slug": "shared-idea-study-g7-b",
+     "sourcePaperId": "goldenpaperb",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Shared Idea Study g7 B",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:29>",
+     "kind": "concept",
+     "linkDegree": 2,
+     "revision": 3,
+     "slug": "prefix-reuse-goldenpaperc",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Prefix reuse goldenpaperc",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:30>",
+     "kind": "domain",
+     "linkDegree": 5,
+     "revision": 1,
+     "slug": "cache-research",
+     "summary": "How the pages of this domain connect.",
+     "tags": [],
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:31>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 1,
+     "slug": "cache-notes",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Cache Notes",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:32>",
+     "kind": "concept",
+     "linkDegree": 3,
+     "revision": 2,
+     "slug": "shared-idea-g7",
+     "sourcePaperId": "goldenpapera",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Shared idea g7",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:33>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 1,
+     "slug": "shared-idea-study-g7-a",
+     "sourcePaperId": "goldenpapera",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Shared Idea Study g7 A",
+     "updatedAt": "<time>"
+    }
+   ],
+   "revision": "<graph revision>",
+   "statistics": {
+    "domains": 2,
+    "links": 8,
+    "pages": 6,
+    "unresolvedTargets": 0
+   }
+  },
+  "status": 200
+ },
+ "/api/memory/neighborhood?slug=shared-idea-study-g7-a": {
+  "json": {
+   "center": {
+    "aliases": [],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "id": "<id:33>",
+    "kind": "source",
+    "linkDegree": 2,
+    "revision": 1,
+    "slug": "shared-idea-study-g7-a",
+    "sourcePaperId": "goldenpapera",
+    "summary": "A matching token prefix is reusable even when the question suffix changes.",
+    "tags": [],
+    "title": "Shared Idea Study g7 A",
+    "updatedAt": "<time>"
+   },
+   "distances": {
+    "cache-notes": 2,
+    "cache-research": 1,
+    "prefix-reuse-goldenpaperc": 2,
+    "shared-idea-g7": 1,
+    "shared-idea-study-g7-a": 0,
+    "shared-idea-study-g7-b": 2
+   },
+   "domains": [
+    {
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "origin": "model",
+     "pages": 6,
+     "position": 0,
+     "slug": "cache-research",
+     "summary": null,
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    }
+   ],
+   "links": [
+    {
+     "from": "cache-research",
+     "to": "cache-notes"
+    },
+    {
+     "from": "cache-research",
+     "to": "prefix-reuse-goldenpaperc"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-g7"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-study-g7-a"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-study-g7-b"
+    },
+    {
+     "from": "prefix-reuse-goldenpaperc",
+     "to": "cache-notes"
+    },
+    {
+     "from": "shared-idea-g7",
+     "to": "shared-idea-study-g7-a"
+    },
+    {
+     "from": "shared-idea-g7",
+     "to": "shared-idea-study-g7-b"
+    }
+   ],
+   "pages": [
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:28>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 2,
+     "slug": "shared-idea-study-g7-b",
+     "sourcePaperId": "goldenpaperb",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Shared Idea Study g7 B",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:29>",
+     "kind": "concept",
+     "linkDegree": 2,
+     "revision": 3,
+     "slug": "prefix-reuse-goldenpaperc",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Prefix reuse goldenpaperc",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:30>",
+     "kind": "domain",
+     "linkDegree": 5,
+     "revision": 1,
+     "slug": "cache-research",
+     "summary": "How the pages of this domain connect.",
+     "tags": [],
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:31>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 1,
+     "slug": "cache-notes",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Cache Notes",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:32>",
+     "kind": "concept",
+     "linkDegree": 3,
+     "revision": 2,
+     "slug": "shared-idea-g7",
+     "sourcePaperId": "goldenpapera",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Shared idea g7",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:33>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 1,
+     "slug": "shared-idea-study-g7-a",
+     "sourcePaperId": "goldenpapera",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Shared Idea Study g7 A",
+     "updatedAt": "<time>"
+    }
+   ],
+   "revision": "<graph revision>",
+   "statistics": {
+    "domains": 2,
+    "links": 8,
+    "pages": 6,
+    "unresolvedTargets": 0
+   }
+  },
+  "status": 200
+ },
+ "/api/memory/neighborhood?slug=shared-idea-study-g7-b": {
+  "json": {
+   "center": {
+    "aliases": [],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "id": "<id:28>",
+    "kind": "source",
+    "linkDegree": 2,
+    "revision": 2,
+    "slug": "shared-idea-study-g7-b",
+    "sourcePaperId": "goldenpaperb",
+    "summary": "A matching token prefix is reusable even when the question suffix changes.",
+    "tags": [],
+    "title": "Shared Idea Study g7 B",
+    "updatedAt": "<time>"
+   },
+   "distances": {
+    "cache-notes": 2,
+    "cache-research": 1,
+    "prefix-reuse-goldenpaperc": 2,
+    "shared-idea-g7": 1,
+    "shared-idea-study-g7-a": 2,
+    "shared-idea-study-g7-b": 0
+   },
+   "domains": [
+    {
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "origin": "model",
+     "pages": 6,
+     "position": 0,
+     "slug": "cache-research",
+     "summary": null,
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    }
+   ],
+   "links": [
+    {
+     "from": "cache-research",
+     "to": "cache-notes"
+    },
+    {
+     "from": "cache-research",
+     "to": "prefix-reuse-goldenpaperc"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-g7"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-study-g7-a"
+    },
+    {
+     "from": "cache-research",
+     "to": "shared-idea-study-g7-b"
+    },
+    {
+     "from": "prefix-reuse-goldenpaperc",
+     "to": "cache-notes"
+    },
+    {
+     "from": "shared-idea-g7",
+     "to": "shared-idea-study-g7-a"
+    },
+    {
+     "from": "shared-idea-g7",
+     "to": "shared-idea-study-g7-b"
+    }
+   ],
+   "pages": [
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:28>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 2,
+     "slug": "shared-idea-study-g7-b",
+     "sourcePaperId": "goldenpaperb",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Shared Idea Study g7 B",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:29>",
+     "kind": "concept",
+     "linkDegree": 2,
+     "revision": 3,
+     "slug": "prefix-reuse-goldenpaperc",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Prefix reuse goldenpaperc",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:30>",
+     "kind": "domain",
+     "linkDegree": 5,
+     "revision": 1,
+     "slug": "cache-research",
+     "summary": "How the pages of this domain connect.",
+     "tags": [],
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:31>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 1,
+     "slug": "cache-notes",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Cache Notes",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:32>",
+     "kind": "concept",
+     "linkDegree": 3,
+     "revision": 2,
+     "slug": "shared-idea-g7",
+     "sourcePaperId": "goldenpapera",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Shared idea g7",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:33>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 1,
+     "slug": "shared-idea-study-g7-a",
+     "sourcePaperId": "goldenpapera",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Shared Idea Study g7 A",
+     "updatedAt": "<time>"
+    }
+   ],
+   "revision": "<graph revision>",
+   "statistics": {
+    "domains": 2,
+    "links": 8,
+    "pages": 6,
+    "unresolvedTargets": 0
+   }
+  },
+  "status": 200
+ },
+ "/api/memory/pages": {
+  "json": [
+   {
+    "aliases": [],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "id": "<id:28>",
+    "kind": "source",
+    "linkDegree": 2,
+    "revision": 2,
+    "slug": "shared-idea-study-g7-b",
+    "sourcePaperId": "goldenpaperb",
+    "summary": "A matching token prefix is reusable even when the question suffix changes.",
+    "tags": [],
+    "title": "Shared Idea Study g7 B",
+    "updatedAt": "<time>"
+   },
+   {
+    "aliases": [],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "id": "<id:29>",
+    "kind": "concept",
+    "linkDegree": 2,
+    "revision": 3,
+    "slug": "prefix-reuse-goldenpaperc",
+    "sourcePaperId": "goldenpaperc",
+    "summary": "Understand exact prefix reuse and test its limitations.",
+    "tags": [],
+    "title": "Prefix reuse goldenpaperc",
+    "updatedAt": "<time>"
+   },
+   {
+    "aliases": [],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "id": "<id:30>",
+    "kind": "domain",
+    "linkDegree": 5,
+    "revision": 1,
+    "slug": "cache-research",
+    "summary": "How the pages of this domain connect.",
+    "tags": [],
+    "title": "Cache research",
+    "updatedAt": "<time>"
+   },
+   {
+    "aliases": [],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "id": "<id:31>",
+    "kind": "source",
+    "linkDegree": 2,
+    "revision": 1,
+    "slug": "cache-notes",
+    "sourcePaperId": "goldenpaperc",
+    "summary": "A matching token prefix is reusable even when the question suffix changes.",
+    "tags": [],
+    "title": "Cache Notes",
+    "updatedAt": "<time>"
+   },
+   {
+    "aliases": [],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "id": "<id:32>",
+    "kind": "concept",
+    "linkDegree": 3,
+    "revision": 2,
+    "slug": "shared-idea-g7",
+    "sourcePaperId": "goldenpapera",
+    "summary": "Understand exact prefix reuse and test its limitations.",
+    "tags": [],
+    "title": "Shared idea g7",
+    "updatedAt": "<time>"
+   },
+   {
+    "aliases": [],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "id": "<id:33>",
+    "kind": "source",
+    "linkDegree": 2,
+    "revision": 1,
+    "slug": "shared-idea-study-g7-a",
+    "sourcePaperId": "goldenpapera",
+    "summary": "A matching token prefix is reusable even when the question suffix changes.",
+    "tags": [],
+    "title": "Shared Idea Study g7 A",
+    "updatedAt": "<time>"
+   }
+  ],
+  "status": 200
+ },
+ "/api/memory/pages/cache-notes": {
+  "json": {
+   "authors": [],
+   "backlinks": [
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:29>",
+     "kind": "concept",
+     "linkDegree": 0,
+     "revision": 3,
+     "slug": "prefix-reuse-goldenpaperc",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Prefix reuse goldenpaperc",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:30>",
+     "kind": "domain",
+     "linkDegree": 0,
+     "revision": 1,
+     "slug": "cache-research",
+     "summary": "How the pages of this domain connect.",
+     "tags": [],
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    }
+   ],
+   "document": {
+    "paperId": "goldenpaperc",
+    "projectId": "<id:3>"
+   },
+   "page": {
+    "aliases": [],
+    "body": "## Prefix reuse\n\nA matching token prefix is reusable even when the question suffix changes. [E1]\n\n## Controlled comparison\n\nKeep the model, suffix length and timing fixed. Compare stable and shuffled prefixes and report latency distributions.\n\n## Limits\n\nA small example does not establish a universal speedup.",
+    "citations": [
+     {
+      "claimType": "author-claim",
+      "evidenceId": null,
+      "id": 1,
+      "noteId": null,
+      "page": 1,
+      "paperId": "goldenpaperc",
+      "section": null,
+      "sectionTitle": "Prefix reuse"
+     }
+    ],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "figures": [],
+    "id": "<id:31>",
+    "kind": "source",
+    "linkDegree": 2,
+    "links": [],
+    "revision": 1,
+    "slug": "cache-notes",
+    "sourcePaperId": "goldenpaperc",
+    "summary": "A matching token prefix is reusable even when the question suffix changes.",
+    "tags": [],
+    "title": "Cache Notes",
+    "updatedAt": "<time>"
+   },
+   "sources": [
+    {
+     "available": true,
+     "pages": [
+      1
+     ],
+     "paperId": "goldenpaperc",
+     "passages": 1,
+     "projectId": "<id:3>",
+     "sections": [],
+     "title": "Cache Notes"
+    }
+   ]
+  },
+  "status": 200
+ },
+ "/api/memory/pages/cache-research": {
+  "json": {
+   "authors": [],
+   "backlinks": [],
+   "document": null,
+   "page": {
+    "aliases": [],
+    "body": "## How these pages connect\n\n[[cache-notes]] and [[shared-idea-study-g7-b]] and [[shared-idea-study-g7-a]] report on the same question, and [[prefix-reuse-goldenpaperc]], [[shared-idea-g7]] is where what they share is explained.\n\n## Reading paths\n\nStart with [[prefix-reuse-goldenpaperc]], then read the sources against it.",
+    "citations": [],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "figures": [],
+    "id": "<id:30>",
+    "kind": "domain",
+    "linkDegree": 5,
+    "links": [
+     "cache-notes",
+     "shared-idea-study-g7-b",
+     "shared-idea-study-g7-a",
+     "prefix-reuse-goldenpaperc",
+     "shared-idea-g7"
+    ],
+    "revision": 1,
+    "slug": "cache-research",
+    "summary": "How the pages of this domain connect.",
+    "tags": [],
+    "title": "Cache research",
+    "updatedAt": "<time>"
+   },
+   "sources": []
+  },
+  "status": 200
+ },
+ "/api/memory/pages/prefix-reuse-goldenpaperc": {
+  "json": {
+   "authors": [
+    {
+     "firstAt": "<time>",
+     "id": "goldenpaperc",
+     "kind": "document",
+     "note": "Filed an evidence-bound page on prefix reuse.",
+     "projectId": "<id:3>",
+     "removed": false,
+     "title": "Cache Notes"
+    },
+    {
+     "firstAt": "<time>",
+     "id": "goldenpaperc",
+     "kind": "session",
+     "note": "Added what the reader's note says.",
+     "projectId": "<id:3>",
+     "removed": false,
+     "title": "Cache Notes"
+    }
+   ],
+   "backlinks": [
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:30>",
+     "kind": "domain",
+     "linkDegree": 0,
+     "revision": 1,
+     "slug": "cache-research",
+     "summary": "How the pages of this domain connect.",
+     "tags": [],
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    }
+   ],
+   "document": null,
+   "page": {
+    "aliases": [],
+    "body": "## Problem and approach\n\nPrefix caching reuses exact matching tokens before the changing question. [E1]\n\n## Evidence and limitations\n\nA stable prefix can reduce repeated work. Measure hit rate and repeated latency rather than assuming a universal speedup.\n\n## Reading route\n\nInspect the controlled comparison in [[cache-notes]] and ask which confounders remain.\n\nAsked again in a session: a matching prefix is reused when only the question changes. [E2]\n\nThe reader noted a doubt about this comparison. [E3]",
+    "citations": [
+     {
+      "claimType": "author-claim",
+      "evidenceId": null,
+      "id": 1,
+      "noteId": null,
+      "page": 1,
+      "paperId": "goldenpaperc",
+      "section": null,
+      "sectionTitle": "Prefix reuse"
+     },
+     {
+      "claimType": "author-claim",
+      "evidenceId": null,
+      "id": 2,
+      "noteId": null,
+      "page": 1,
+      "paperId": "goldenpaperc",
+      "section": null,
+      "sectionTitle": "Prefix reuse"
+     },
+     {
+      "claimType": "reader-note",
+      "evidenceId": null,
+      "id": 3,
+      "noteId": "<id:10>",
+      "page": null,
+      "paperId": "goldenpaperc",
+      "section": null
+     }
+    ],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "figures": [],
+    "id": "<id:29>",
+    "kind": "concept",
+    "linkDegree": 2,
+    "links": [
+     "cache-notes"
+    ],
+    "revision": 3,
+    "slug": "prefix-reuse-goldenpaperc",
+    "sourcePaperId": "goldenpaperc",
+    "summary": "Understand exact prefix reuse and test its limitations.",
+    "tags": [],
+    "title": "Prefix reuse goldenpaperc",
+    "updatedAt": "<time>"
+   },
+   "sources": [
+    {
+     "available": true,
+     "pages": [
+      1
+     ],
+     "paperId": "goldenpaperc",
+     "passages": 3,
+     "projectId": "<id:3>",
+     "sections": [],
+     "title": "Cache Notes"
+    }
+   ]
+  },
+  "status": 200
+ },
+ "/api/memory/pages/shared-idea-g7": {
+  "json": {
+   "authors": [
+    {
+     "firstAt": "<time>",
+     "id": "goldenpapera",
+     "kind": "document",
+     "note": "Filed an evidence-bound page on prefix reuse.",
+     "projectId": "<id:3>",
+     "removed": false,
+     "title": "Shared Idea Study g7 A"
+    },
+    {
+     "firstAt": "<time>",
+     "id": "goldenpaperb",
+     "kind": "document",
+     "note": "Added what another document reports about prefix reuse.",
+     "projectId": "<id:3>",
+     "removed": false,
+     "title": "Shared Idea Study g7 B"
+    }
+   ],
+   "backlinks": [
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:30>",
+     "kind": "domain",
+     "linkDegree": 0,
+     "revision": 1,
+     "slug": "cache-research",
+     "summary": "How the pages of this domain connect.",
+     "tags": [],
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    }
+   ],
+   "document": null,
+   "page": {
+    "aliases": [],
+    "body": "## Problem and approach\n\nPrefix caching reuses exact matching tokens before the changing question. [E1]\n\n## Evidence and limitations\n\nA stable prefix can reduce repeated work. Measure hit rate and repeated latency rather than assuming a universal speedup.\n\n## Reading route\n\nInspect the controlled comparison in [[shared-idea-study-g7-a]] and ask which confounders remain.\n\nThe same reuse is reported again. A stable prefix can reduce repeated work. [E2] The document that reports it has its own page, [[shared-idea-study-g7-b]].",
+    "citations": [
+     {
+      "claimType": "author-claim",
+      "evidenceId": null,
+      "id": 1,
+      "noteId": null,
+      "page": 1,
+      "paperId": "goldenpapera",
+      "section": null,
+      "sectionTitle": "Prefix reuse"
+     },
+     {
+      "claimType": "author-claim",
+      "evidenceId": null,
+      "id": 2,
+      "noteId": null,
+      "page": 1,
+      "paperId": "goldenpaperb",
+      "section": null,
+      "sectionTitle": "Prefix reuse"
+     }
+    ],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "figures": [],
+    "id": "<id:32>",
+    "kind": "concept",
+    "linkDegree": 3,
+    "links": [
+     "shared-idea-study-g7-a",
+     "shared-idea-study-g7-b"
+    ],
+    "revision": 2,
+    "slug": "shared-idea-g7",
+    "sourcePaperId": "goldenpapera",
+    "summary": "Understand exact prefix reuse and test its limitations.",
+    "tags": [],
+    "title": "Shared idea g7",
+    "updatedAt": "<time>"
+   },
+   "sources": [
+    {
+     "available": true,
+     "pages": [
+      1
+     ],
+     "paperId": "goldenpapera",
+     "passages": 1,
+     "projectId": "<id:3>",
+     "sections": [],
+     "title": "Shared Idea Study g7 A"
+    },
+    {
+     "available": true,
+     "pages": [
+      1
+     ],
+     "paperId": "goldenpaperb",
+     "passages": 1,
+     "projectId": "<id:3>",
+     "sections": [],
+     "title": "Shared Idea Study g7 B"
+    }
+   ]
+  },
+  "status": 200
+ },
+ "/api/memory/pages/shared-idea-study-g7-a": {
+  "json": {
+   "authors": [],
+   "backlinks": [
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:30>",
+     "kind": "domain",
+     "linkDegree": 0,
+     "revision": 1,
+     "slug": "cache-research",
+     "summary": "How the pages of this domain connect.",
+     "tags": [],
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:32>",
+     "kind": "concept",
+     "linkDegree": 0,
+     "revision": 2,
+     "slug": "shared-idea-g7",
+     "sourcePaperId": "goldenpapera",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Shared idea g7",
+     "updatedAt": "<time>"
+    }
+   ],
+   "document": {
+    "paperId": "goldenpapera",
+    "projectId": "<id:3>"
+   },
+   "page": {
+    "aliases": [],
+    "body": "## Prefix reuse\n\nA matching token prefix is reusable even when the question suffix changes. [E1]\n\n## Controlled comparison\n\nKeep the model, suffix length and timing fixed. Compare stable and shuffled prefixes and report latency distributions.\n\n## Limits\n\nA small example does not establish a universal speedup.",
+    "citations": [
+     {
+      "claimType": "author-claim",
+      "evidenceId": null,
+      "id": 1,
+      "noteId": null,
+      "page": 1,
+      "paperId": "goldenpapera",
+      "section": null,
+      "sectionTitle": "Prefix reuse"
+     }
+    ],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "figures": [],
+    "id": "<id:33>",
+    "kind": "source",
+    "linkDegree": 2,
+    "links": [],
+    "revision": 1,
+    "slug": "shared-idea-study-g7-a",
+    "sourcePaperId": "goldenpapera",
+    "summary": "A matching token prefix is reusable even when the question suffix changes.",
+    "tags": [],
+    "title": "Shared Idea Study g7 A",
+    "updatedAt": "<time>"
+   },
+   "sources": [
+    {
+     "available": true,
+     "pages": [
+      1
+     ],
+     "paperId": "goldenpapera",
+     "passages": 1,
+     "projectId": "<id:3>",
+     "sections": [],
+     "title": "Shared Idea Study g7 A"
+    }
+   ]
+  },
+  "status": 200
+ },
+ "/api/memory/pages/shared-idea-study-g7-b": {
+  "json": {
+   "authors": [],
+   "backlinks": [
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:30>",
+     "kind": "domain",
+     "linkDegree": 0,
+     "revision": 1,
+     "slug": "cache-research",
+     "summary": "How the pages of this domain connect.",
+     "tags": [],
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:32>",
+     "kind": "concept",
+     "linkDegree": 0,
+     "revision": 2,
+     "slug": "shared-idea-g7",
+     "sourcePaperId": "goldenpapera",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Shared idea g7",
+     "updatedAt": "<time>"
+    }
+   ],
+   "document": {
+    "paperId": "goldenpaperb",
+    "projectId": "<id:3>"
+   },
+   "page": {
+    "aliases": [],
+    "body": "## Prefix reuse\n\nA matching token prefix is reusable even when the question suffix changes. [E1]\n\n![](figure:<id:1>)\n\n## Controlled comparison\n\nKeep the model, suffix length and timing fixed. Compare stable and shuffled prefixes and report latency distributions.\n\n## Limits\n\nA small example does not establish a universal speedup.",
+    "citations": [
+     {
+      "claimType": "author-claim",
+      "evidenceId": null,
+      "id": 1,
+      "noteId": null,
+      "page": 1,
+      "paperId": "goldenpaperb",
+      "section": null,
+      "sectionTitle": "Prefix reuse"
+     }
+    ],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "figures": [
+     {
+      "alt": "Two bars: the stable prefix is half the height of the shuffled one.",
+      "bytes": 70,
+      "caption": "Median latency, stable against shuffled prefix.",
+      "captured": true,
+      "createdAt": "<time>",
+      "height": 12,
+      "id": "<id:1>",
+      "kind": "source-figure",
+      "mimeType": "image/webp",
+      "objectKey": "knowledge/u/reader/figures/<id:1>.webp",
+      "origin": {
+       "page": 2,
+       "paperId": "goldenpaperb"
+      },
+      "pageId": "<id:28>",
+      "provenance": {
+       "digestAssetId": "goldenfigurone",
+       "inventoryId": "pdf-figure-1",
+       "paperId": "goldenpaperb",
+       "type": "source"
+      },
+      "skillVersion": "source-page-v1",
+      "width": 24
+     }
+    ],
+    "id": "<id:28>",
+    "kind": "source",
+    "linkDegree": 2,
+    "links": [],
+    "revision": 2,
+    "slug": "shared-idea-study-g7-b",
+    "sourcePaperId": "goldenpaperb",
+    "summary": "A matching token prefix is reusable even when the question suffix changes.",
+    "tags": [],
+    "title": "Shared Idea Study g7 B",
+    "updatedAt": "<time>"
+   },
+   "sources": [
+    {
+     "available": true,
+     "pages": [
+      1
+     ],
+     "paperId": "goldenpaperb",
+     "passages": 1,
+     "projectId": "<id:3>",
+     "sections": [],
+     "title": "Shared Idea Study g7 B"
+    }
+   ]
+  },
+  "status": 200
+ },
+ "/api/memory/pages?kind=concept": {
+  "json": [
+   {
+    "aliases": [],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "id": "<id:29>",
+    "kind": "concept",
+    "linkDegree": 2,
+    "revision": 3,
+    "slug": "prefix-reuse-goldenpaperc",
+    "sourcePaperId": "goldenpaperc",
+    "summary": "Understand exact prefix reuse and test its limitations.",
+    "tags": [],
+    "title": "Prefix reuse goldenpaperc",
+    "updatedAt": "<time>"
+   },
+   {
+    "aliases": [],
+    "createdAt": "<time>",
+    "domain": "cache-research",
+    "id": "<id:32>",
+    "kind": "concept",
+    "linkDegree": 3,
+    "revision": 2,
+    "slug": "shared-idea-g7",
+    "sourcePaperId": "goldenpapera",
+    "summary": "Understand exact prefix reuse and test its limitations.",
+    "tags": [],
+    "title": "Shared idea g7",
+    "updatedAt": "<time>"
+   }
+  ],
+  "status": 200
+ },
+ "/api/memory/search?q=prefix": {
+  "json": {
+   "query": "prefix",
+   "results": [
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:29>",
+     "kind": "concept",
+     "linkDegree": 2,
+     "revision": 3,
+     "score": 1.0,
+     "slug": "prefix-reuse-goldenpaperc",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Prefix reuse goldenpaperc",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:31>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 1,
+     "score": 0.42857142857142855,
+     "slug": "cache-notes",
+     "sourcePaperId": "goldenpaperc",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Cache Notes",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:32>",
+     "kind": "concept",
+     "linkDegree": 3,
+     "revision": 2,
+     "score": 0.42857142857142855,
+     "slug": "shared-idea-g7",
+     "sourcePaperId": "goldenpapera",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "tags": [],
+     "title": "Shared idea g7",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:33>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 1,
+     "score": 0.42857142857142855,
+     "slug": "shared-idea-study-g7-a",
+     "sourcePaperId": "goldenpapera",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Shared Idea Study g7 A",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:28>",
+     "kind": "source",
+     "linkDegree": 2,
+     "revision": 2,
+     "score": 0.42857142857142855,
+     "slug": "shared-idea-study-g7-b",
+     "sourcePaperId": "goldenpaperb",
+     "summary": "A matching token prefix is reusable even when the question suffix changes.",
+     "tags": [],
+     "title": "Shared Idea Study g7 B",
+     "updatedAt": "<time>"
+    },
+    {
+     "aliases": [],
+     "createdAt": "<time>",
+     "domain": "cache-research",
+     "id": "<id:30>",
+     "kind": "domain",
+     "linkDegree": 5,
+     "revision": 1,
+     "score": 0.14285714285714285,
+     "slug": "cache-research",
+     "summary": "How the pages of this domain connect.",
+     "tags": [],
+     "title": "Cache research",
+     "updatedAt": "<time>"
+    }
+   ]
+  },
+  "status": 200
+ },
+ "/api/memory/update": {
+  "json": {
+   "update": null
+  },
+  "status": 200
+ },
+ "/api/plans": {
+  "json": {
+   "plans": [
+    {
+     "archived": false,
+     "createdAt": "<time>",
+     "id": "<id:37>",
+     "revision": 1,
+     "title": "Measure prefix cache reuse",
+     "url": "/api/plans/<id:37>/view"
+    }
+   ]
+  },
+  "status": 200
+ },
+ "/api/plans/<id:37>": {
+  "json": {
+   "archived": false,
+   "contentHash": "<id:40>",
+   "context": {
+    "conversationId": "<id:6>",
+    "generation": 0,
+    "question": "Plan an experiment that measures prefix reuse.",
+    "requestId": "golden_ask_plan",
+    "scope": "general"
+   },
+   "conversationHash": "<id:41>",
+   "conversationKey": "plans/u/reader/<id:37>/conversation.json",
+   "conversationTruncated": false,
+   "createdAt": "<time>",
+   "documents": [],
+   "id": "<id:37>",
+   "plan": {
+    "design": {
+     "caption": "The two cells of run (1) decide the claim.",
+     "runs": [
+      {
+       "cells": [
+        {
+         "decisive": true,
+         "reports": "hit rate, median latency",
+         "setting": "a"
+        },
+        {
+         "decisive": true,
+         "reports": "hit rate, median latency",
+         "setting": "b"
+        }
+       ],
+       "group": "Latency",
+       "id": "1",
+       "label": "Equal token counts"
+      }
+     ],
+     "settings": [
+      {
+       "detail": "20 requests",
+       "id": "a",
+       "label": "Stable prefix"
+      },
+      {
+       "detail": "20 requests",
+       "id": "b",
+       "label": "Shuffled prefix"
+      }
+     ]
+    },
+    "exhibits": [],
+    "limits": "One endpoint and one prefix length.",
+    "method": "Compare stable and shuffled prefixes with fixed suffix length and request timing.",
+    "order": [
+     "Build the request generator",
+     "Run (1) in (a) and (b)"
+    ],
+    "pseudocode": "for condition in conditions:\n    record(run(condition))",
+    "question": "Does a stable prefix reduce repeated processing?",
+    "readings": [
+     {
+      "then": "Prefix reuse improves latency here.",
+      "when": "(a) beats (b) in repeated runs"
+     }
+    ],
+    "reference": [],
+    "scope": "A bounded 20-request comparison on one endpoint.",
+    "setup": [
+     {
+      "basis": "proposed",
+      "component": "Trial count",
+      "setting": "20 requests per condition"
+     }
+    ],
+    "title": "Measure prefix cache reuse",
+    "version": 4,
+    "web": []
+   },
+   "referenceImages": [],
+   "revision": 1,
+   "title": "Measure prefix cache reuse",
+   "url": "/api/plans/<id:37>/view"
+  },
+  "status": 200
+ },
+ "/api/plans/<id:37>/export": {
+  "entries": {
+   "conversation.json": [
+    {
+     "content": "What have I read about prefix reuse?",
+     "role": "user",
+     "selectedText": null
+    },
+    {
+     "content": "Prefix caching reuses the unchanged token prefix. A different question suffix leaves that prefix reusable. Keep source ordering stable and measure hit rate separately from latency. [[shared-idea-g7]]",
+     "role": "assistant"
+    },
+    {
+     "content": "Plan an experiment that measures prefix reuse.",
+     "role": "user",
+     "selectedText": null
+    }
+   ],
+   "plan.html": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width\"><title>Measure prefix cache reuse · Delphi</title><style>:root{--ink:#241412;--text:#2e1f1c;--muted:#6e5953;--faint:#9a8581;--line:#e6e0dd;--hair:#eee8e5;--wash:#fbfaf9;--sand:#f4f1ef;--clay:#5a2620;--link:#a8423a;--dawn:#ee9d66;--dawn-soft:#fef1e6}\n*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--text);font:16px/1.7 -apple-system,BlinkMacSystemFont,\"Segoe UI\",system-ui,sans-serif;-webkit-font-smoothing:antialiased}\n.page{display:grid;grid-template-columns:160px minmax(0,780px);gap:72px;justify-content:center;padding:72px 40px 96px}\nnav{position:sticky;top:72px;align-self:start;padding-top:96px;display:flex;flex-direction:column}\nnav a{padding:5px 0;font-size:13px;color:var(--muted)}nav a:hover{color:var(--ink)}\nmain{min-width:0;display:flex;flex-direction:column;gap:52px}\nheader{display:flex;flex-direction:column;gap:16px}.title{display:flex;align-items:flex-start;gap:24px}\nh1{margin:0;flex:1;color:var(--ink);font-size:38px;font-weight:650;line-height:1.15;letter-spacing:-.025em}\nh2{margin:0 0 16px;color:var(--ink);font-size:21px;font-weight:650;letter-spacing:-.015em}\np{margin:0 0 14px;white-space:pre-wrap}.byline{margin:0;font-size:13px;color:var(--muted)}\na{color:var(--link);text-decoration:none}a:hover{color:var(--clay)}b{color:var(--ink);font-weight:650}\nsection{scroll-margin-top:24px}.muted{color:var(--faint);font-size:13px}.ref{font-size:.82em;font-weight:600;color:var(--link)}\n.handoff{position:relative;flex-shrink:0;margin-top:6px}\n.handoff summary{height:36px;padding:0 14px;display:flex;align-items:center;list-style:none;cursor:pointer;border:1px solid var(--line);border-radius:6px;font-size:13px;font-weight:600;color:var(--ink)}\n.handoff summary::-webkit-details-marker{display:none}.handoff[open] summary{background:var(--ink);border-color:var(--ink);color:#fff}\n.handoff-panel{position:absolute;right:0;top:44px;z-index:1;width:min(560px,86vw);padding:20px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 18px 48px rgba(36,20,18,.14);display:flex;flex-direction:column;gap:16px;font-size:13px;line-height:1.5}\n.handoff-panel p{margin:6px 0 0;color:var(--muted)}.label{font-size:12px;font-weight:600;color:var(--muted)}\npre{margin:6px 0 0;padding:10px 12px;background:var(--sand);border:1px solid var(--line);border-radius:6px;font:12px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink);white-space:pre-wrap;overflow-wrap:anywhere}\ntable{width:100%;border-collapse:collapse;font-size:13.5px;line-height:1.5;font-variant-numeric:tabular-nums}\nth,td{padding:10px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--hair);overflow-wrap:break-word}\nthead th{font-size:12px;font-weight:600;color:var(--muted);border-bottom:1.5px solid var(--ink)}\n.design th,.design td{text-align:center}.design th+th,.design td+td{box-shadow:inset 1px 0 0 var(--line)}\n.design th:first-child,.design td:first-child{text-align:left}.design thead th{color:var(--ink);font-weight:700}\n.design thead small{display:block;font-weight:400;color:var(--muted)}.run{font-weight:600;color:var(--ink)}\n.design tr.group td{background:var(--wash);box-shadow:none;text-align:left;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}\n.design td.none{color:#c9bcb8}.design td.decisive{background:var(--dawn-soft);box-shadow:inset 0 0 0 1.5px var(--dawn)}\n.setup td:first-child,.readings td:first-child{width:160px;font-weight:600;color:var(--ink)}.setup td:last-child{width:130px;color:var(--muted)}\nfigure{margin:28px 0 0}figure img{max-width:100%;border:1px solid var(--line);border-radius:6px}\nfigcaption,.caption{margin:12px 0 0;font-size:14px;line-height:1.55;color:#3a2925}\n.flow{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}\n.flow li{flex:1 1 120px;padding:10px 12px;border:1px solid #cfc5c2;border-radius:6px;font-size:12.5px;line-height:1.35;text-align:center}\n.flow li b{display:block}.flow li span{color:var(--muted)}.flow li.key{background:var(--dawn-soft);border-color:var(--dawn)}\n.bars{display:grid;grid-template-columns:minmax(0,160px) minmax(0,1fr) minmax(0,200px);gap:8px 14px;align-items:center;font-size:13px}\n.bar{display:flex;align-items:center;gap:8px}.bar i{height:14px;min-width:2px;border-radius:2px;background:var(--clay)}.bar em{font-style:normal;color:var(--ink);white-space:nowrap}\n.bars small{color:var(--muted);font-size:12px}\n.order{margin:16px 0 0;padding-left:22px}.order li+li{margin-top:4px}\ndetails summary{cursor:pointer;color:var(--muted);font-size:13px}details pre{margin-top:10px}\n#references{padding-top:20px;border-top:1px solid var(--line)}#references h2{font-size:17px}\n#references ol{margin:0;padding-left:22px;font-size:14px;line-height:1.6;color:#3a2925}#references li+li{margin-top:12px}\n#references p{margin:4px 0 0}.quote{font-style:italic}.conversation{margin-top:24px}.conversation p{font-size:13px}\n@media(max-width:900px){.page{grid-template-columns:1fr;gap:24px;padding:32px 20px 64px}nav{display:none}h1{font-size:30px}.design{display:block;overflow-x:auto}.bars{grid-template-columns:1fr}}\n@media print{.handoff,nav{display:none}.page{display:block;padding:0}}</style></head><body><div class=\"page\"><nav aria-label=\"Sections\"><a href=\"#question\">Question</a><a href=\"#design\">Design</a><a href=\"#method\">Method</a><a href=\"#setup\">Setup</a><a href=\"#reading\">Reading the result</a><a href=\"#limits\">Limits</a><a href=\"#references\">References</a></nav><main><header><div class=\"title\"><h1>Measure prefix cache reuse</h1><details class=\"handoff\"><summary>Hand off</summary><div class=\"handoff-panel\"><div><span class=\"label\">1 · Connect Delphi once</span><p>Create read-only access in Delphi Settings → Plans, or download the plan and its captured sources from the line under the title.</p></div><div><span class=\"label\">2 · Point at runs from Table 1</span><pre>Use Delphi MCP plan <id:37>. Implement runs (1) in setting (a). Hold Setup fixed and ask before changing it.</pre></div></div></details></div><p class=\"byline\">Research plan · revision 1 · <a href=\"/api/plans/<id:37>/export\">Download plan and captured sources</a></p></header><section id=\"question\" aria-labelledby=\"question-title\"><h2 id=\"question-title\">Question</h2><p>Does a stable prefix reduce repeated processing?</p><p>A bounded 20-request comparison on one endpoint.</p></section><section id=\"design\" aria-labelledby=\"design-title\"><h2 id=\"design-title\">Design</h2><table class=\"design\"><thead><tr><th scope=\"col\">Run</th><th scope=\"col\">(a) Stable prefix<small>20 requests</small></th><th scope=\"col\">(b) Shuffled prefix<small>20 requests</small></th></tr></thead><tbody><tr class=\"group\"><td colspan=\"3\">Latency</td></tr><tr><td><span class=\"run\">(1)</span> Equal token counts</td><td class=\"decisive\">hit rate, median latency</td><td class=\"decisive\">hit rate, median latency</td></tr></tbody></table><p class=\"caption\"><b>Table 1. Planned runs.</b> The two cells of run (1) decide the claim.</p></section><section id=\"method\" aria-labelledby=\"method-title\"><h2 id=\"method-title\">Method</h2><p>Compare stable and shuffled prefixes with fixed suffix length and request timing.</p><ol class=\"order\"><li>Build the request generator</li><li>Run (1) in (a) and (b)</li></ol><details><summary>Pseudocode</summary><pre>for condition in conditions:\n    record(run(condition))</pre></details></section><section id=\"setup\" aria-labelledby=\"setup-title\"><h2 id=\"setup-title\">Setup</h2><table class=\"setup\"><thead><tr><th scope=\"col\">Component</th><th scope=\"col\">Setting</th><th scope=\"col\">Basis</th></tr></thead><tbody><tr><td>Trial count</td><td>20 requests per condition</td><td>proposed</td></tr></tbody></table></section><section id=\"reading\" aria-labelledby=\"reading-title\"><h2 id=\"reading-title\">Reading the result</h2><table class=\"readings\"><thead><tr><th scope=\"col\">If</th><th scope=\"col\">Then</th></tr></thead><tbody><tr><td>(a) beats (b) in repeated runs</td><td>Prefix reuse improves latency here.</td></tr></tbody></table></section><section id=\"limits\" aria-labelledby=\"limits-title\"><h2 id=\"limits-title\">Limits</h2><p>One endpoint and one prefix length.</p></section><section id=\"references\" aria-labelledby=\"references-title\"><h2 id=\"references-title\">References</h2><ol></ol><details class=\"conversation\"><summary>Conversation captured with this plan</summary><p><b>User</b><br>What have I read about prefix reuse?</p><p><b>Assistant</b><br>Prefix caching reuses the unchanged token prefix. A different question suffix leaves that prefix reusable. Keep source ordering stable and measure hit rate separately from latency. [[shared-idea-g7]]</p><p><b>User</b><br>Plan an experiment that measures prefix reuse.</p></details></section></main></div></body></html>",
+   "plan.json": {
+    "archived": false,
+    "contentHash": "<id:40>",
+    "context": {
+     "conversationId": "<id:6>",
+     "generation": 0,
+     "question": "Plan an experiment that measures prefix reuse.",
+     "requestId": "golden_ask_plan",
+     "scope": "general"
+    },
+    "conversationHash": "<id:41>",
+    "conversationKey": "plans/u/reader/<id:37>/conversation.json",
+    "conversationTruncated": false,
+    "createdAt": "<time>",
+    "documents": [],
+    "id": "<id:37>",
+    "plan": {
+     "design": {
+      "caption": "The two cells of run (1) decide the claim.",
+      "runs": [
+       {
+        "cells": [
+         {
+          "decisive": true,
+          "reports": "hit rate, median latency",
+          "setting": "a"
+         },
+         {
+          "decisive": true,
+          "reports": "hit rate, median latency",
+          "setting": "b"
+         }
+        ],
+        "group": "Latency",
+        "id": "1",
+        "label": "Equal token counts"
+       }
+      ],
+      "settings": [
+       {
+        "detail": "20 requests",
+        "id": "a",
+        "label": "Stable prefix"
+       },
+       {
+        "detail": "20 requests",
+        "id": "b",
+        "label": "Shuffled prefix"
+       }
+      ]
+     },
+     "exhibits": [],
+     "limits": "One endpoint and one prefix length.",
+     "method": "Compare stable and shuffled prefixes with fixed suffix length and request timing.",
+     "order": [
+      "Build the request generator",
+      "Run (1) in (a) and (b)"
+     ],
+     "pseudocode": "for condition in conditions:\n    record(run(condition))",
+     "question": "Does a stable prefix reduce repeated processing?",
+     "readings": [
+      {
+       "then": "Prefix reuse improves latency here.",
+       "when": "(a) beats (b) in repeated runs"
+      }
+     ],
+     "reference": [],
+     "scope": "A bounded 20-request comparison on one endpoint.",
+     "setup": [
+      {
+       "basis": "proposed",
+       "component": "Trial count",
+       "setting": "20 requests per condition"
+      }
+     ],
+     "title": "Measure prefix cache reuse",
+     "version": 4,
+     "web": []
+    },
+    "referenceImages": [],
+    "revision": 1
+   }
+  },
+  "status": 200,
+  "type": "application/zip"
+ },
+ "/api/plans/<id:37>/view": {
+  "status": 200,
+  "text": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width\"><title>Measure prefix cache reuse · Delphi</title><style>:root{--ink:#241412;--text:#2e1f1c;--muted:#6e5953;--faint:#9a8581;--line:#e6e0dd;--hair:#eee8e5;--wash:#fbfaf9;--sand:#f4f1ef;--clay:#5a2620;--link:#a8423a;--dawn:#ee9d66;--dawn-soft:#fef1e6}\n*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--text);font:16px/1.7 -apple-system,BlinkMacSystemFont,\"Segoe UI\",system-ui,sans-serif;-webkit-font-smoothing:antialiased}\n.page{display:grid;grid-template-columns:160px minmax(0,780px);gap:72px;justify-content:center;padding:72px 40px 96px}\nnav{position:sticky;top:72px;align-self:start;padding-top:96px;display:flex;flex-direction:column}\nnav a{padding:5px 0;font-size:13px;color:var(--muted)}nav a:hover{color:var(--ink)}\nmain{min-width:0;display:flex;flex-direction:column;gap:52px}\nheader{display:flex;flex-direction:column;gap:16px}.title{display:flex;align-items:flex-start;gap:24px}\nh1{margin:0;flex:1;color:var(--ink);font-size:38px;font-weight:650;line-height:1.15;letter-spacing:-.025em}\nh2{margin:0 0 16px;color:var(--ink);font-size:21px;font-weight:650;letter-spacing:-.015em}\np{margin:0 0 14px;white-space:pre-wrap}.byline{margin:0;font-size:13px;color:var(--muted)}\na{color:var(--link);text-decoration:none}a:hover{color:var(--clay)}b{color:var(--ink);font-weight:650}\nsection{scroll-margin-top:24px}.muted{color:var(--faint);font-size:13px}.ref{font-size:.82em;font-weight:600;color:var(--link)}\n.handoff{position:relative;flex-shrink:0;margin-top:6px}\n.handoff summary{height:36px;padding:0 14px;display:flex;align-items:center;list-style:none;cursor:pointer;border:1px solid var(--line);border-radius:6px;font-size:13px;font-weight:600;color:var(--ink)}\n.handoff summary::-webkit-details-marker{display:none}.handoff[open] summary{background:var(--ink);border-color:var(--ink);color:#fff}\n.handoff-panel{position:absolute;right:0;top:44px;z-index:1;width:min(560px,86vw);padding:20px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 18px 48px rgba(36,20,18,.14);display:flex;flex-direction:column;gap:16px;font-size:13px;line-height:1.5}\n.handoff-panel p{margin:6px 0 0;color:var(--muted)}.label{font-size:12px;font-weight:600;color:var(--muted)}\npre{margin:6px 0 0;padding:10px 12px;background:var(--sand);border:1px solid var(--line);border-radius:6px;font:12px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink);white-space:pre-wrap;overflow-wrap:anywhere}\ntable{width:100%;border-collapse:collapse;font-size:13.5px;line-height:1.5;font-variant-numeric:tabular-nums}\nth,td{padding:10px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--hair);overflow-wrap:break-word}\nthead th{font-size:12px;font-weight:600;color:var(--muted);border-bottom:1.5px solid var(--ink)}\n.design th,.design td{text-align:center}.design th+th,.design td+td{box-shadow:inset 1px 0 0 var(--line)}\n.design th:first-child,.design td:first-child{text-align:left}.design thead th{color:var(--ink);font-weight:700}\n.design thead small{display:block;font-weight:400;color:var(--muted)}.run{font-weight:600;color:var(--ink)}\n.design tr.group td{background:var(--wash);box-shadow:none;text-align:left;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}\n.design td.none{color:#c9bcb8}.design td.decisive{background:var(--dawn-soft);box-shadow:inset 0 0 0 1.5px var(--dawn)}\n.setup td:first-child,.readings td:first-child{width:160px;font-weight:600;color:var(--ink)}.setup td:last-child{width:130px;color:var(--muted)}\nfigure{margin:28px 0 0}figure img{max-width:100%;border:1px solid var(--line);border-radius:6px}\nfigcaption,.caption{margin:12px 0 0;font-size:14px;line-height:1.55;color:#3a2925}\n.flow{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}\n.flow li{flex:1 1 120px;padding:10px 12px;border:1px solid #cfc5c2;border-radius:6px;font-size:12.5px;line-height:1.35;text-align:center}\n.flow li b{display:block}.flow li span{color:var(--muted)}.flow li.key{background:var(--dawn-soft);border-color:var(--dawn)}\n.bars{display:grid;grid-template-columns:minmax(0,160px) minmax(0,1fr) minmax(0,200px);gap:8px 14px;align-items:center;font-size:13px}\n.bar{display:flex;align-items:center;gap:8px}.bar i{height:14px;min-width:2px;border-radius:2px;background:var(--clay)}.bar em{font-style:normal;color:var(--ink);white-space:nowrap}\n.bars small{color:var(--muted);font-size:12px}\n.order{margin:16px 0 0;padding-left:22px}.order li+li{margin-top:4px}\ndetails summary{cursor:pointer;color:var(--muted);font-size:13px}details pre{margin-top:10px}\n#references{padding-top:20px;border-top:1px solid var(--line)}#references h2{font-size:17px}\n#references ol{margin:0;padding-left:22px;font-size:14px;line-height:1.6;color:#3a2925}#references li+li{margin-top:12px}\n#references p{margin:4px 0 0}.quote{font-style:italic}.conversation{margin-top:24px}.conversation p{font-size:13px}\n@media(max-width:900px){.page{grid-template-columns:1fr;gap:24px;padding:32px 20px 64px}nav{display:none}h1{font-size:30px}.design{display:block;overflow-x:auto}.bars{grid-template-columns:1fr}}\n@media print{.handoff,nav{display:none}.page{display:block;padding:0}}</style></head><body><div class=\"page\"><nav aria-label=\"Sections\"><a href=\"#question\">Question</a><a href=\"#design\">Design</a><a href=\"#method\">Method</a><a href=\"#setup\">Setup</a><a href=\"#reading\">Reading the result</a><a href=\"#limits\">Limits</a><a href=\"#references\">References</a></nav><main><header><div class=\"title\"><h1>Measure prefix cache reuse</h1><details class=\"handoff\"><summary>Hand off</summary><div class=\"handoff-panel\"><div><span class=\"label\">1 · Connect Delphi once</span><p>Create read-only access in Delphi Settings → Plans, or download the plan and its captured sources from the line under the title.</p></div><div><span class=\"label\">2 · Point at runs from Table 1</span><pre>Use Delphi MCP plan <id:37>. Implement runs (1) in setting (a). Hold Setup fixed and ask before changing it.</pre></div></div></details></div><p class=\"byline\">Research plan · revision 1 · <a href=\"/api/plans/<id:37>/export\">Download plan and captured sources</a></p></header><section id=\"question\" aria-labelledby=\"question-title\"><h2 id=\"question-title\">Question</h2><p>Does a stable prefix reduce repeated processing?</p><p>A bounded 20-request comparison on one endpoint.</p></section><section id=\"design\" aria-labelledby=\"design-title\"><h2 id=\"design-title\">Design</h2><table class=\"design\"><thead><tr><th scope=\"col\">Run</th><th scope=\"col\">(a) Stable prefix<small>20 requests</small></th><th scope=\"col\">(b) Shuffled prefix<small>20 requests</small></th></tr></thead><tbody><tr class=\"group\"><td colspan=\"3\">Latency</td></tr><tr><td><span class=\"run\">(1)</span> Equal token counts</td><td class=\"decisive\">hit rate, median latency</td><td class=\"decisive\">hit rate, median latency</td></tr></tbody></table><p class=\"caption\"><b>Table 1. Planned runs.</b> The two cells of run (1) decide the claim.</p></section><section id=\"method\" aria-labelledby=\"method-title\"><h2 id=\"method-title\">Method</h2><p>Compare stable and shuffled prefixes with fixed suffix length and request timing.</p><ol class=\"order\"><li>Build the request generator</li><li>Run (1) in (a) and (b)</li></ol><details><summary>Pseudocode</summary><pre>for condition in conditions:\n    record(run(condition))</pre></details></section><section id=\"setup\" aria-labelledby=\"setup-title\"><h2 id=\"setup-title\">Setup</h2><table class=\"setup\"><thead><tr><th scope=\"col\">Component</th><th scope=\"col\">Setting</th><th scope=\"col\">Basis</th></tr></thead><tbody><tr><td>Trial count</td><td>20 requests per condition</td><td>proposed</td></tr></tbody></table></section><section id=\"reading\" aria-labelledby=\"reading-title\"><h2 id=\"reading-title\">Reading the result</h2><table class=\"readings\"><thead><tr><th scope=\"col\">If</th><th scope=\"col\">Then</th></tr></thead><tbody><tr><td>(a) beats (b) in repeated runs</td><td>Prefix reuse improves latency here.</td></tr></tbody></table></section><section id=\"limits\" aria-labelledby=\"limits-title\"><h2 id=\"limits-title\">Limits</h2><p>One endpoint and one prefix length.</p></section><section id=\"references\" aria-labelledby=\"references-title\"><h2 id=\"references-title\">References</h2><ol></ol><details class=\"conversation\"><summary>Conversation captured with this plan</summary><p><b>User</b><br>What have I read about prefix reuse?</p><p><b>Assistant</b><br>Prefix caching reuses the unchanged token prefix. A different question suffix leaves that prefix reusable. Keep source ordering stable and measure hit rate separately from latency. [[shared-idea-g7]]</p><p><b>User</b><br>Plan an experiment that measures prefix reuse.</p></details></section></main></div></body></html>",
+  "type": "text/html"
+ },
+ "/api/plans/capacity": {
+  "json": {
+   "limit": 3,
+   "pending": 0,
+   "plans": [
+    {
+     "archived": false,
+     "createdAt": "<time>",
+     "id": "<id:37>",
+     "revision": 1,
+     "title": "Measure prefix cache reuse",
+     "url": "/api/plans/<id:37>/view"
+    }
+   ]
+  },
+  "status": 200
+ },
+ "/api/plans/grants": {
+  "json": {
+   "grants": []
+  },
+  "status": 200
+ },
+ "/api/projects": {
+  "json": [
+   {
+    "id": "<id:3>",
+    "name": "Reading",
+    "paperCount": 3,
+    "slug": "reading",
+    "updatedAt": "<time>"
+   }
+  ],
+  "status": 200
+ },
+ "/api/projects/<id:3>": {
+  "json": {
+   "createdAt": "<time>",
+   "id": "<id:3>",
+   "name": "Reading",
+   "owner": "reader",
+   "papers": [
+    {
+     "bytes": 100,
+     "createdAt": "<time>",
+     "digest": {
+      "estimatedTokens": 114,
+      "evidenceIds": [],
+      "model": "gpt-6.1-sol",
+      "sourceHash": "<id:39>",
+      "sourceMode": "pdf-multimodal",
+      "status": "ready",
+      "telemetry": {
+       "actualTier": "default",
+       "attempts": {
+        "author": 1,
+        "corrections": 0
+       },
+       "bodyCharacters": 310,
+       "cacheReadTokens": 0,
+       "cacheWriteTokens": 0,
+       "callCount": 1,
+       "calls": [
+        {
+         "actualTier": "default",
+         "cacheReadTokens": 0,
+         "cacheWriteTokens": 0,
+         "durationMs": "<ms>",
+         "inputTokens": 100,
+         "model": "gpt-6.1-sol",
+         "outputTokens": 60,
+         "reasoningTokens": 0,
+         "requestedTier": "default",
+         "stage": "digest-author"
+        }
+       ],
+       "inputTokens": 100,
+       "outputTokens": 60,
+       "reasoningTokens": 0,
+       "requestedTier": "default",
+       "stageDurationsMs": [
+        {
+         "durationMs": "<ms>",
+         "stage": "digest-author"
+        }
+       ],
+       "totalDurationMs": "<ms>"
+      },
+      "updatedAt": "<time>",
+      "version": "research-digest-v8"
+     },
+     "filename": "goldenpapera.pdf",
+     "id": "goldenpapera",
+     "openaiFileId": "file-goldenpapera",
+     "openaiFileUploadedAt": "<time>",
+     "pages": 2,
+     "slug": "shared-idea-study-g7-a",
+     "title": "Shared Idea Study g7 A",
+     "tokens": 20
+    },
+    {
+     "bytes": 100,
+     "createdAt": "<time>",
+     "digest": {
+      "estimatedTokens": 114,
+      "evidenceIds": [],
+      "model": "gpt-6.1-sol",
+      "sourceHash": "<id:39>",
+      "sourceMode": "pdf-multimodal",
+      "status": "ready",
+      "telemetry": {
+       "actualTier": "default",
+       "attempts": {
+        "author": 1,
+        "corrections": 0
+       },
+       "bodyCharacters": 310,
+       "cacheReadTokens": 0,
+       "cacheWriteTokens": 0,
+       "callCount": 1,
+       "calls": [
+        {
+         "actualTier": "default",
+         "cacheReadTokens": 0,
+         "cacheWriteTokens": 0,
+         "durationMs": "<ms>",
+         "inputTokens": 100,
+         "model": "gpt-6.1-sol",
+         "outputTokens": 60,
+         "reasoningTokens": 0,
+         "requestedTier": "default",
+         "stage": "digest-author"
+        }
+       ],
+       "inputTokens": 100,
+       "outputTokens": 60,
+       "reasoningTokens": 0,
+       "requestedTier": "default",
+       "stageDurationsMs": [
+        {
+         "durationMs": "<ms>",
+         "stage": "digest-author"
+        }
+       ],
+       "totalDurationMs": "<ms>"
+      },
+      "updatedAt": "<time>",
+      "version": "research-digest-v8"
+     },
+     "filename": "goldenpaperb.pdf",
+     "id": "goldenpaperb",
+     "openaiFileId": "file-goldenpaperb",
+     "openaiFileUploadedAt": "<time>",
+     "pages": 2,
+     "slug": "shared-idea-study-g7-b",
+     "title": "Shared Idea Study g7 B",
+     "tokens": 20
+    },
+    {
+     "bytes": 100,
+     "createdAt": "<time>",
+     "digest": {
+      "estimatedTokens": 114,
+      "evidenceIds": [],
+      "model": "gpt-6.1-sol",
+      "sourceHash": "<id:39>",
+      "sourceMode": "pdf-multimodal",
+      "status": "ready",
+      "telemetry": {
+       "actualTier": "default",
+       "attempts": {
+        "author": 1,
+        "corrections": 0
+       },
+       "bodyCharacters": 310,
+       "cacheReadTokens": 0,
+       "cacheWriteTokens": 0,
+       "callCount": 1,
+       "calls": [
+        {
+         "actualTier": "default",
+         "cacheReadTokens": 0,
+         "cacheWriteTokens": 0,
+         "durationMs": "<ms>",
+         "inputTokens": 100,
+         "model": "gpt-6.1-sol",
+         "outputTokens": 60,
+         "reasoningTokens": 0,
+         "requestedTier": "default",
+         "stage": "digest-author"
+        }
+       ],
+       "inputTokens": 100,
+       "outputTokens": 60,
+       "reasoningTokens": 0,
+       "requestedTier": "default",
+       "stageDurationsMs": [
+        {
+         "durationMs": "<ms>",
+         "stage": "digest-author"
+        }
+       ],
+       "totalDurationMs": "<ms>"
+      },
+      "updatedAt": "<time>",
+      "version": "research-digest-v8"
+     },
+     "filename": "goldenpaperc.pdf",
+     "id": "goldenpaperc",
+     "openaiFileId": "file-goldenpaperc",
+     "openaiFileUploadedAt": "<time>",
+     "pages": 2,
+     "slug": "cache-notes",
+     "title": "Cache Notes",
+     "tokens": 20
+    }
+   ],
+   "slug": "reading",
+   "updatedAt": "<time>"
+  },
+  "status": 200
+ },
+ "/api/projects/<id:3>/papers/goldenpapera/highlights": {
+  "json": [],
+  "status": 200
+ },
+ "/api/projects/<id:3>/papers/goldenpapera/notes": {
+  "json": [],
+  "status": 200
+ },
+ "/api/projects/<id:3>/papers/goldenpaperb/highlights": {
+  "json": [],
+  "status": 200
+ },
+ "/api/projects/<id:3>/papers/goldenpaperb/notes": {
+  "json": [],
+  "status": 200
+ },
+ "/api/projects/<id:3>/papers/goldenpaperc/highlights": {
+  "json": [
+   {
+    "color": "yellow",
+    "createdAt": "<time>",
+    "id": "<id:38>",
+    "page": 2,
+    "rects": [
+     {
+      "h": 0.03,
+      "w": 0.5,
+      "x": 0.1,
+      "y": 0.2
+     }
+    ],
+    "text": "Stable prefix: 120 ms. Shuffled prefix: 240 ms.",
+    "type": "pdf"
+   }
+  ],
+  "status": 200
+ },
+ "/api/projects/<id:3>/papers/goldenpaperc/notes": {
+  "json": [
+   {
+    "anchorY": 0.2,
+    "body": "One comparison, twenty requests: too few to call it a speedup.",
+    "createdAt": "<time>",
+    "filedAt": "<time>",
+    "highlightId": "<id:38>",
+    "id": "<id:10>",
+    "page": 2,
+    "quotedText": "Stable prefix: 120 ms. Shuffled prefix: 240 ms.",
+    "updatedAt": "<time>"
+   }
+  ],
+  "status": 200
+ },
+ "Storage.list_page_versions(cache-notes)": {
+  "rows": []
+ },
+ "Storage.list_page_versions(cache-research)": {
+  "rows": [
+   {
+    "body": "## How these pages connect\n\n[[cache-notes]] and [[shared-idea-study-g7-b]] and [[shared-idea-study-g7-a]] report on the same question, and [[prefix-reuse-goldenpaperc]], [[shared-idea-g7]] is where what they share is explained.\n\n## Reading paths\n\nStart with [[prefix-reuse-goldenpaperc]], then read the sources against it.",
+    "citations": [],
+    "createdAt": "<time>",
+    "eventId": "<id:16>",
+    "note": "Composed from the domain's members.",
+    "revision": 1,
+    "slug": "cache-research",
+    "summary": "How the pages of this domain connect.",
+    "title": "Cache research",
+    "trigger": "domain"
+   }
+  ]
+ },
+ "Storage.list_page_versions(prefix-reuse-goldenpaperc)": {
+  "rows": [
+   {
+    "body": "## Problem and approach\n\nPrefix caching reuses exact matching tokens before the changing question. [E1]\n\n## Evidence and limitations\n\nA stable prefix can reduce repeated work. Measure hit rate and repeated latency rather than assuming a universal speedup.\n\n## Reading route\n\nInspect the controlled comparison in [[cache-notes]] and ask which confounders remain.\n\nAsked again in a session: a matching prefix is reused when only the question changes. [E2]\n\nThe reader noted a doubt about this comparison. [E3]",
+    "citations": [
+     {
+      "claimType": "author-claim",
+      "evidenceId": null,
+      "id": 1,
+      "noteId": null,
+      "page": 1,
+      "paperId": "goldenpaperc",
+      "section": null
+     },
+     {
+      "claimType": "author-claim",
+      "evidenceId": null,
+      "id": 2,
+      "noteId": null,
+      "page": 1,
+      "paperId": "goldenpaperc",
+      "section": null
+     },
+     {
+      "claimType": "reader-note",
+      "evidenceId": null,
+      "id": 3,
+      "noteId": "<id:10>",
+      "page": null,
+      "paperId": "goldenpaperc",
+      "section": null
+     }
+    ],
+    "createdAt": "<time>",
+    "eventId": "<id:9>",
+    "note": "Added what the reader's note says.",
+    "revision": 3,
+    "slug": "prefix-reuse-goldenpaperc",
+    "summary": "Understand exact prefix reuse and test its limitations.",
+    "title": "Prefix reuse goldenpaperc",
+    "trigger": "notes"
+   },
+   {
+    "body": "## Problem and approach\n\nPrefix caching reuses exact matching tokens before the changing question. [E1]\n\n## Evidence and limitations\n\nA stable prefix can reduce repeated work. Measure hit rate and repeated latency rather than assuming a universal speedup.\n\n## Reading route\n\nInspect the controlled comparison in [[cache-notes]] and ask which confounders remain.\n\nAsked again in a session: a matching prefix is reused when only the question changes. [E2]",
+    "citations": [
+     {
+      "claimType": "author-claim",
+      "evidenceId": null,
+      "id": 1,
+      "noteId": null,
+      "page": 1,
+      "paperId": "goldenpaperc",
+      "section": null
+     },
+     {
+      "claimType": "author-claim",
+      "evidenceId": null,
+      "id": 2,
+      "noteId": null,
+      "page": 1,
+      "paperId": "goldenpaperc",
+      "section": null
+     }
+    ],
+    "createdAt": "<time>",
+    "eventId": "<id:14>",
+    "note": "Added what a session worked out about prefix reuse.",
+    "revision": 2,
+    "slug": "prefix-reuse-goldenpaperc",
+    "summary": "Understand exact prefix reuse and test its limitations.",
+    "title": "Prefix reuse goldenpaperc",
+    "trigger": "conversation"
+   },
+   {
+    "body": "## Problem and approach\n\nPrefix caching reuses exact matching tokens before the changing question. [E1]\n\n## Evidence and limitations\n\nA stable prefix can reduce repeated work. Measure hit rate and repeated latency rather than assuming a universal speedup.\n\n## Reading route\n\nInspect the controlled comparison in [[cache-notes]] and ask which confounders remain.",
+    "citations": [
+     {
+      "claimType": "author-claim",
+      "evidenceId": null,
+      "id": 1,
+      "noteId": null,
+      "page": 1,
+      "paperId": "goldenpaperc",
+      "section": null
+     }
+    ],
+    "createdAt": "<time>",
+    "eventId": "<id:19>",
+    "note": "Filed an evidence-bound page on prefix reuse.",
+    "revision": 1,
+    "slug": "prefix-reuse-goldenpaperc",
+    "summary": "Understand exact prefix reuse and test its limitations.",
+    "title": "Prefix reuse goldenpaperc",
+    "trigger": "document"
+   }
+  ]
+ },
+ "Storage.list_page_versions(shared-idea-g7)": {
+  "rows": [
+   {
+    "body": "## Problem and approach\n\nPrefix caching reuses exact matching tokens before the changing question. [E1]\n\n## Evidence and limitations\n\nA stable prefix can reduce repeated work. Measure hit rate and repeated latency rather than assuming a universal speedup.\n\n## Reading route\n\nInspect the controlled comparison in [[shared-idea-study-g7-a]] and ask which confounders remain.\n\nThe same reuse is reported again. A stable prefix can reduce repeated work. [E2] The document that reports it has its own page, [[shared-idea-study-g7-b]].",
+    "citations": [
+     {
+      "claimType": "author-claim",
+      "evidenceId": null,
+      "id": 1,
+      "noteId": null,
+      "page": 1,
+      "paperId": "goldenpapera",
+      "section": null
+     },
+     {
+      "claimType": "author-claim",
+      "evidenceId": null,
+      "id": 2,
+      "noteId": null,
+      "page": 1,
+      "paperId": "goldenpaperb",
+      "section": null
+     }
+    ],
+    "createdAt": "<time>",
+    "eventId": "<id:22>",
+    "note": "Added what another document reports about prefix reuse.",
+    "revision": 2,
+    "slug": "shared-idea-g7",
+    "summary": "Understand exact prefix reuse and test its limitations.",
+    "title": "Shared idea g7",
+    "trigger": "document"
+   },
+   {
+    "body": "## Problem and approach\n\nPrefix caching reuses exact matching tokens before the changing question. [E1]\n\n## Evidence and limitations\n\nA stable prefix can reduce repeated work. Measure hit rate and repeated latency rather than assuming a universal speedup.\n\n## Reading route\n\nInspect the controlled comparison in [[shared-idea-study-g7-a]] and ask which confounders remain.",
+    "citations": [
+     {
+      "claimType": "author-claim",
+      "evidenceId": null,
+      "id": 1,
+      "noteId": null,
+      "page": 1,
+      "paperId": "goldenpapera",
+      "section": null
+     }
+    ],
+    "createdAt": "<time>",
+    "eventId": "<id:25>",
+    "note": "Filed an evidence-bound page on prefix reuse.",
+    "revision": 1,
+    "slug": "shared-idea-g7",
+    "summary": "Understand exact prefix reuse and test its limitations.",
+    "title": "Shared idea g7",
+    "trigger": "document"
+   }
+  ]
+ },
+ "Storage.list_page_versions(shared-idea-study-g7-a)": {
+  "rows": []
+ },
+ "Storage.list_page_versions(shared-idea-study-g7-b)": {
+  "rows": []
+ },
+ "Storage.page_history": {
+  "rows": {
+   "cache-notes": {
+    "asked": null,
+    "latest": null
+   },
+   "cache-research": {
+    "asked": null,
+    "latest": {
+     "citations": [],
+     "createdAt": "<time>",
+     "eventId": "<id:16>",
+     "note": "Composed from the domain's members.",
+     "revision": 1,
+     "slug": "cache-research",
+     "summary": "How the pages of this domain connect.",
+     "title": "Cache research",
+     "trigger": "domain"
+    }
+   },
+   "prefix-reuse-goldenpaperc": {
+    "asked": {
+     "citations": [
+      {
+       "claimType": "author-claim",
+       "evidenceId": null,
+       "id": 1,
+       "noteId": null,
+       "page": 1,
+       "paperId": "goldenpaperc",
+       "section": null
+      },
+      {
+       "claimType": "author-claim",
+       "evidenceId": null,
+       "id": 2,
+       "noteId": null,
+       "page": 1,
+       "paperId": "goldenpaperc",
+       "section": null
+      }
+     ],
+     "createdAt": "<time>",
+     "eventId": "<id:14>",
+     "note": "Added what a session worked out about prefix reuse.",
+     "revision": 2,
+     "slug": "prefix-reuse-goldenpaperc",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "title": "Prefix reuse goldenpaperc",
+     "trigger": "conversation"
+    },
+    "latest": {
+     "citations": [
+      {
+       "claimType": "author-claim",
+       "evidenceId": null,
+       "id": 1,
+       "noteId": null,
+       "page": 1,
+       "paperId": "goldenpaperc",
+       "section": null
+      },
+      {
+       "claimType": "author-claim",
+       "evidenceId": null,
+       "id": 2,
+       "noteId": null,
+       "page": 1,
+       "paperId": "goldenpaperc",
+       "section": null
+      },
+      {
+       "claimType": "reader-note",
+       "evidenceId": null,
+       "id": 3,
+       "noteId": "<id:10>",
+       "page": null,
+       "paperId": "goldenpaperc",
+       "section": null
+      }
+     ],
+     "createdAt": "<time>",
+     "eventId": "<id:9>",
+     "note": "Added what the reader's note says.",
+     "revision": 3,
+     "slug": "prefix-reuse-goldenpaperc",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "title": "Prefix reuse goldenpaperc",
+     "trigger": "notes"
+    }
+   },
+   "shared-idea-g7": {
+    "asked": null,
+    "latest": {
+     "citations": [
+      {
+       "claimType": "author-claim",
+       "evidenceId": null,
+       "id": 1,
+       "noteId": null,
+       "page": 1,
+       "paperId": "goldenpapera",
+       "section": null
+      },
+      {
+       "claimType": "author-claim",
+       "evidenceId": null,
+       "id": 2,
+       "noteId": null,
+       "page": 1,
+       "paperId": "goldenpaperb",
+       "section": null
+      }
+     ],
+     "createdAt": "<time>",
+     "eventId": "<id:22>",
+     "note": "Added what another document reports about prefix reuse.",
+     "revision": 2,
+     "slug": "shared-idea-g7",
+     "summary": "Understand exact prefix reuse and test its limitations.",
+     "title": "Shared idea g7",
+     "trigger": "document"
+    }
+   },
+   "shared-idea-study-g7-a": {
+    "asked": null,
+    "latest": null
+   },
+   "shared-idea-study-g7-b": {
+    "asked": null,
+    "latest": null
+   }
+  }
+ }
+}

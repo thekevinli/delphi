@@ -1,0 +1,28 @@
+{
+  "id": "e2997335733542859ebaeb05",
+  "slug": "shared-idea-study-g7-a",
+  "createdAt": "2026-10-23T06:57:29.425431+00:00",
+  "revision": 1,
+  "kind": "source",
+  "domain": "cache-research",
+  "title": "Shared Idea Study g7 A",
+  "summary": "A matching token prefix is reusable even when the question suffix changes.",
+  "body": "## Prefix reuse\n\nA matching token prefix is reusable even when the question suffix changes. [E1]\n\n## Controlled comparison\n\nKeep the model, suffix length and timing fixed. Compare stable and shuffled prefixes and report latency distributions.\n\n## Limits\n\nA small example does not establish a universal speedup.",
+  "tags": [],
+  "aliases": [],
+  "citations": [
+    {
+      "id": 1,
+      "claimType": "author-claim",
+      "paperId": "goldenpapera",
+      "page": 1,
+      "section": null,
+      "noteId": null,
+      "evidenceId": null
+    }
+  ],
+  "links": [],
+  "updatedAt": "2026-10-23T06:57:29.470995+00:00",
+  "sourcePaperId": "goldenpapera",
+  "sourceProjectId": "5fdf2b5c144f"
+}

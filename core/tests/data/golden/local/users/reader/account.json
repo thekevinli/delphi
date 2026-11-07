@@ -1,0 +1,8 @@
+{
+  "username": "reader",
+  "email": null,
+  "passwordSalt": "salt",
+  "passwordHash": "hash",
+  "useStandardTier": true,
+  "createdAt": "2026-10-23T06:57:29.373731+00:00"
+}

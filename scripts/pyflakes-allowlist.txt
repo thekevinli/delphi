@@ -1,0 +1,7 @@
+# Findings the pyflakes gate (scripts/check_pyflakes.py) tolerates: undefined names
+# and redefinitions it would otherwise fail on. One per line, as
+#
+#   backend/path/to/file.py: redefinition of unused 'name'  # why this one stays
+#
+# Line numbers are left out on purpose. A reason after ' # ' is required, and an
+# entry matching nothing fails the gate, so this list can only shrink.

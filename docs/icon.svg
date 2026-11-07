@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fbf6ef"/>
+      <stop offset="1" stop-color="#efe3d3"/>
+    </linearGradient>
+    <clipPath id="squircle">
+      <rect x="100" y="100" width="824" height="824" rx="185" ry="185"/>
+    </clipPath>
+    <radialGradient id="dawn" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ee9d66" stop-opacity="0.16"/>
+      <stop offset="0.55" stop-color="#ee9d66" stop-opacity="0.07"/>
+      <stop offset="1" stop-color="#ee9d66" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="gap-x" maskUnits="userSpaceOnUse" x="0" y="0" width="120" height="120">
+      <rect width="120" height="120" fill="#000"/>
+      <circle cx="60" cy="40" r="21" fill="#fff"/>
+      <path d="M60 44 L98 98 H22 Z" fill="#000" stroke="#000" stroke-width="12" stroke-linejoin="round" stroke-linecap="round"/>
+    </mask>
+  </defs>
+  <rect x="100" y="100" width="824" height="824" rx="185" ry="185" fill="url(#ground)"/>
+  <g clip-path="url(#squircle)">
+    <circle cx="512" cy="392" r="420" fill="url(#dawn)"/>
+  </g>
+  <g transform="translate(212, 196) scale(5)">
+    <circle cx="60" cy="40" r="21" fill="#ee9d66" mask="url(#gap-x)"/>
+    <path d="M60 44 L98 98 H22 Z" fill="#5a2620" stroke="#5a2620" stroke-width="4" stroke-linejoin="round"/>
+  </g>
+</svg>

@@ -1,0 +1,7 @@
+--- Page 1 ---
+
+Prefix caching reuses the unchanged beginning of a prompt. Token equality matters.
+
+--- Page 2 ---
+
+Stable prefix: 120 ms. Shuffled prefix: 240 ms.

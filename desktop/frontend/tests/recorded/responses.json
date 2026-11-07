@@ -1,0 +1,5011 @@
+{
+  "backend": "0.1.0",
+  "routes": {
+    "DELETE /api/memory/domains/{slug}": [
+      {
+        "case": "an empty domain",
+        "status": 204
+      }
+    ],
+    "GET /api/chat": [
+      {
+        "case": "a Memory chat",
+        "json": {
+          "conversationId": "f0000000000000000000000000000001",
+          "generation": 0,
+          "images": [],
+          "messages": [
+            {
+              "content": "What does Memory hold on [[prefix-reuse-f00000000002]]?",
+              "createdAt": "2000-01-01T00:00:00Z",
+              "model": "gpt-6.1-sol",
+              "reasoningEffort": "medium",
+              "referencedImages": [],
+              "referencedPapers": [],
+              "requestId": "f0000000000000000000000000000003",
+              "role": "user",
+              "selectedText": null
+            },
+            {
+              "content": "Prefix caching reuses the unchanged token prefix. A different question suffix leaves that prefix reusable. Keep source ordering stable and measure hit rate separately from latency. [[prefix-reuse-f00000000002]]",
+              "createdAt": "2000-01-01T00:00:00Z",
+              "model": "gpt-6.1-sol",
+              "reasoningEffort": "medium",
+              "requestId": "f0000000000000000000000000000003",
+              "role": "assistant",
+              "trace": [
+                {
+                  "context": {
+                    "index": {
+                      "chats": 1,
+                      "documents": 2,
+                      "pages": 6,
+                      "projects": 1
+                    },
+                    "start": {
+                      "kind": "question"
+                    }
+                  },
+                  "endedAt": 0,
+                  "entries": [
+                    {
+                      "at": 0,
+                      "kind": "thought",
+                      "text": "I will check the stored evidence and distinguish reuse from latency."
+                    },
+                    {
+                      "args": {},
+                      "at": 0,
+                      "kind": "tool",
+                      "ms": 0,
+                      "ok": true,
+                      "results": [
+                        {
+                          "kind": "concept",
+                          "slug": "prefix-reuse-f00000000002",
+                          "title": "Prefix reuse f00000000002"
+                        }
+                      ],
+                      "tool": "open_memory"
+                    },
+                    {
+                      "at": 0,
+                      "kind": "thought",
+                      "text": "I will check the stored evidence and distinguish reuse from latency."
+                    }
+                  ],
+                  "offset": 0,
+                  "startedAt": 0
+                }
+              ]
+            }
+          ],
+          "personaId": "mentor"
+        },
+        "status": 200
+      }
+    ],
+    "GET /api/chat/conversations": [
+      {
+        "case": "Memory chats",
+        "json": {
+          "defaultId": "f0000000000000000000000000000001",
+          "items": [
+            {
+              "createdAt": "2000-01-01T00:00:00Z",
+              "empty": false,
+              "generation": 0,
+              "id": "f0000000000000000000000000000001",
+              "kind": "memory_chat",
+              "lastChatModel": "gpt-6.1-sol",
+              "lastEngagedAt": "2000-01-01T00:00:00Z",
+              "manualTitle": false,
+              "paperId": null,
+              "personaId": "mentor",
+              "projectId": null,
+              "title": "What does Memory hold on [[prefix-reuse-f00000000002]]?"
+            }
+          ],
+          "limit": 10
+        },
+        "status": 200
+      },
+      {
+        "case": "chats beside a document",
+        "json": {
+          "defaultId": "f0000000000000000000000000000004",
+          "items": [
+            {
+              "createdAt": "2000-01-01T00:00:00Z",
+              "empty": true,
+              "generation": 0,
+              "id": "f0000000000000000000000000000004",
+              "kind": "document_chat",
+              "lastChatModel": null,
+              "lastEngagedAt": "2000-01-01T00:00:00Z",
+              "manualTitle": false,
+              "paperId": "f00000000005",
+              "personaId": null,
+              "projectId": "f00000000006",
+              "title": "New chat"
+            }
+          ],
+          "limit": 10
+        },
+        "status": 200
+      }
+    ],
+    "GET /api/config": [
+      {
+        "case": "signed in",
+        "json": {
+          "capabilities": {
+            "planAuthoring": true,
+            "planHandoff": true,
+            "providerManagement": false,
+            "traceVersion": 2
+          },
+          "chatImageMaxPerQuestion": 2,
+          "chatImageMaxPerThread": 50,
+          "chatImageMaxSide": 512,
+          "chatImageMaxSourceMb": 20,
+          "chatImageMaxSourcePixels": 40000000,
+          "chatImageMaxThreadBytes": 33554432,
+          "chatImageRetentionDays": 30,
+          "conversationTitleMaxCharacters": 120,
+          "defaultModel": "gpt-6.1-sol",
+          "defaultPersona": "mentor",
+          "defaultReasoningEffort": "medium",
+          "librarySearchEnabled": true,
+          "librarySearchMaxResults": 20,
+          "maxPagesPerPaper": 100,
+          "maxPapersPerProject": 10,
+          "maxPapersTotalPerProject": 50,
+          "maxUploadMb": 30,
+          "maxUploadSourceMb": 60,
+          "memoryEnabled": true,
+          "memoryMaxPages": 1000,
+          "memoryPageMaxCharacters": 12000,
+          "memoryRelatedHops": 2,
+          "memoryRewriteNoteMaxWords": 20,
+          "modelReasoningEfforts": {
+            "gpt-6-luna": [
+              "max",
+              "xhigh",
+              "high",
+              "medium",
+              "low"
+            ],
+            "gpt-6.1-sol": [
+              "max",
+              "xhigh",
+              "high",
+              "medium",
+              "low"
+            ]
+          },
+          "models": [
+            "gpt-6-luna",
+            "gpt-6.1-sol"
+          ],
+          "personaMarketplaceEnabled": false,
+          "personaMaxCharacters": 30000,
+          "personaMaxNameCharacters": 40,
+          "personaMaxTaglineCharacters": 140,
+          "providerConfigured": true,
+          "reasoningEfforts": [
+            "max",
+            "xhigh",
+            "high",
+            "medium",
+            "low"
+          ],
+          "signupCodeRequired": false,
+          "webBrowsingEnabled": true,
+          "webDocumentsEnabled": true,
+          "webSavedPageMaxBytes": 8388608
+        },
+        "status": 200
+      }
+    ],
+    "GET /api/conversations": [
+      {
+        "case": "with a Memory chat",
+        "json": [
+          {
+            "createdAt": "2000-01-01T00:00:00Z",
+            "creationKey": "recorded_memory_chat",
+            "generation": 0,
+            "id": "f0000000000000000000000000000001",
+            "kind": "memory_chat",
+            "lastChatModel": "gpt-6.1-sol",
+            "lastEngagedAt": "2000-01-01T00:00:00Z",
+            "memoryFiledThrough": "",
+            "paperId": null,
+            "paperSlug": null,
+            "paperTitle": null,
+            "personaId": "mentor",
+            "projectId": null,
+            "projectName": null,
+            "projectSlug": null,
+            "threadKey": "conversation-f0000000000000000000000000000001-0",
+            "title": "What does Memory hold on [[prefix-reuse-f00000000002]]?"
+          }
+        ],
+        "status": 200
+      }
+    ],
+    "GET /api/dashboard": [
+      {
+        "case": "with a Memory chat",
+        "json": {
+          "conversations": [
+            {
+              "createdAt": "2000-01-01T00:00:00Z",
+              "creationKey": "recorded_memory_chat",
+              "generation": 0,
+              "id": "f0000000000000000000000000000001",
+              "kind": "memory_chat",
+              "lastChatModel": "gpt-6.1-sol",
+              "lastEngagedAt": "2000-01-01T00:00:00Z",
+              "memoryFiledThrough": "",
+              "paperId": null,
+              "paperSlug": null,
+              "paperTitle": null,
+              "personaId": "mentor",
+              "projectId": null,
+              "projectName": null,
+              "projectSlug": null,
+              "threadKey": "conversation-f0000000000000000000000000000001-0",
+              "title": "What does Memory hold on [[prefix-reuse-f00000000002]]?"
+            }
+          ],
+          "projects": [
+            {
+              "accentIndex": 0,
+              "activeCount": 2,
+              "documents": [
+                {
+                  "bytes": 1304,
+                  "createdAt": "2000-01-01T00:00:00Z",
+                  "digest": {
+                    "estimatedTokens": 114,
+                    "evidenceIds": [],
+                    "model": "gpt-6.1-sol",
+                    "sourceHash": "f000000000000000000000000000000000000000000000000000000000000007",
+                    "sourceMode": "pdf-multimodal",
+                    "status": "ready",
+                    "telemetry": {
+                      "actualTier": "default",
+                      "attempts": {
+                        "author": 1,
+                        "corrections": 0
+                      },
+                      "bodyCharacters": 310,
+                      "cacheReadTokens": 0,
+                      "cacheWriteTokens": 0,
+                      "callCount": 1,
+                      "calls": [
+                        {
+                          "actualTier": "default",
+                          "cacheReadTokens": 0,
+                          "cacheWriteTokens": 0,
+                          "durationMs": 0,
+                          "inputTokens": 100,
+                          "model": "gpt-6.1-sol",
+                          "outputTokens": 60,
+                          "reasoningTokens": 0,
+                          "requestedTier": "default",
+                          "stage": "digest-author"
+                        }
+                      ],
+                      "inputTokens": 100,
+                      "outputTokens": 60,
+                      "reasoningTokens": 0,
+                      "requestedTier": "default",
+                      "stageDurationsMs": [
+                        {
+                          "durationMs": 0,
+                          "stage": "digest-author"
+                        }
+                      ],
+                      "totalDurationMs": 0
+                    },
+                    "updatedAt": "2000-01-01T00:00:00Z",
+                    "version": "research-digest-v8"
+                  },
+                  "filename": "Refused Claim Study one.pdf",
+                  "id": "f00000000002",
+                  "openaiFileId": "file_e2e_17",
+                  "openaiFileUploadedAt": "2000-01-01T00:00:00Z",
+                  "pages": 2,
+                  "projectId": "f00000000006",
+                  "projectName": "Cache studies",
+                  "projectSlug": "cache-studies",
+                  "slug": "refused-claim-study-one",
+                  "thumbnailAttemptedAt": "2000-01-01T00:00:00Z",
+                  "thumbnailAvailable": true,
+                  "thumbnailVersion": 1,
+                  "title": "Refused Claim Study one",
+                  "tokens": 111
+                },
+                {
+                  "bytes": 1304,
+                  "createdAt": "2000-01-01T00:00:00Z",
+                  "digest": {
+                    "estimatedTokens": 114,
+                    "evidenceIds": [],
+                    "model": "gpt-6.1-sol",
+                    "sourceHash": "f000000000000000000000000000000000000000000000000000000000000007",
+                    "sourceMode": "pdf-multimodal",
+                    "status": "ready",
+                    "telemetry": {
+                      "actualTier": "default",
+                      "attempts": {
+                        "author": 1,
+                        "corrections": 0
+                      },
+                      "bodyCharacters": 310,
+                      "cacheReadTokens": 0,
+                      "cacheWriteTokens": 0,
+                      "callCount": 1,
+                      "calls": [
+                        {
+                          "actualTier": "default",
+                          "cacheReadTokens": 0,
+                          "cacheWriteTokens": 0,
+                          "durationMs": 0,
+                          "inputTokens": 100,
+                          "model": "gpt-6.1-sol",
+                          "outputTokens": 60,
+                          "reasoningTokens": 0,
+                          "requestedTier": "default",
+                          "stage": "digest-author"
+                        }
+                      ],
+                      "inputTokens": 100,
+                      "outputTokens": 60,
+                      "reasoningTokens": 0,
+                      "requestedTier": "default",
+                      "stageDurationsMs": [
+                        {
+                          "durationMs": 0,
+                          "stage": "digest-author"
+                        }
+                      ],
+                      "totalDurationMs": 0
+                    },
+                    "updatedAt": "2000-01-01T00:00:00Z",
+                    "version": "research-digest-v8"
+                  },
+                  "filename": "Prefix reuse notes.pdf",
+                  "id": "f00000000005",
+                  "openaiFileId": "file_e2e_1",
+                  "openaiFileUploadedAt": "2000-01-01T00:00:00Z",
+                  "pages": 2,
+                  "projectId": "f00000000006",
+                  "projectName": "Cache studies",
+                  "projectSlug": "cache-studies",
+                  "slug": "prefix-reuse-notes",
+                  "thumbnailAttemptedAt": "2000-01-01T00:00:00Z",
+                  "thumbnailAvailable": true,
+                  "thumbnailVersion": 1,
+                  "title": "Prefix reuse notes",
+                  "tokens": 111
+                }
+              ],
+              "id": "f00000000006",
+              "lastEngagedAt": "2000-01-01T00:00:00Z",
+              "name": "Cache studies",
+              "slug": "cache-studies",
+              "totalCount": 2
+            }
+          ],
+          "stats": {
+            "completed": 0,
+            "completedPercent": 0,
+            "documents": 2,
+            "projects": 1
+          }
+        },
+        "status": 200
+      }
+    ],
+    "GET /api/memory": [
+      {
+        "case": "documents filed",
+        "json": {
+          "domains": [
+            {
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "origin": "model",
+              "pages": 4,
+              "position": 0,
+              "slug": "cache-research",
+              "summary": null,
+              "title": "Cache research",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            }
+          ],
+          "events": [
+            {
+              "advisory": {
+                "count": 0,
+                "objections": []
+              },
+              "blocked": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "distinct": [],
+              "dropped": [],
+              "edits": [
+                {
+                  "action": "created",
+                  "kind": "domain",
+                  "note": "Composed from the domain's members.",
+                  "slug": "cache-research",
+                  "title": "Cache research"
+                }
+              ],
+              "fingerprint": "f000000000000000000000000000000000000000000000000000000000000008",
+              "id": "f0000000000000000000000000000009",
+              "kind": "domain",
+              "marker": "domain:cache-research",
+              "notes": {},
+              "operationId": "[\"f00000000000000000000010\",null,\"f000000000000000000000000000000000000000000000000000000000000008\"]",
+              "outcome": "filed",
+              "pages": [
+                "cache-research"
+              ],
+              "paperId": null,
+              "projectId": null,
+              "read": {
+                "domain": "cache-research",
+                "members": {
+                  "prefix-reuse-f00000000005": 1,
+                  "prefix-reuse-f00000000002": 1,
+                  "prefix-reuse-notes": 1,
+                  "refused-claim-study-one": 1
+                },
+                "title": "Cache research"
+              },
+              "recited": [],
+              "requestId": "domain:cache-research",
+              "requestIds": [],
+              "selection": null,
+              "summary": "Composed from the domain's members.",
+              "telemetry": {
+                "asked": [],
+                "ended": "completed",
+                "maintain": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 100,
+                  "output_tokens": 60,
+                  "reasoning_tokens": 0
+                },
+                "rounds": 1,
+                "select": {},
+                "tools": {},
+                "verify": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 100,
+                  "output_tokens": 60,
+                  "reasoning_tokens": 0
+                }
+              },
+              "version": "knowledge-v6"
+            },
+            {
+              "advisory": {
+                "count": 0,
+                "objections": []
+              },
+              "blocked": [
+                {
+                  "check": 1,
+                  "evidenceId": null,
+                  "explanation": "The document reports one controlled comparison, 120 ms against 240 ms. It does not say every reuse halves latency in production.",
+                  "finding": "differs",
+                  "quote": "Every reuse halves latency in production",
+                  "recited": false,
+                  "slug": "prefix-latency-f00000000002",
+                  "struck": false
+                }
+              ],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "distinct": [],
+              "dropped": [
+                {
+                  "action": "create",
+                  "quote": "Every reuse halves latency in production",
+                  "reason": "The document reports one controlled comparison, 120 ms against 240 ms. It does not say every reuse halves latency in production.",
+                  "slug": "prefix-latency-f00000000002",
+                  "title": "Prefix latency f00000000002",
+                  "unstruck": "the quote is in the page's summary, which a strike cannot cut"
+                }
+              ],
+              "edits": [
+                {
+                  "action": "created",
+                  "kind": "concept",
+                  "note": "Filed an evidence-bound page on prefix reuse.",
+                  "slug": "prefix-reuse-f00000000002",
+                  "title": "Prefix reuse f00000000002"
+                }
+              ],
+              "fingerprint": "f000000000000000000000000000000000000000000000000000000000000011",
+              "id": "f0000000000000000000000000000012",
+              "kind": "document",
+              "marker": "paper:f00000000002",
+              "notes": {},
+              "operationId": "[\"f00000000000000000000013\",\"knowledge-v6\",\"f000000000000000000000000000000000000000000000000000000000000011\"]",
+              "outcome": "filed",
+              "pages": [
+                "prefix-reuse-f00000000002"
+              ],
+              "paperId": "f00000000002",
+              "projectId": "f00000000006",
+              "recited": [],
+              "requestId": "paper:f00000000002",
+              "requestIds": [],
+              "selection": {
+                "needsOutside": null,
+                "nothingToFile": false,
+                "pages": [],
+                "reason": "No page covers what this document says."
+              },
+              "summary": "Filed what Refused Claim Study one says on [[prefix-reuse-f00000000002]].",
+              "telemetry": {
+                "asked": [],
+                "ended": "completed",
+                "maintain": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 300,
+                  "output_tokens": 180,
+                  "reasoning_tokens": 0
+                },
+                "rounds": 3,
+                "select": {
+                  "cacheReadTokens": 0,
+                  "cacheWriteTokens": 0,
+                  "inputTokens": 100,
+                  "outputTokens": 60,
+                  "reasoningTokens": 0
+                },
+                "tools": {
+                  "create_memory": 2
+                },
+                "verify": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 100,
+                  "output_tokens": 60,
+                  "reasoning_tokens": 0
+                }
+              },
+              "title": "Refused Claim Study one",
+              "version": "knowledge-v6"
+            },
+            {
+              "createdAt": "2000-01-01T00:00:00Z",
+              "edits": [
+                {
+                  "action": "created",
+                  "kind": "source",
+                  "note": "Written from its document's digest.",
+                  "slug": "refused-claim-study-one",
+                  "title": "Refused Claim Study one"
+                }
+              ],
+              "figures": [],
+              "id": "f0000000000000000000000000000014",
+              "kind": "digest-refresh",
+              "method": "Derived from the digest; no model call.",
+              "pages": [
+                "refused-claim-study-one"
+              ],
+              "paperId": "f00000000002",
+              "projectId": "f00000000006",
+              "summary": "Wrote the page for Refused Claim Study one from its digest.",
+              "version": "knowledge-v6"
+            },
+            {
+              "advisory": {
+                "count": 0,
+                "objections": []
+              },
+              "blocked": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "distinct": [],
+              "dropped": [],
+              "edits": [
+                {
+                  "action": "created",
+                  "kind": "concept",
+                  "note": "Filed an evidence-bound page on prefix reuse.",
+                  "slug": "prefix-reuse-f00000000005",
+                  "title": "Prefix reuse f00000000005"
+                }
+              ],
+              "fingerprint": "f000000000000000000000000000000000000000000000000000000000000011",
+              "id": "f0000000000000000000000000000015",
+              "kind": "document",
+              "marker": "paper:f00000000005",
+              "notes": {},
+              "operationId": "[\"f00000000000000000000016\",\"knowledge-v6\",\"f000000000000000000000000000000000000000000000000000000000000011\"]",
+              "outcome": "filed",
+              "pages": [
+                "prefix-reuse-f00000000005"
+              ],
+              "paperId": "f00000000005",
+              "projectId": "f00000000006",
+              "recited": [],
+              "requestId": "paper:f00000000005",
+              "requestIds": [],
+              "selection": {
+                "needsOutside": null,
+                "nothingToFile": false,
+                "pages": [],
+                "reason": "No page covers what this document says."
+              },
+              "summary": "Filed what Prefix reuse notes says about prefix reuse on [[prefix-reuse-f00000000005]].",
+              "telemetry": {
+                "asked": [],
+                "ended": "completed",
+                "maintain": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 200,
+                  "output_tokens": 120,
+                  "reasoning_tokens": 0
+                },
+                "rounds": 2,
+                "select": {
+                  "cacheReadTokens": 0,
+                  "cacheWriteTokens": 0,
+                  "inputTokens": 100,
+                  "outputTokens": 60,
+                  "reasoningTokens": 0
+                },
+                "tools": {
+                  "create_memory": 1
+                },
+                "verify": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 100,
+                  "output_tokens": 60,
+                  "reasoning_tokens": 0
+                }
+              },
+              "title": "Prefix reuse notes",
+              "version": "knowledge-v6"
+            },
+            {
+              "createdAt": "2000-01-01T00:00:00Z",
+              "edits": [
+                {
+                  "action": "created",
+                  "kind": "source",
+                  "note": "Written from its document's digest.",
+                  "slug": "prefix-reuse-notes",
+                  "title": "Prefix reuse notes"
+                }
+              ],
+              "figures": [],
+              "id": "f0000000000000000000000000000017",
+              "kind": "digest-refresh",
+              "method": "Derived from the digest; no model call.",
+              "pages": [
+                "prefix-reuse-notes"
+              ],
+              "paperId": "f00000000005",
+              "projectId": "f00000000006",
+              "summary": "Wrote the page for Prefix reuse notes from its digest.",
+              "version": "knowledge-v6"
+            }
+          ],
+          "links": [
+            {
+              "from": "cache-research",
+              "to": "prefix-reuse-f00000000005"
+            },
+            {
+              "from": "cache-research",
+              "to": "prefix-reuse-f00000000002"
+            },
+            {
+              "from": "cache-research",
+              "to": "prefix-reuse-notes"
+            },
+            {
+              "from": "cache-research",
+              "to": "refused-claim-study-one"
+            },
+            {
+              "from": "prefix-reuse-f00000000005",
+              "to": "prefix-reuse-notes"
+            }
+          ],
+          "pages": [
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000018",
+              "kind": "domain",
+              "linkDegree": 4,
+              "revision": 1,
+              "slug": "cache-research",
+              "summary": "How the pages of this domain connect.",
+              "tags": [],
+              "title": "Cache research",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000019",
+              "kind": "source",
+              "linkDegree": 1,
+              "revision": 1,
+              "slug": "refused-claim-study-one",
+              "sourcePaperId": "f00000000002",
+              "summary": "A matching token prefix is reusable even when the question suffix changes.",
+              "tags": [],
+              "title": "Refused Claim Study one",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000020",
+              "kind": "concept",
+              "linkDegree": 1,
+              "revision": 1,
+              "slug": "prefix-reuse-f00000000002",
+              "sourcePaperId": "f00000000002",
+              "summary": "Understand exact prefix reuse.",
+              "tags": [],
+              "title": "Prefix reuse f00000000002",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000021",
+              "kind": "source",
+              "linkDegree": 2,
+              "revision": 1,
+              "slug": "prefix-reuse-notes",
+              "sourcePaperId": "f00000000005",
+              "summary": "A matching token prefix is reusable even when the question suffix changes.",
+              "tags": [],
+              "title": "Prefix reuse notes",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000022",
+              "kind": "concept",
+              "linkDegree": 2,
+              "revision": 1,
+              "slug": "prefix-reuse-f00000000005",
+              "sourcePaperId": "f00000000005",
+              "summary": "Understand exact prefix reuse and test its limitations.",
+              "tags": [],
+              "title": "Prefix reuse f00000000005",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            }
+          ],
+          "revision": 15,
+          "statistics": {
+            "domains": 2,
+            "links": 5,
+            "pages": 5,
+            "unresolvedTargets": 0
+          },
+          "version": "knowledge-v6"
+        },
+        "status": 200
+      },
+      {
+        "case": "at the end",
+        "json": {
+          "domains": [
+            {
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "reading-list",
+              "origin": "reader",
+              "pages": 1,
+              "position": -1,
+              "slug": "reading-list",
+              "summary": null,
+              "title": "Reading list, revised",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "origin": "model",
+              "pages": 7,
+              "position": 0,
+              "slug": "cache-research",
+              "summary": null,
+              "title": "Cache research",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "general",
+              "origin": "model",
+              "pages": 1,
+              "position": 0,
+              "slug": "general",
+              "summary": null,
+              "title": "General",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            }
+          ],
+          "events": [
+            {
+              "createdAt": "2000-01-01T00:00:00Z",
+              "edits": [
+                {
+                  "action": "created",
+                  "kind": "source",
+                  "note": "Written from its document's digest.",
+                  "slug": "stalled-selection-study-one",
+                  "title": "Stalled Selection Study one"
+                }
+              ],
+              "figures": [],
+              "id": "f0000000000000000000000000000023",
+              "kind": "digest-refresh",
+              "method": "Derived from the digest; no model call.",
+              "pages": [
+                "stalled-selection-study-one"
+              ],
+              "paperId": "f00000000024",
+              "projectId": "f00000000006",
+              "summary": "Wrote the page for Stalled Selection Study one from its digest.",
+              "version": "knowledge-v6"
+            },
+            {
+              "brokenFigures": [],
+              "contradictions": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "edits": [],
+              "id": "f0000000000000000000000000000025",
+              "kind": "lint",
+              "method": "Compared the pages supplied, and nothing else.",
+              "pages": [],
+              "reconcile": [],
+              "summary": "Read what was supplied.",
+              "version": "knowledge-v6"
+            },
+            {
+              "advisory": {
+                "count": 0,
+                "objections": []
+              },
+              "blocked": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "distinct": [],
+              "dropped": [],
+              "edits": [
+                {
+                  "action": "revised",
+                  "kind": "domain",
+                  "note": "Placed the pages that joined the domain.",
+                  "slug": "cache-research",
+                  "title": "Cache research"
+                }
+              ],
+              "fingerprint": "f000000000000000000000000000000000000000000000000000000000000026",
+              "id": "f0000000000000000000000000000027",
+              "kind": "domain",
+              "marker": "domain:cache-research",
+              "notes": {},
+              "operationId": "[\"f00000000000000000000028\",null,\"f000000000000000000000000000000000000000000000000000000000000026\"]",
+              "outcome": "filed",
+              "pages": [
+                "cache-research"
+              ],
+              "paperId": null,
+              "projectId": null,
+              "read": {
+                "domain": "cache-research",
+                "members": {
+                  "kept-page-study": 2,
+                  "prefix-latency-f00000000002": 1,
+                  "prefix-reuse-f00000000005": 1,
+                  "prefix-reuse-f00000000029": 1,
+                  "prefix-reuse-f00000000030": 1,
+                  "prefix-reuse-notes": 1,
+                  "refused-claim-study-one": 1
+                },
+                "title": "Cache research"
+              },
+              "recited": [],
+              "requestId": "domain:cache-research",
+              "requestIds": [],
+              "selection": null,
+              "summary": "Placed the pages that joined the domain.",
+              "telemetry": {
+                "asked": [],
+                "ended": "completed",
+                "maintain": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 100,
+                  "output_tokens": 60,
+                  "reasoning_tokens": 0
+                },
+                "rounds": 1,
+                "select": {},
+                "tools": {},
+                "verify": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 100,
+                  "output_tokens": 60,
+                  "reasoning_tokens": 0
+                }
+              },
+              "version": "knowledge-v6"
+            },
+            {
+              "advisory": {
+                "count": 0,
+                "objections": []
+              },
+              "blocked": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "distinct": [],
+              "dropped": [],
+              "edits": [
+                {
+                  "action": "created",
+                  "kind": "concept",
+                  "note": "Filed an evidence-bound page on prefix reuse.",
+                  "slug": "prefix-reuse-f00000000029",
+                  "title": "Prefix reuse f00000000029"
+                }
+              ],
+              "fingerprint": "f000000000000000000000000000000000000000000000000000000000000011",
+              "id": "f0000000000000000000000000000031",
+              "kind": "document",
+              "marker": "paper:f00000000029",
+              "notes": {},
+              "operationId": "[\"f00000000000000000000032\",\"knowledge-v6\",\"f000000000000000000000000000000000000000000000000000000000000011\"]",
+              "outcome": "filed",
+              "pages": [
+                "prefix-reuse-f00000000029"
+              ],
+              "paperId": "f00000000029",
+              "projectId": "f00000000006",
+              "recited": [],
+              "requestId": "paper:f00000000029",
+              "requestIds": [],
+              "selection": {
+                "needsOutside": null,
+                "nothingToFile": false,
+                "pages": [],
+                "reason": "No page covers what this document says."
+              },
+              "summary": "Filed what Kept page study says about prefix reuse on [[prefix-reuse-f00000000029]].",
+              "telemetry": {
+                "asked": [],
+                "ended": "completed",
+                "maintain": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 200,
+                  "output_tokens": 120,
+                  "reasoning_tokens": 0
+                },
+                "rounds": 2,
+                "select": {
+                  "cacheReadTokens": 0,
+                  "cacheWriteTokens": 0,
+                  "inputTokens": 100,
+                  "outputTokens": 60,
+                  "reasoningTokens": 0
+                },
+                "tools": {
+                  "create_memory": 1
+                },
+                "verify": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 100,
+                  "output_tokens": 60,
+                  "reasoning_tokens": 0
+                }
+              },
+              "title": "Kept page study",
+              "version": "knowledge-v6"
+            },
+            {
+              "createdAt": "2000-01-01T00:00:00Z",
+              "edits": [
+                {
+                  "action": "revised",
+                  "kind": "source",
+                  "note": "Its document was added again; rewritten from that copy's digest.",
+                  "slug": "kept-page-study",
+                  "title": "Kept page study"
+                }
+              ],
+              "figures": [],
+              "id": "f0000000000000000000000000000033",
+              "kind": "digest-refresh",
+              "method": "Derived from the digest; no model call.",
+              "pages": [
+                "kept-page-study"
+              ],
+              "paperId": "f00000000029",
+              "projectId": "f00000000006",
+              "summary": "Rewrote the page a deleted copy of Kept page study left, from this copy's digest.",
+              "version": "knowledge-v6"
+            },
+            {
+              "createdAt": "2000-01-01T00:00:00Z",
+              "edits": [],
+              "id": "f0000000000000000000000000000034",
+              "kind": "document-delete",
+              "marker": "deleted:f00000000030",
+              "pages": [],
+              "paperId": "f00000000030",
+              "summary": "Deleted the document Kept page study."
+            },
+            {
+              "advisory": {
+                "count": 0,
+                "objections": []
+              },
+              "blocked": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "distinct": [],
+              "dropped": [],
+              "edits": [
+                {
+                  "action": "revised",
+                  "kind": "domain",
+                  "note": "Placed the pages that joined the domain.",
+                  "slug": "cache-research",
+                  "title": "Cache research"
+                }
+              ],
+              "fingerprint": "f000000000000000000000000000000000000000000000000000000000000035",
+              "id": "f0000000000000000000000000000036",
+              "kind": "domain",
+              "marker": "domain:cache-research",
+              "notes": {},
+              "operationId": "[\"f00000000000000000000037\",null,\"f000000000000000000000000000000000000000000000000000000000000035\"]",
+              "outcome": "filed",
+              "pages": [
+                "cache-research"
+              ],
+              "paperId": null,
+              "projectId": null,
+              "read": {
+                "domain": "cache-research",
+                "members": {
+                  "kept-page-study": 1,
+                  "prefix-latency-f00000000002": 1,
+                  "prefix-reuse-f00000000005": 1,
+                  "prefix-reuse-f00000000030": 1,
+                  "prefix-reuse-notes": 1,
+                  "refused-claim-study-one": 1
+                },
+                "title": "Cache research"
+              },
+              "recited": [],
+              "requestId": "domain:cache-research",
+              "requestIds": [],
+              "selection": null,
+              "summary": "Placed the pages that joined the domain.",
+              "telemetry": {
+                "asked": [],
+                "ended": "completed",
+                "maintain": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 100,
+                  "output_tokens": 60,
+                  "reasoning_tokens": 0
+                },
+                "rounds": 1,
+                "select": {},
+                "tools": {},
+                "verify": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 100,
+                  "output_tokens": 60,
+                  "reasoning_tokens": 0
+                }
+              },
+              "version": "knowledge-v6"
+            },
+            {
+              "advisory": {
+                "count": 0,
+                "objections": []
+              },
+              "blocked": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "distinct": [],
+              "dropped": [],
+              "edits": [
+                {
+                  "action": "created",
+                  "kind": "concept",
+                  "note": "Filed an evidence-bound page on prefix reuse.",
+                  "slug": "prefix-reuse-f00000000030",
+                  "title": "Prefix reuse f00000000030"
+                }
+              ],
+              "fingerprint": "f000000000000000000000000000000000000000000000000000000000000011",
+              "id": "f0000000000000000000000000000038",
+              "kind": "document",
+              "marker": "paper:f00000000030",
+              "notes": {},
+              "operationId": "[\"f00000000000000000000039\",\"knowledge-v6\",\"f000000000000000000000000000000000000000000000000000000000000011\"]",
+              "outcome": "filed",
+              "pages": [
+                "prefix-reuse-f00000000030"
+              ],
+              "paperId": "f00000000030",
+              "projectId": "f00000000006",
+              "recited": [],
+              "requestId": "paper:f00000000030",
+              "requestIds": [],
+              "selection": {
+                "needsOutside": null,
+                "nothingToFile": false,
+                "pages": [],
+                "reason": "No page covers what this document says."
+              },
+              "summary": "Filed what Kept page study says about prefix reuse on [[prefix-reuse-f00000000030]].",
+              "telemetry": {
+                "asked": [],
+                "ended": "completed",
+                "maintain": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 200,
+                  "output_tokens": 120,
+                  "reasoning_tokens": 0
+                },
+                "rounds": 2,
+                "select": {
+                  "cacheReadTokens": 0,
+                  "cacheWriteTokens": 0,
+                  "inputTokens": 100,
+                  "outputTokens": 60,
+                  "reasoningTokens": 0
+                },
+                "tools": {
+                  "create_memory": 1
+                },
+                "verify": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 100,
+                  "output_tokens": 60,
+                  "reasoning_tokens": 0
+                }
+              },
+              "title": "Kept page study",
+              "version": "knowledge-v6"
+            },
+            {
+              "createdAt": "2000-01-01T00:00:00Z",
+              "edits": [
+                {
+                  "action": "created",
+                  "kind": "source",
+                  "note": "Written from its document's digest.",
+                  "slug": "kept-page-study",
+                  "title": "Kept page study"
+                }
+              ],
+              "figures": [],
+              "id": "f0000000000000000000000000000040",
+              "kind": "digest-refresh",
+              "method": "Derived from the digest; no model call.",
+              "pages": [
+                "kept-page-study"
+              ],
+              "paperId": "f00000000030",
+              "projectId": "f00000000006",
+              "summary": "Wrote the page for Kept page study from its digest.",
+              "version": "knowledge-v6"
+            },
+            {
+              "calls": [
+                {
+                  "actualTier": "default",
+                  "cacheReadTokens": 0,
+                  "cacheWriteTokens": 0,
+                  "durationMs": 0,
+                  "inputTokens": 100,
+                  "model": "gpt-6.1-sol",
+                  "outputTokens": 60,
+                  "providerAttempts": 1,
+                  "reasoningTokens": 0,
+                  "requestedTier": "default",
+                  "stage": "page-rewrite-author"
+                },
+                {
+                  "actualTier": "default",
+                  "cacheReadTokens": 0,
+                  "cacheWriteTokens": 0,
+                  "durationMs": 0,
+                  "inputTokens": 100,
+                  "model": "gpt-6.1-sol",
+                  "outputTokens": 60,
+                  "providerAttempts": 1,
+                  "reasoningTokens": 0,
+                  "requestedTier": "default",
+                  "stage": "page-rewrite-verify"
+                }
+              ],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "edits": [
+                {
+                  "action": "revised",
+                  "kind": "concept",
+                  "note": null,
+                  "slug": "prefix-reuse-f00000000002",
+                  "title": "Prefix reuse f00000000002"
+                }
+              ],
+              "id": "f0000000000000000000000000000041",
+              "kind": "page-rewrite",
+              "pages": [
+                "prefix-reuse-f00000000002"
+              ],
+              "requestId": "page:prefix-reuse-f00000000002:rewrite:knowledge-v6:1:f00000000042",
+              "summary": "Rewrote Prefix reuse f00000000002 in place",
+              "version": "knowledge-v6"
+            },
+            {
+              "advisory": {
+                "count": 0,
+                "objections": []
+              },
+              "blocked": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "distinct": [],
+              "dropped": [],
+              "edits": [],
+              "fingerprint": "f000000000000000000000000000000000000000000000000000000000000043",
+              "id": "f0000000000000000000000000000044",
+              "kind": "domain",
+              "marker": "domain:cache-research",
+              "notes": {},
+              "operationId": "[\"f00000000000000000000045\",null,\"f000000000000000000000000000000000000000000000000000000000000043\"]",
+              "outcome": "nothing",
+              "pages": [],
+              "paperId": null,
+              "projectId": null,
+              "read": {
+                "domain": "cache-research",
+                "members": {
+                  "prefix-latency-f00000000002": 1,
+                  "prefix-reuse-f00000000005": 1,
+                  "prefix-reuse-notes": 1,
+                  "refused-claim-study-one": 1
+                },
+                "title": "Cache research"
+              },
+              "recited": [],
+              "requestId": "domain:cache-research",
+              "requestIds": [],
+              "selection": null,
+              "summary": "Nothing in the domain's page needed to change.",
+              "telemetry": {
+                "asked": [],
+                "ended": "completed",
+                "maintain": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 100,
+                  "output_tokens": 60,
+                  "reasoning_tokens": 0
+                },
+                "rounds": 1,
+                "select": {},
+                "tools": {},
+                "verify": {}
+              },
+              "version": "knowledge-v6"
+            },
+            {
+              "createdAt": "2000-01-01T00:00:00Z",
+              "id": "f0000000000000000000000000000046",
+              "kind": "refile",
+              "pages": [
+                "prefix-reuse-f00000000002"
+              ],
+              "summary": "Moved 1 page into reading-list."
+            },
+            {
+              "advisory": {
+                "count": 0,
+                "objections": []
+              },
+              "blocked": [],
+              "chatGeneration": 0,
+              "createdAt": "2000-01-01T00:00:00Z",
+              "distinct": [],
+              "dropped": [],
+              "edits": [],
+              "fingerprint": "f000000000000000000000000000000000000000000000000000000000000047",
+              "id": "f0000000000000000000000000000048",
+              "kind": "session",
+              "marker": "session:conversation:f0000000000000000000000000000001",
+              "notes": {},
+              "operationId": "[\"f00000000000000000000049\",\"knowledge-v6\",\"f000000000000000000000000000000000000000000000000000000000000047\"]",
+              "outcome": "nothing",
+              "pages": [],
+              "paperId": null,
+              "projectId": null,
+              "recited": [],
+              "requestId": "session:conversation:f0000000000000000000000000000001",
+              "requestIds": [
+                "f0000000000000000000000000000003"
+              ],
+              "selection": null,
+              "summary": "Every exchange of this session rested on Memory alone, and no note changed.",
+              "telemetry": {
+                "asked": [],
+                "ended": null,
+                "maintain": {},
+                "rounds": 0,
+                "select": {},
+                "tools": {},
+                "verify": {}
+              },
+              "title": "What does Memory hold on [[prefix-reuse-f00000000002]]?",
+              "version": "knowledge-v6"
+            },
+            {
+              "advisory": {
+                "count": 0,
+                "objections": []
+              },
+              "blocked": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "distinct": [],
+              "dropped": [],
+              "edits": [
+                {
+                  "action": "revised",
+                  "kind": "domain",
+                  "note": "Placed the pages that joined the domain.",
+                  "slug": "cache-research",
+                  "title": "Cache research"
+                }
+              ],
+              "fingerprint": "f000000000000000000000000000000000000000000000000000000000000050",
+              "id": "f0000000000000000000000000000051",
+              "kind": "domain",
+              "marker": "domain:cache-research",
+              "notes": {},
+              "operationId": "[\"f00000000000000000000052\",null,\"f000000000000000000000000000000000000000000000000000000000000050\"]",
+              "outcome": "filed",
+              "pages": [
+                "cache-research"
+              ],
+              "paperId": null,
+              "projectId": null,
+              "read": {
+                "domain": "cache-research",
+                "members": {
+                  "prefix-latency-f00000000002": 1,
+                  "prefix-reuse-f00000000005": 1,
+                  "prefix-reuse-f00000000002": 1,
+                  "prefix-reuse-notes": 1,
+                  "refused-claim-study-one": 1
+                },
+                "title": "Cache research"
+              },
+              "recited": [],
+              "requestId": "domain:cache-research",
+              "requestIds": [],
+              "selection": null,
+              "summary": "Placed the pages that joined the domain.",
+              "telemetry": {
+                "asked": [],
+                "ended": "completed",
+                "maintain": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 100,
+                  "output_tokens": 60,
+                  "reasoning_tokens": 0
+                },
+                "rounds": 1,
+                "select": {},
+                "tools": {},
+                "verify": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 100,
+                  "output_tokens": 60,
+                  "reasoning_tokens": 0
+                }
+              },
+              "version": "knowledge-v6"
+            },
+            {
+              "advisory": {
+                "count": 0,
+                "objections": []
+              },
+              "blocked": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "distinct": [],
+              "dropped": [],
+              "edits": [
+                {
+                  "action": "created",
+                  "kind": "concept",
+                  "note": "Filed the latency comparison.",
+                  "slug": "prefix-latency-f00000000002",
+                  "title": "Prefix latency f00000000002"
+                }
+              ],
+              "fingerprint": "f000000000000000000000000000000000000000000000000000000000000011",
+              "id": "f0000000000000000000000000000053",
+              "kind": "document",
+              "marker": "paper:f00000000002",
+              "notes": {},
+              "operationId": "[\"f00000000000000000000054\",\"knowledge-v6\",\"f000000000000000000000000000000000000000000000000000000000000011\"]",
+              "outcome": "filed",
+              "pages": [
+                "prefix-latency-f00000000002"
+              ],
+              "paperId": "f00000000002",
+              "projectId": "f00000000006",
+              "recited": [],
+              "requestId": "paper:f00000000002",
+              "requestIds": [],
+              "selection": {
+                "needsOutside": null,
+                "nothingToFile": false,
+                "pages": [
+                  "prefix-reuse-f00000000002"
+                ],
+                "reason": "It adds to Prefix reuse f00000000002."
+              },
+              "summary": "Filed what Refused Claim Study one says on [[prefix-reuse-f00000000002]].",
+              "telemetry": {
+                "asked": [],
+                "ended": "completed",
+                "maintain": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 200,
+                  "output_tokens": 120,
+                  "reasoning_tokens": 0
+                },
+                "rounds": 2,
+                "select": {
+                  "cacheReadTokens": 0,
+                  "cacheWriteTokens": 0,
+                  "inputTokens": 100,
+                  "outputTokens": 60,
+                  "reasoningTokens": 0
+                },
+                "tools": {
+                  "create_memory": 1
+                },
+                "verify": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 100,
+                  "output_tokens": 60,
+                  "reasoning_tokens": 0
+                }
+              },
+              "title": "Refused Claim Study one",
+              "version": "knowledge-v6"
+            },
+            {
+              "advisory": {
+                "count": 0,
+                "objections": []
+              },
+              "blocked": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "distinct": [],
+              "dropped": [],
+              "edits": [
+                {
+                  "action": "created",
+                  "kind": "domain",
+                  "note": "Composed from the domain's members.",
+                  "slug": "cache-research",
+                  "title": "Cache research"
+                }
+              ],
+              "fingerprint": "f000000000000000000000000000000000000000000000000000000000000008",
+              "id": "f0000000000000000000000000000009",
+              "kind": "domain",
+              "marker": "domain:cache-research",
+              "notes": {},
+              "operationId": "[\"f00000000000000000000010\",null,\"f000000000000000000000000000000000000000000000000000000000000008\"]",
+              "outcome": "filed",
+              "pages": [
+                "cache-research"
+              ],
+              "paperId": null,
+              "projectId": null,
+              "read": {
+                "domain": "cache-research",
+                "members": {
+                  "prefix-reuse-f00000000005": 1,
+                  "prefix-reuse-f00000000002": 1,
+                  "prefix-reuse-notes": 1,
+                  "refused-claim-study-one": 1
+                },
+                "title": "Cache research"
+              },
+              "recited": [],
+              "requestId": "domain:cache-research",
+              "requestIds": [],
+              "selection": null,
+              "summary": "Composed from the domain's members.",
+              "telemetry": {
+                "asked": [],
+                "ended": "completed",
+                "maintain": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 100,
+                  "output_tokens": 60,
+                  "reasoning_tokens": 0
+                },
+                "rounds": 1,
+                "select": {},
+                "tools": {},
+                "verify": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 100,
+                  "output_tokens": 60,
+                  "reasoning_tokens": 0
+                }
+              },
+              "version": "knowledge-v6"
+            },
+            {
+              "advisory": {
+                "count": 0,
+                "objections": []
+              },
+              "blocked": [
+                {
+                  "check": 1,
+                  "evidenceId": null,
+                  "explanation": "The document reports one controlled comparison, 120 ms against 240 ms. It does not say every reuse halves latency in production.",
+                  "finding": "differs",
+                  "quote": "Every reuse halves latency in production",
+                  "recited": false,
+                  "slug": "prefix-latency-f00000000002",
+                  "struck": false
+                }
+              ],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "distinct": [],
+              "dropped": [
+                {
+                  "action": "create",
+                  "quote": "Every reuse halves latency in production",
+                  "reason": "The document reports one controlled comparison, 120 ms against 240 ms. It does not say every reuse halves latency in production.",
+                  "slug": "prefix-latency-f00000000002",
+                  "title": "Prefix latency f00000000002",
+                  "unstruck": "the quote is in the page's summary, which a strike cannot cut"
+                }
+              ],
+              "edits": [
+                {
+                  "action": "created",
+                  "kind": "concept",
+                  "note": "Filed an evidence-bound page on prefix reuse.",
+                  "slug": "prefix-reuse-f00000000002",
+                  "title": "Prefix reuse f00000000002"
+                }
+              ],
+              "fingerprint": "f000000000000000000000000000000000000000000000000000000000000011",
+              "id": "f0000000000000000000000000000012",
+              "kind": "document",
+              "marker": "paper:f00000000002",
+              "notes": {},
+              "operationId": "[\"f00000000000000000000013\",\"knowledge-v6\",\"f000000000000000000000000000000000000000000000000000000000000011\"]",
+              "outcome": "filed",
+              "pages": [
+                "prefix-reuse-f00000000002"
+              ],
+              "paperId": "f00000000002",
+              "projectId": "f00000000006",
+              "recited": [],
+              "requestId": "paper:f00000000002",
+              "requestIds": [],
+              "selection": {
+                "needsOutside": null,
+                "nothingToFile": false,
+                "pages": [],
+                "reason": "No page covers what this document says."
+              },
+              "summary": "Filed what Refused Claim Study one says on [[prefix-reuse-f00000000002]].",
+              "telemetry": {
+                "asked": [],
+                "ended": "completed",
+                "maintain": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 300,
+                  "output_tokens": 180,
+                  "reasoning_tokens": 0
+                },
+                "rounds": 3,
+                "select": {
+                  "cacheReadTokens": 0,
+                  "cacheWriteTokens": 0,
+                  "inputTokens": 100,
+                  "outputTokens": 60,
+                  "reasoningTokens": 0
+                },
+                "tools": {
+                  "create_memory": 2
+                },
+                "verify": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 100,
+                  "output_tokens": 60,
+                  "reasoning_tokens": 0
+                }
+              },
+              "title": "Refused Claim Study one",
+              "version": "knowledge-v6"
+            },
+            {
+              "createdAt": "2000-01-01T00:00:00Z",
+              "edits": [
+                {
+                  "action": "created",
+                  "kind": "source",
+                  "note": "Written from its document's digest.",
+                  "slug": "refused-claim-study-one",
+                  "title": "Refused Claim Study one"
+                }
+              ],
+              "figures": [],
+              "id": "f0000000000000000000000000000014",
+              "kind": "digest-refresh",
+              "method": "Derived from the digest; no model call.",
+              "pages": [
+                "refused-claim-study-one"
+              ],
+              "paperId": "f00000000002",
+              "projectId": "f00000000006",
+              "summary": "Wrote the page for Refused Claim Study one from its digest.",
+              "version": "knowledge-v6"
+            },
+            {
+              "advisory": {
+                "count": 0,
+                "objections": []
+              },
+              "blocked": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "distinct": [],
+              "dropped": [],
+              "edits": [
+                {
+                  "action": "created",
+                  "kind": "concept",
+                  "note": "Filed an evidence-bound page on prefix reuse.",
+                  "slug": "prefix-reuse-f00000000005",
+                  "title": "Prefix reuse f00000000005"
+                }
+              ],
+              "fingerprint": "f000000000000000000000000000000000000000000000000000000000000011",
+              "id": "f0000000000000000000000000000015",
+              "kind": "document",
+              "marker": "paper:f00000000005",
+              "notes": {},
+              "operationId": "[\"f00000000000000000000016\",\"knowledge-v6\",\"f000000000000000000000000000000000000000000000000000000000000011\"]",
+              "outcome": "filed",
+              "pages": [
+                "prefix-reuse-f00000000005"
+              ],
+              "paperId": "f00000000005",
+              "projectId": "f00000000006",
+              "recited": [],
+              "requestId": "paper:f00000000005",
+              "requestIds": [],
+              "selection": {
+                "needsOutside": null,
+                "nothingToFile": false,
+                "pages": [],
+                "reason": "No page covers what this document says."
+              },
+              "summary": "Filed what Prefix reuse notes says about prefix reuse on [[prefix-reuse-f00000000005]].",
+              "telemetry": {
+                "asked": [],
+                "ended": "completed",
+                "maintain": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 200,
+                  "output_tokens": 120,
+                  "reasoning_tokens": 0
+                },
+                "rounds": 2,
+                "select": {
+                  "cacheReadTokens": 0,
+                  "cacheWriteTokens": 0,
+                  "inputTokens": 100,
+                  "outputTokens": 60,
+                  "reasoningTokens": 0
+                },
+                "tools": {
+                  "create_memory": 1
+                },
+                "verify": {
+                  "cache_write_tokens": 0,
+                  "cached_tokens": 0,
+                  "input_tokens": 100,
+                  "output_tokens": 60,
+                  "reasoning_tokens": 0
+                }
+              },
+              "title": "Prefix reuse notes",
+              "version": "knowledge-v6"
+            },
+            {
+              "createdAt": "2000-01-01T00:00:00Z",
+              "edits": [
+                {
+                  "action": "created",
+                  "kind": "source",
+                  "note": "Written from its document's digest.",
+                  "slug": "prefix-reuse-notes",
+                  "title": "Prefix reuse notes"
+                }
+              ],
+              "figures": [],
+              "id": "f0000000000000000000000000000017",
+              "kind": "digest-refresh",
+              "method": "Derived from the digest; no model call.",
+              "pages": [
+                "prefix-reuse-notes"
+              ],
+              "paperId": "f00000000005",
+              "projectId": "f00000000006",
+              "summary": "Wrote the page for Prefix reuse notes from its digest.",
+              "version": "knowledge-v6"
+            }
+          ],
+          "links": [
+            {
+              "from": "cache-research",
+              "to": "kept-page-study"
+            },
+            {
+              "from": "cache-research",
+              "to": "prefix-latency-f00000000002"
+            },
+            {
+              "from": "cache-research",
+              "to": "prefix-reuse-f00000000005"
+            },
+            {
+              "from": "cache-research",
+              "to": "prefix-reuse-f00000000029"
+            },
+            {
+              "from": "cache-research",
+              "to": "prefix-reuse-f00000000002"
+            },
+            {
+              "from": "cache-research",
+              "to": "prefix-reuse-f00000000030"
+            },
+            {
+              "from": "cache-research",
+              "to": "prefix-reuse-notes"
+            },
+            {
+              "from": "cache-research",
+              "to": "refused-claim-study-one"
+            },
+            {
+              "from": "prefix-reuse-f00000000005",
+              "to": "prefix-reuse-notes"
+            },
+            {
+              "from": "prefix-reuse-f00000000029",
+              "to": "kept-page-study"
+            },
+            {
+              "from": "prefix-reuse-f00000000030",
+              "to": "kept-page-study"
+            }
+          ],
+          "pages": [
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "general",
+              "id": "f00000000000000000000055",
+              "kind": "source",
+              "linkDegree": 0,
+              "revision": 1,
+              "slug": "stalled-selection-study-one",
+              "sourcePaperId": "f00000000024",
+              "summary": "A matching token prefix is reusable even when the question suffix changes.",
+              "tags": [],
+              "title": "Stalled Selection Study one",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000018",
+              "kind": "domain",
+              "linkDegree": 8,
+              "revision": 4,
+              "slug": "cache-research",
+              "summary": "How the pages of this domain connect.",
+              "tags": [],
+              "title": "Cache research",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000056",
+              "kind": "concept",
+              "linkDegree": 2,
+              "revision": 1,
+              "slug": "prefix-reuse-f00000000029",
+              "sourcePaperId": "f00000000029",
+              "summary": "Understand exact prefix reuse and test its limitations.",
+              "tags": [],
+              "title": "Prefix reuse f00000000029",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000057",
+              "kind": "source",
+              "linkDegree": 3,
+              "revision": 2,
+              "slug": "kept-page-study",
+              "sourcePaperId": "f00000000029",
+              "summary": "A matching token prefix is reusable even when the question suffix changes.",
+              "tags": [],
+              "title": "Kept page study",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000058",
+              "kind": "concept",
+              "linkDegree": 2,
+              "revision": 1,
+              "slug": "prefix-reuse-f00000000030",
+              "sourcePaperId": "f00000000030",
+              "summary": "Understand exact prefix reuse and test its limitations.",
+              "tags": [],
+              "title": "Prefix reuse f00000000030",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "reading-list",
+              "id": "f00000000000000000000020",
+              "kind": "concept",
+              "linkDegree": 1,
+              "revision": 2,
+              "slug": "prefix-reuse-f00000000002",
+              "sourcePaperId": "f00000000002",
+              "summary": "A detailed, controlled procedure for measuring exact prefix reuse.",
+              "tags": [],
+              "title": "Prefix reuse f00000000002",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000059",
+              "kind": "concept",
+              "linkDegree": 1,
+              "revision": 1,
+              "slug": "prefix-latency-f00000000002",
+              "sourcePaperId": "f00000000002",
+              "summary": "In the one controlled comparison, the stable prefix had a median latency of 120 ms against 240 ms for the shuffled one.",
+              "tags": [],
+              "title": "Prefix latency f00000000002",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000019",
+              "kind": "source",
+              "linkDegree": 1,
+              "revision": 1,
+              "slug": "refused-claim-study-one",
+              "sourcePaperId": "f00000000002",
+              "summary": "A matching token prefix is reusable even when the question suffix changes.",
+              "tags": [],
+              "title": "Refused Claim Study one",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000021",
+              "kind": "source",
+              "linkDegree": 2,
+              "revision": 1,
+              "slug": "prefix-reuse-notes",
+              "sourcePaperId": "f00000000005",
+              "summary": "A matching token prefix is reusable even when the question suffix changes.",
+              "tags": [],
+              "title": "Prefix reuse notes",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000022",
+              "kind": "concept",
+              "linkDegree": 2,
+              "revision": 1,
+              "slug": "prefix-reuse-f00000000005",
+              "sourcePaperId": "f00000000005",
+              "summary": "Understand exact prefix reuse and test its limitations.",
+              "tags": [],
+              "title": "Prefix reuse f00000000005",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            }
+          ],
+          "revision": 38,
+          "statistics": {
+            "domains": 3,
+            "links": 11,
+            "pages": 10,
+            "unresolvedTargets": 0
+          },
+          "version": "knowledge-v6"
+        },
+        "status": 200
+      }
+    ],
+    "GET /api/memory/backfill/papers": [
+      {
+        "case": "documents queued",
+        "json": {
+          "papers": [
+            {
+              "digestReady": false,
+              "dropped": [],
+              "filed": false,
+              "filedVersion": null,
+              "paperId": "f00000000005",
+              "projectId": "f00000000006",
+              "projectName": "Cache studies",
+              "stale": false,
+              "title": "Prefix reuse notes"
+            },
+            {
+              "digestReady": false,
+              "dropped": [],
+              "filed": false,
+              "filedVersion": null,
+              "paperId": "f00000000002",
+              "projectId": "f00000000006",
+              "projectName": "Cache studies",
+              "stale": false,
+              "title": "Refused Claim Study one"
+            }
+          ],
+          "version": "knowledge-v6"
+        },
+        "status": 200
+      },
+      {
+        "case": "a page refused",
+        "json": {
+          "papers": [
+            {
+              "digestReady": true,
+              "dropped": [],
+              "filed": true,
+              "filedVersion": "knowledge-v6",
+              "paperId": "f00000000005",
+              "projectId": "f00000000006",
+              "projectName": "Cache studies",
+              "stale": false,
+              "title": "Prefix reuse notes"
+            },
+            {
+              "digestReady": true,
+              "dropped": [
+                {
+                  "action": "create",
+                  "quote": "Every reuse halves latency in production",
+                  "reason": "The document reports one controlled comparison, 120 ms against 240 ms. It does not say every reuse halves latency in production.",
+                  "slug": "prefix-latency-f00000000002",
+                  "title": "Prefix latency f00000000002"
+                }
+              ],
+              "filed": true,
+              "filedVersion": "knowledge-v6",
+              "paperId": "f00000000002",
+              "projectId": "f00000000006",
+              "projectName": "Cache studies",
+              "stale": false,
+              "title": "Refused Claim Study one"
+            }
+          ],
+          "version": "knowledge-v6"
+        },
+        "status": 200
+      },
+      {
+        "case": "a filing gave up",
+        "json": {
+          "papers": [
+            {
+              "digestReady": true,
+              "dropped": [],
+              "filed": true,
+              "filedVersion": "knowledge-v6",
+              "paperId": "f00000000005",
+              "projectId": "f00000000006",
+              "projectName": "Cache studies",
+              "stale": false,
+              "title": "Prefix reuse notes"
+            },
+            {
+              "digestReady": true,
+              "dropped": [],
+              "filed": true,
+              "filedVersion": "knowledge-v6",
+              "paperId": "f00000000002",
+              "projectId": "f00000000006",
+              "projectName": "Cache studies",
+              "stale": false,
+              "title": "Refused Claim Study one"
+            },
+            {
+              "digestReady": true,
+              "dropped": [],
+              "filed": true,
+              "filedVersion": "knowledge-v6",
+              "paperId": "f00000000029",
+              "projectId": "f00000000006",
+              "projectName": "Cache studies",
+              "stale": false,
+              "title": "Kept page study"
+            },
+            {
+              "digestReady": true,
+              "dropped": [],
+              "filed": false,
+              "filedVersion": null,
+              "paperId": "f00000000024",
+              "projectId": "f00000000006",
+              "projectName": "Cache studies",
+              "stale": false,
+              "title": "Stalled Selection Study one"
+            }
+          ],
+          "version": "knowledge-v6"
+        },
+        "status": 200
+      }
+    ],
+    "GET /api/memory/documents/{paperId}/dependents": [
+      {
+        "case": "a filed document",
+        "json": {
+          "pages": [
+            {
+              "kind": "source",
+              "slug": "prefix-reuse-notes",
+              "title": "Prefix reuse notes"
+            },
+            {
+              "kind": "concept",
+              "slug": "prefix-reuse-f00000000005",
+              "title": "Prefix reuse f00000000005"
+            }
+          ]
+        },
+        "status": 200
+      }
+    ],
+    "GET /api/memory/documents/{paperId}/filing": [
+      {
+        "case": "queued",
+        "json": {
+          "dropped": [],
+          "filed": false,
+          "filedVersion": null,
+          "queued": true,
+          "sameAs": null,
+          "stale": false,
+          "stuck": false,
+          "version": "knowledge-v6"
+        },
+        "status": 200
+      },
+      {
+        "case": "filed",
+        "json": {
+          "dropped": [],
+          "filed": true,
+          "filedVersion": "knowledge-v6",
+          "queued": false,
+          "sameAs": null,
+          "stale": false,
+          "stuck": false,
+          "version": "knowledge-v6"
+        },
+        "status": 200
+      },
+      {
+        "case": "a page refused",
+        "json": {
+          "dropped": [
+            {
+              "action": "create",
+              "quote": "Every reuse halves latency in production",
+              "reason": "The document reports one controlled comparison, 120 ms against 240 ms. It does not say every reuse halves latency in production.",
+              "slug": "prefix-latency-f00000000002",
+              "title": "Prefix latency f00000000002"
+            }
+          ],
+          "filed": true,
+          "filedVersion": "knowledge-v6",
+          "queued": false,
+          "sameAs": null,
+          "stale": false,
+          "stuck": false,
+          "version": "knowledge-v6"
+        },
+        "status": 200
+      },
+      {
+        "case": "waiting to ask",
+        "json": {
+          "dropped": [],
+          "filed": false,
+          "filedVersion": null,
+          "queued": false,
+          "sameAs": {
+            "deletedAt": "2000-01-01T00:00:00Z",
+            "slug": "kept-page-study",
+            "title": "Kept page study"
+          },
+          "stale": false,
+          "stuck": false,
+          "version": "knowledge-v6"
+        },
+        "status": 200
+      },
+      {
+        "case": "gave up",
+        "json": {
+          "dropped": [],
+          "filed": false,
+          "filedVersion": null,
+          "queued": false,
+          "sameAs": null,
+          "stale": false,
+          "stuck": true,
+          "version": "knowledge-v6"
+        },
+        "status": 200
+      }
+    ],
+    "GET /api/memory/documents/{paperId}/neighborhood": [
+      {
+        "case": "not filed yet",
+        "json": {
+          "center": null,
+          "distances": {},
+          "domains": [],
+          "filing": {
+            "dropped": [],
+            "filed": false,
+            "filedVersion": null,
+            "queued": true,
+            "sameAs": null,
+            "stale": false,
+            "stuck": false,
+            "version": "knowledge-v6"
+          },
+          "links": [],
+          "pages": [],
+          "paperId": "f00000000005",
+          "revision": 0,
+          "sourcePage": null,
+          "statistics": {
+            "domains": 0,
+            "links": 0,
+            "pages": 0,
+            "unresolvedTargets": 0
+          }
+        },
+        "status": 200
+      },
+      {
+        "case": "filed",
+        "json": {
+          "center": {
+            "aliases": [],
+            "createdAt": "2000-01-01T00:00:00Z",
+            "domain": "cache-research",
+            "id": "f00000000000000000000021",
+            "kind": "source",
+            "linkDegree": 2,
+            "revision": 1,
+            "slug": "prefix-reuse-notes",
+            "sourcePaperId": "f00000000005",
+            "summary": "A matching token prefix is reusable even when the question suffix changes.",
+            "tags": [],
+            "title": "Prefix reuse notes",
+            "updatedAt": "2000-01-01T00:00:00Z"
+          },
+          "distances": {
+            "cache-research": 1,
+            "prefix-reuse-f00000000005": 1,
+            "prefix-reuse-f00000000002": 2,
+            "prefix-reuse-notes": 0,
+            "refused-claim-study-one": 2
+          },
+          "domains": [
+            {
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "origin": "model",
+              "pages": 5,
+              "position": 0,
+              "slug": "cache-research",
+              "summary": null,
+              "title": "Cache research",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            }
+          ],
+          "filing": {
+            "dropped": [],
+            "filed": true,
+            "filedVersion": "knowledge-v6",
+            "queued": false,
+            "sameAs": null,
+            "stale": false,
+            "stuck": false,
+            "version": "knowledge-v6"
+          },
+          "links": [
+            {
+              "from": "cache-research",
+              "to": "prefix-reuse-f00000000005"
+            },
+            {
+              "from": "cache-research",
+              "to": "prefix-reuse-f00000000002"
+            },
+            {
+              "from": "cache-research",
+              "to": "prefix-reuse-notes"
+            },
+            {
+              "from": "cache-research",
+              "to": "refused-claim-study-one"
+            },
+            {
+              "from": "prefix-reuse-f00000000005",
+              "to": "prefix-reuse-notes"
+            }
+          ],
+          "pages": [
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000018",
+              "kind": "domain",
+              "linkDegree": 4,
+              "revision": 1,
+              "slug": "cache-research",
+              "summary": "How the pages of this domain connect.",
+              "tags": [],
+              "title": "Cache research",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000019",
+              "kind": "source",
+              "linkDegree": 1,
+              "revision": 1,
+              "slug": "refused-claim-study-one",
+              "sourcePaperId": "f00000000002",
+              "summary": "A matching token prefix is reusable even when the question suffix changes.",
+              "tags": [],
+              "title": "Refused Claim Study one",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000020",
+              "kind": "concept",
+              "linkDegree": 1,
+              "revision": 1,
+              "slug": "prefix-reuse-f00000000002",
+              "sourcePaperId": "f00000000002",
+              "summary": "Understand exact prefix reuse.",
+              "tags": [],
+              "title": "Prefix reuse f00000000002",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000021",
+              "kind": "source",
+              "linkDegree": 2,
+              "revision": 1,
+              "slug": "prefix-reuse-notes",
+              "sourcePaperId": "f00000000005",
+              "summary": "A matching token prefix is reusable even when the question suffix changes.",
+              "tags": [],
+              "title": "Prefix reuse notes",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000022",
+              "kind": "concept",
+              "linkDegree": 2,
+              "revision": 1,
+              "slug": "prefix-reuse-f00000000005",
+              "sourcePaperId": "f00000000005",
+              "summary": "Understand exact prefix reuse and test its limitations.",
+              "tags": [],
+              "title": "Prefix reuse f00000000005",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            }
+          ],
+          "paperId": "f00000000005",
+          "revision": 15,
+          "sourcePage": {
+            "aliases": [],
+            "createdAt": "2000-01-01T00:00:00Z",
+            "domain": "cache-research",
+            "id": "f00000000000000000000021",
+            "kind": "source",
+            "linkDegree": 2,
+            "revision": 1,
+            "slug": "prefix-reuse-notes",
+            "sourcePaperId": "f00000000005",
+            "summary": "A matching token prefix is reusable even when the question suffix changes.",
+            "tags": [],
+            "title": "Prefix reuse notes",
+            "updatedAt": "2000-01-01T00:00:00Z"
+          },
+          "statistics": {
+            "domains": 2,
+            "links": 5,
+            "pages": 5,
+            "unresolvedTargets": 0
+          }
+        },
+        "status": 200
+      }
+    ],
+    "GET /api/memory/domains": [
+      {
+        "case": "documents filed",
+        "json": {
+          "domains": [
+            {
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "origin": "model",
+              "pages": 5,
+              "position": 0,
+              "slug": "cache-research",
+              "summary": null,
+              "title": "Cache research",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "case": "at the end",
+        "json": {
+          "domains": [
+            {
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "reading-list",
+              "origin": "reader",
+              "pages": 1,
+              "position": -1,
+              "slug": "reading-list",
+              "summary": null,
+              "title": "Reading list, revised",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "origin": "model",
+              "pages": 8,
+              "position": 0,
+              "slug": "cache-research",
+              "summary": null,
+              "title": "Cache research",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "general",
+              "origin": "model",
+              "pages": 1,
+              "position": 0,
+              "slug": "general",
+              "summary": null,
+              "title": "General",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            }
+          ]
+        },
+        "status": 200
+      }
+    ],
+    "GET /api/memory/health": [
+      {
+        "case": "a page refused",
+        "json": {
+          "computedAt": "2000-01-01T00:00:00Z",
+          "droppedTargets": [
+            {
+              "action": "create",
+              "filedAt": "2000-01-01T00:00:00Z",
+              "marker": "paper:f00000000002",
+              "paperId": "f00000000002",
+              "projectId": "f00000000006",
+              "quote": "Every reuse halves latency in production",
+              "reason": "The document reports one controlled comparison, 120 ms against 240 ms. It does not say every reuse halves latency in production.",
+              "slug": "prefix-latency-f00000000002",
+              "title": "Prefix latency f00000000002"
+            }
+          ],
+          "lastCheck": null,
+          "orphans": [],
+          "pages": 5,
+          "uncapturedFigures": []
+        },
+        "status": 200
+      },
+      {
+        "case": "after a check",
+        "json": {
+          "computedAt": "2000-01-01T00:00:00Z",
+          "droppedTargets": [],
+          "lastCheck": {
+            "brokenFigures": [],
+            "contradictions": [],
+            "createdAt": "2000-01-01T00:00:00Z",
+            "edits": [],
+            "id": "f0000000000000000000000000000025",
+            "kind": "lint",
+            "method": "Compared the pages supplied, and nothing else.",
+            "pages": [],
+            "reconcile": [],
+            "summary": "Read what was supplied.",
+            "version": "knowledge-v6"
+          },
+          "orphans": [],
+          "pages": 9,
+          "uncapturedFigures": []
+        },
+        "status": 200
+      },
+      {
+        "case": "a filing gave up",
+        "json": {
+          "computedAt": "2000-01-01T00:00:00Z",
+          "droppedTargets": [],
+          "lastCheck": {
+            "brokenFigures": [],
+            "contradictions": [],
+            "createdAt": "2000-01-01T00:00:00Z",
+            "edits": [],
+            "id": "f0000000000000000000000000000025",
+            "kind": "lint",
+            "method": "Compared the pages supplied, and nothing else.",
+            "pages": [],
+            "reconcile": [],
+            "summary": "Read what was supplied.",
+            "version": "knowledge-v6"
+          },
+          "orphans": [
+            {
+              "domain": "general",
+              "kind": "source",
+              "slug": "stalled-selection-study-one",
+              "title": "Stalled Selection Study one"
+            }
+          ],
+          "pages": 10,
+          "uncapturedFigures": []
+        },
+        "status": 200
+      }
+    ],
+    "GET /api/memory/maintenance": [
+      {
+        "case": "documents queued",
+        "json": {
+          "cancellable": 2,
+          "due": 2,
+          "failed": 0,
+          "jobs": [
+            {
+              "attempts": 0,
+              "context": "Filing a document",
+              "createdAt": "2000-01-01T00:00:00Z",
+              "failure": null,
+              "id": "f00000000000000000000016",
+              "kind": "document",
+              "label": "Prefix reuse notes",
+              "lastError": null,
+              "leaseExpiresAt": null,
+              "marker": "paper:f00000000005",
+              "payload": {
+                "paperId": "f00000000005",
+                "projectId": "f00000000006",
+                "targetVersion": "knowledge-v6"
+              },
+              "retryAt": null,
+              "status": "pending",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "attempts": 0,
+              "context": "Filing a document",
+              "createdAt": "2000-01-01T00:00:00Z",
+              "failure": null,
+              "id": "f00000000000000000000013",
+              "kind": "document",
+              "label": "Refused Claim Study one",
+              "lastError": null,
+              "leaseExpiresAt": null,
+              "marker": "paper:f00000000002",
+              "payload": {
+                "paperId": "f00000000002",
+                "projectId": "f00000000006",
+                "targetVersion": "knowledge-v6"
+              },
+              "retryAt": null,
+              "status": "pending",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            }
+          ],
+          "leased": 0,
+          "maxAttempts": 1,
+          "pending": 2
+        },
+        "status": 200
+      },
+      {
+        "case": "a rewrite queued",
+        "json": {
+          "cancellable": 1,
+          "due": 3,
+          "failed": 0,
+          "jobs": [
+            {
+              "attempts": 0,
+              "context": "Writing a domain summary",
+              "createdAt": "2000-01-01T00:00:00Z",
+              "failure": null,
+              "id": "f00000000000000000000060",
+              "kind": "domain",
+              "label": "Reading list, revised",
+              "lastError": null,
+              "leaseExpiresAt": null,
+              "marker": "domain:reading-list",
+              "payload": {
+                "domain": "reading-list",
+                "fingerprint": "f000000000000000000000000000000000000000000000000000000000000061"
+              },
+              "retryAt": "2000-01-01T00:00:00Z",
+              "status": "pending",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "attempts": 0,
+              "context": "Writing a domain summary",
+              "createdAt": "2000-01-01T00:00:00Z",
+              "failure": null,
+              "id": "f00000000000000000000045",
+              "kind": "domain",
+              "label": "Cache research",
+              "lastError": null,
+              "leaseExpiresAt": null,
+              "marker": "domain:cache-research",
+              "payload": {
+                "domain": "cache-research",
+                "fingerprint": "f000000000000000000000000000000000000000000000000000000000000062"
+              },
+              "retryAt": "2000-01-01T00:00:00Z",
+              "status": "pending",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "attempts": 0,
+              "context": "Rewriting one Memory page",
+              "createdAt": "2000-01-01T00:00:00Z",
+              "failure": null,
+              "id": "f00000000000000000000063",
+              "kind": "page-rewrite",
+              "label": "Prefix reuse f00000000002",
+              "lastError": null,
+              "leaseExpiresAt": null,
+              "marker": "page:prefix-reuse-f00000000002:rewrite:knowledge-v6:1:f00000000042",
+              "payload": {
+                "pageSlug": "prefix-reuse-f00000000002",
+                "pageTitle": "Prefix reuse f00000000002",
+                "paperId": "f00000000002",
+                "projectId": "f00000000006",
+                "readerNote": "Say how the timing was measured."
+              },
+              "retryAt": null,
+              "status": "pending",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            }
+          ],
+          "leased": 0,
+          "maxAttempts": 1,
+          "pending": 3
+        },
+        "status": 200
+      },
+      {
+        "case": "a job gave up",
+        "json": {
+          "cancellable": 0,
+          "due": 0,
+          "failed": 1,
+          "jobs": [
+            {
+              "attempts": 1,
+              "context": "Filing a document",
+              "createdAt": "2000-01-01T00:00:00Z",
+              "failure": {
+                "cause": "answer",
+                "failedAt": "2000-01-01T00:00:00Z",
+                "pages": []
+              },
+              "id": "f00000000000000000000064",
+              "kind": "document",
+              "label": "Stalled Selection Study one",
+              "lastError": "Memory selection for filing was cut off before it finished (max_output_tokens)",
+              "leaseExpiresAt": null,
+              "marker": "paper:f00000000024",
+              "payload": {
+                "attemptTelemetry": [
+                  {
+                    "cause": "answer",
+                    "failedAt": "2000-01-01T00:00:00Z",
+                    "rejection": "Memory selection for filing was cut off before it finished (max_output_tokens)"
+                  }
+                ],
+                "fingerprint": "f000000000000000000000000000000000000000000000000000000000000011",
+                "paperId": "f00000000024",
+                "projectId": "f00000000006",
+                "targetVersion": "knowledge-v6"
+              },
+              "retryAt": null,
+              "status": "failed",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            }
+          ],
+          "leased": 0,
+          "maxAttempts": 1,
+          "pending": 0
+        },
+        "status": 200
+      },
+      {
+        "case": "a job retried",
+        "json": {
+          "cancellable": 1,
+          "due": 1,
+          "failed": 0,
+          "jobs": [
+            {
+              "attempts": 0,
+              "context": "Filing a document",
+              "createdAt": "2000-01-01T00:00:00Z",
+              "failure": null,
+              "id": "f00000000000000000000064",
+              "kind": "document",
+              "label": "Stalled Selection Study one",
+              "lastError": null,
+              "leaseExpiresAt": null,
+              "marker": "paper:f00000000024",
+              "payload": {
+                "attemptTelemetry": [
+                  {
+                    "cause": "answer",
+                    "failedAt": "2000-01-01T00:00:00Z",
+                    "rejection": "Memory selection for filing was cut off before it finished (max_output_tokens)"
+                  }
+                ],
+                "fingerprint": "f000000000000000000000000000000000000000000000000000000000000011",
+                "paperId": "f00000000024",
+                "projectId": "f00000000006",
+                "targetVersion": "knowledge-v6"
+              },
+              "retryAt": null,
+              "status": "pending",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            }
+          ],
+          "leased": 0,
+          "maxAttempts": 1,
+          "pending": 1
+        },
+        "status": 200
+      }
+    ],
+    "GET /api/memory/neighborhood": [
+      {
+        "case": "a concept page",
+        "json": {
+          "center": {
+            "aliases": [],
+            "createdAt": "2000-01-01T00:00:00Z",
+            "domain": "cache-research",
+            "id": "f00000000000000000000020",
+            "kind": "concept",
+            "linkDegree": 1,
+            "revision": 1,
+            "slug": "prefix-reuse-f00000000002",
+            "sourcePaperId": "f00000000002",
+            "summary": "Understand exact prefix reuse.",
+            "tags": [],
+            "title": "Prefix reuse f00000000002",
+            "updatedAt": "2000-01-01T00:00:00Z"
+          },
+          "distances": {
+            "cache-research": 1,
+            "prefix-reuse-f00000000005": 2,
+            "prefix-reuse-f00000000002": 0,
+            "prefix-reuse-notes": 2,
+            "refused-claim-study-one": 2
+          },
+          "domains": [
+            {
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "origin": "model",
+              "pages": 5,
+              "position": 0,
+              "slug": "cache-research",
+              "summary": null,
+              "title": "Cache research",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            }
+          ],
+          "links": [
+            {
+              "from": "cache-research",
+              "to": "prefix-reuse-f00000000005"
+            },
+            {
+              "from": "cache-research",
+              "to": "prefix-reuse-f00000000002"
+            },
+            {
+              "from": "cache-research",
+              "to": "prefix-reuse-notes"
+            },
+            {
+              "from": "cache-research",
+              "to": "refused-claim-study-one"
+            },
+            {
+              "from": "prefix-reuse-f00000000005",
+              "to": "prefix-reuse-notes"
+            }
+          ],
+          "pages": [
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000018",
+              "kind": "domain",
+              "linkDegree": 4,
+              "revision": 1,
+              "slug": "cache-research",
+              "summary": "How the pages of this domain connect.",
+              "tags": [],
+              "title": "Cache research",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000019",
+              "kind": "source",
+              "linkDegree": 1,
+              "revision": 1,
+              "slug": "refused-claim-study-one",
+              "sourcePaperId": "f00000000002",
+              "summary": "A matching token prefix is reusable even when the question suffix changes.",
+              "tags": [],
+              "title": "Refused Claim Study one",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000020",
+              "kind": "concept",
+              "linkDegree": 1,
+              "revision": 1,
+              "slug": "prefix-reuse-f00000000002",
+              "sourcePaperId": "f00000000002",
+              "summary": "Understand exact prefix reuse.",
+              "tags": [],
+              "title": "Prefix reuse f00000000002",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000021",
+              "kind": "source",
+              "linkDegree": 2,
+              "revision": 1,
+              "slug": "prefix-reuse-notes",
+              "sourcePaperId": "f00000000005",
+              "summary": "A matching token prefix is reusable even when the question suffix changes.",
+              "tags": [],
+              "title": "Prefix reuse notes",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            },
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000022",
+              "kind": "concept",
+              "linkDegree": 2,
+              "revision": 1,
+              "slug": "prefix-reuse-f00000000005",
+              "sourcePaperId": "f00000000005",
+              "summary": "Understand exact prefix reuse and test its limitations.",
+              "tags": [],
+              "title": "Prefix reuse f00000000005",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            }
+          ],
+          "revision": 15,
+          "statistics": {
+            "domains": 2,
+            "links": 5,
+            "pages": 5,
+            "unresolvedTargets": 0
+          }
+        },
+        "status": 200
+      }
+    ],
+    "GET /api/memory/pages": [
+      {
+        "case": "documents filed",
+        "json": [
+          {
+            "aliases": [],
+            "createdAt": "2000-01-01T00:00:00Z",
+            "domain": "cache-research",
+            "id": "f00000000000000000000018",
+            "kind": "domain",
+            "linkDegree": 4,
+            "revision": 1,
+            "slug": "cache-research",
+            "summary": "How the pages of this domain connect.",
+            "tags": [],
+            "title": "Cache research",
+            "updatedAt": "2000-01-01T00:00:00Z"
+          },
+          {
+            "aliases": [],
+            "createdAt": "2000-01-01T00:00:00Z",
+            "domain": "cache-research",
+            "id": "f00000000000000000000019",
+            "kind": "source",
+            "linkDegree": 1,
+            "revision": 1,
+            "slug": "refused-claim-study-one",
+            "sourcePaperId": "f00000000002",
+            "summary": "A matching token prefix is reusable even when the question suffix changes.",
+            "tags": [],
+            "title": "Refused Claim Study one",
+            "updatedAt": "2000-01-01T00:00:00Z"
+          },
+          {
+            "aliases": [],
+            "createdAt": "2000-01-01T00:00:00Z",
+            "domain": "cache-research",
+            "id": "f00000000000000000000020",
+            "kind": "concept",
+            "linkDegree": 1,
+            "revision": 1,
+            "slug": "prefix-reuse-f00000000002",
+            "sourcePaperId": "f00000000002",
+            "summary": "Understand exact prefix reuse.",
+            "tags": [],
+            "title": "Prefix reuse f00000000002",
+            "updatedAt": "2000-01-01T00:00:00Z"
+          },
+          {
+            "aliases": [],
+            "createdAt": "2000-01-01T00:00:00Z",
+            "domain": "cache-research",
+            "id": "f00000000000000000000021",
+            "kind": "source",
+            "linkDegree": 2,
+            "revision": 1,
+            "slug": "prefix-reuse-notes",
+            "sourcePaperId": "f00000000005",
+            "summary": "A matching token prefix is reusable even when the question suffix changes.",
+            "tags": [],
+            "title": "Prefix reuse notes",
+            "updatedAt": "2000-01-01T00:00:00Z"
+          },
+          {
+            "aliases": [],
+            "createdAt": "2000-01-01T00:00:00Z",
+            "domain": "cache-research",
+            "id": "f00000000000000000000022",
+            "kind": "concept",
+            "linkDegree": 2,
+            "revision": 1,
+            "slug": "prefix-reuse-f00000000005",
+            "sourcePaperId": "f00000000005",
+            "summary": "Understand exact prefix reuse and test its limitations.",
+            "tags": [],
+            "title": "Prefix reuse f00000000005",
+            "updatedAt": "2000-01-01T00:00:00Z"
+          }
+        ],
+        "status": 200
+      },
+      {
+        "case": "at the end",
+        "json": [
+          {
+            "aliases": [],
+            "createdAt": "2000-01-01T00:00:00Z",
+            "domain": "general",
+            "id": "f00000000000000000000055",
+            "kind": "source",
+            "linkDegree": 0,
+            "revision": 1,
+            "slug": "stalled-selection-study-one",
+            "sourcePaperId": "f00000000024",
+            "summary": "A matching token prefix is reusable even when the question suffix changes.",
+            "tags": [],
+            "title": "Stalled Selection Study one",
+            "updatedAt": "2000-01-01T00:00:00Z"
+          },
+          {
+            "aliases": [],
+            "createdAt": "2000-01-01T00:00:00Z",
+            "domain": "cache-research",
+            "id": "f00000000000000000000018",
+            "kind": "domain",
+            "linkDegree": 8,
+            "revision": 4,
+            "slug": "cache-research",
+            "summary": "How the pages of this domain connect.",
+            "tags": [],
+            "title": "Cache research",
+            "updatedAt": "2000-01-01T00:00:00Z"
+          },
+          {
+            "aliases": [],
+            "createdAt": "2000-01-01T00:00:00Z",
+            "domain": "cache-research",
+            "id": "f00000000000000000000056",
+            "kind": "concept",
+            "linkDegree": 2,
+            "revision": 1,
+            "slug": "prefix-reuse-f00000000029",
+            "sourcePaperId": "f00000000029",
+            "summary": "Understand exact prefix reuse and test its limitations.",
+            "tags": [],
+            "title": "Prefix reuse f00000000029",
+            "updatedAt": "2000-01-01T00:00:00Z"
+          },
+          {
+            "aliases": [],
+            "createdAt": "2000-01-01T00:00:00Z",
+            "domain": "cache-research",
+            "id": "f00000000000000000000057",
+            "kind": "source",
+            "linkDegree": 3,
+            "revision": 2,
+            "slug": "kept-page-study",
+            "sourcePaperId": "f00000000029",
+            "summary": "A matching token prefix is reusable even when the question suffix changes.",
+            "tags": [],
+            "title": "Kept page study",
+            "updatedAt": "2000-01-01T00:00:00Z"
+          },
+          {
+            "aliases": [],
+            "createdAt": "2000-01-01T00:00:00Z",
+            "domain": "cache-research",
+            "id": "f00000000000000000000058",
+            "kind": "concept",
+            "linkDegree": 2,
+            "revision": 1,
+            "slug": "prefix-reuse-f00000000030",
+            "sourcePaperId": "f00000000030",
+            "summary": "Understand exact prefix reuse and test its limitations.",
+            "tags": [],
+            "title": "Prefix reuse f00000000030",
+            "updatedAt": "2000-01-01T00:00:00Z"
+          },
+          {
+            "aliases": [],
+            "createdAt": "2000-01-01T00:00:00Z",
+            "domain": "reading-list",
+            "id": "f00000000000000000000020",
+            "kind": "concept",
+            "linkDegree": 1,
+            "revision": 2,
+            "slug": "prefix-reuse-f00000000002",
+            "sourcePaperId": "f00000000002",
+            "summary": "A detailed, controlled procedure for measuring exact prefix reuse.",
+            "tags": [],
+            "title": "Prefix reuse f00000000002",
+            "updatedAt": "2000-01-01T00:00:00Z"
+          },
+          {
+            "aliases": [],
+            "createdAt": "2000-01-01T00:00:00Z",
+            "domain": "cache-research",
+            "id": "f00000000000000000000059",
+            "kind": "concept",
+            "linkDegree": 1,
+            "revision": 1,
+            "slug": "prefix-latency-f00000000002",
+            "sourcePaperId": "f00000000002",
+            "summary": "In the one controlled comparison, the stable prefix had a median latency of 120 ms against 240 ms for the shuffled one.",
+            "tags": [],
+            "title": "Prefix latency f00000000002",
+            "updatedAt": "2000-01-01T00:00:00Z"
+          },
+          {
+            "aliases": [],
+            "createdAt": "2000-01-01T00:00:00Z",
+            "domain": "cache-research",
+            "id": "f00000000000000000000019",
+            "kind": "source",
+            "linkDegree": 1,
+            "revision": 1,
+            "slug": "refused-claim-study-one",
+            "sourcePaperId": "f00000000002",
+            "summary": "A matching token prefix is reusable even when the question suffix changes.",
+            "tags": [],
+            "title": "Refused Claim Study one",
+            "updatedAt": "2000-01-01T00:00:00Z"
+          },
+          {
+            "aliases": [],
+            "createdAt": "2000-01-01T00:00:00Z",
+            "domain": "cache-research",
+            "id": "f00000000000000000000021",
+            "kind": "source",
+            "linkDegree": 2,
+            "revision": 1,
+            "slug": "prefix-reuse-notes",
+            "sourcePaperId": "f00000000005",
+            "summary": "A matching token prefix is reusable even when the question suffix changes.",
+            "tags": [],
+            "title": "Prefix reuse notes",
+            "updatedAt": "2000-01-01T00:00:00Z"
+          },
+          {
+            "aliases": [],
+            "createdAt": "2000-01-01T00:00:00Z",
+            "domain": "cache-research",
+            "id": "f00000000000000000000022",
+            "kind": "concept",
+            "linkDegree": 2,
+            "revision": 1,
+            "slug": "prefix-reuse-f00000000005",
+            "sourcePaperId": "f00000000005",
+            "summary": "Understand exact prefix reuse and test its limitations.",
+            "tags": [],
+            "title": "Prefix reuse f00000000005",
+            "updatedAt": "2000-01-01T00:00:00Z"
+          }
+        ],
+        "status": 200
+      }
+    ],
+    "GET /api/memory/pages/{slug}": [
+      {
+        "case": "a concept page",
+        "json": {
+          "authors": [
+            {
+              "firstAt": "2000-01-01T00:00:00Z",
+              "id": "f00000000002",
+              "kind": "document",
+              "note": "Filed an evidence-bound page on prefix reuse.",
+              "projectId": "f00000000006",
+              "removed": false,
+              "title": "Refused Claim Study one"
+            }
+          ],
+          "backlinks": [
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000018",
+              "kind": "domain",
+              "linkDegree": 0,
+              "revision": 1,
+              "slug": "cache-research",
+              "summary": "How the pages of this domain connect.",
+              "tags": [],
+              "title": "Cache research",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            }
+          ],
+          "document": null,
+          "page": {
+            "aliases": [],
+            "body": "## Problem and approach\n\nPrefix caching reuses exact matching tokens before the changing question. [E1]",
+            "citations": [
+              {
+                "claimType": "author-claim",
+                "evidenceId": null,
+                "id": 1,
+                "noteId": null,
+                "page": 1,
+                "paperId": "f00000000002",
+                "section": null,
+                "sectionTitle": "Prefix reuse"
+              }
+            ],
+            "createdAt": "2000-01-01T00:00:00Z",
+            "domain": "cache-research",
+            "figures": [],
+            "id": "f00000000000000000000020",
+            "kind": "concept",
+            "linkDegree": 1,
+            "links": [],
+            "revision": 1,
+            "slug": "prefix-reuse-f00000000002",
+            "sourcePaperId": "f00000000002",
+            "summary": "Understand exact prefix reuse.",
+            "tags": [],
+            "title": "Prefix reuse f00000000002",
+            "updatedAt": "2000-01-01T00:00:00Z"
+          },
+          "sources": [
+            {
+              "available": true,
+              "pages": [
+                1
+              ],
+              "paperId": "f00000000002",
+              "passages": 1,
+              "projectId": "f00000000006",
+              "sections": [],
+              "title": "Refused Claim Study one"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "case": "a source page",
+        "json": {
+          "authors": [],
+          "backlinks": [
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000018",
+              "kind": "domain",
+              "linkDegree": 0,
+              "revision": 1,
+              "slug": "cache-research",
+              "summary": "How the pages of this domain connect.",
+              "tags": [],
+              "title": "Cache research",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            }
+          ],
+          "document": {
+            "paperId": "f00000000002",
+            "projectId": "f00000000006"
+          },
+          "page": {
+            "aliases": [],
+            "body": "## Prefix reuse\n\nA matching token prefix is reusable even when the question suffix changes. [E1]\n\n## Controlled comparison\n\nKeep the model, suffix length and timing fixed. Compare stable and shuffled prefixes and report latency distributions.\n\n## Limits\n\nA small example does not establish a universal speedup.",
+            "citations": [
+              {
+                "claimType": "author-claim",
+                "evidenceId": null,
+                "id": 1,
+                "noteId": null,
+                "page": 1,
+                "paperId": "f00000000002",
+                "section": null,
+                "sectionTitle": "Prefix reuse"
+              }
+            ],
+            "createdAt": "2000-01-01T00:00:00Z",
+            "domain": "cache-research",
+            "figures": [],
+            "id": "f00000000000000000000019",
+            "kind": "source",
+            "linkDegree": 1,
+            "links": [],
+            "revision": 1,
+            "slug": "refused-claim-study-one",
+            "sourcePaperId": "f00000000002",
+            "summary": "A matching token prefix is reusable even when the question suffix changes.",
+            "tags": [],
+            "title": "Refused Claim Study one",
+            "updatedAt": "2000-01-01T00:00:00Z"
+          },
+          "sources": [
+            {
+              "available": true,
+              "pages": [
+                1
+              ],
+              "paperId": "f00000000002",
+              "passages": 1,
+              "projectId": "f00000000006",
+              "sections": [],
+              "title": "Refused Claim Study one"
+            }
+          ]
+        },
+        "status": 200
+      },
+      {
+        "case": "a domain page",
+        "json": {
+          "authors": [],
+          "backlinks": [],
+          "document": null,
+          "page": {
+            "aliases": [],
+            "body": "## How these pages connect\n\n[[refused-claim-study-one]] and [[prefix-reuse-notes]] report on the same question, and [[prefix-reuse-f00000000002]], [[prefix-reuse-f00000000005]] is where what they share is explained.\n\n## Reading paths\n\nStart with [[prefix-reuse-f00000000002]], then read the sources against it.\n\nSince then the domain also holds [[prefix-latency-f00000000002]].",
+            "citations": [],
+            "createdAt": "2000-01-01T00:00:00Z",
+            "domain": "cache-research",
+            "figures": [],
+            "id": "f00000000000000000000018",
+            "kind": "domain",
+            "linkDegree": 5,
+            "links": [
+              "refused-claim-study-one",
+              "prefix-reuse-notes",
+              "prefix-reuse-f00000000002",
+              "prefix-reuse-f00000000005",
+              "prefix-latency-f00000000002"
+            ],
+            "revision": 2,
+            "slug": "cache-research",
+            "summary": "How the pages of this domain connect.",
+            "tags": [],
+            "title": "Cache research",
+            "updatedAt": "2000-01-01T00:00:00Z"
+          },
+          "sources": []
+        },
+        "status": 200
+      },
+      {
+        "case": "a moved and rewritten page",
+        "json": {
+          "authors": [
+            {
+              "firstAt": "2000-01-01T00:00:00Z",
+              "id": "f00000000002",
+              "kind": "document",
+              "note": "Filed an evidence-bound page on prefix reuse.",
+              "projectId": "f00000000006",
+              "removed": false,
+              "title": "Refused Claim Study one"
+            }
+          ],
+          "backlinks": [
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "cache-research",
+              "id": "f00000000000000000000018",
+              "kind": "domain",
+              "linkDegree": 0,
+              "revision": 2,
+              "slug": "cache-research",
+              "summary": "How the pages of this domain connect.",
+              "tags": [],
+              "title": "Cache research",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            }
+          ],
+          "document": null,
+          "page": {
+            "aliases": [],
+            "body": "## Problem and approach\n\nPrefix caching reuses exact matching tokens before the changing question. [E1]\n\n## Worked measurement detail\n\nHold the suffix length fixed. Count reused prefix tokens separately from total request latency, then repeat each condition to measure variation.",
+            "citations": [
+              {
+                "claimType": "author-claim",
+                "evidenceId": null,
+                "id": 1,
+                "noteId": null,
+                "page": 1,
+                "paperId": "f00000000002",
+                "section": null,
+                "sectionTitle": "Prefix reuse"
+              }
+            ],
+            "createdAt": "2000-01-01T00:00:00Z",
+            "domain": "reading-list",
+            "figures": [],
+            "id": "f00000000000000000000020",
+            "kind": "concept",
+            "linkDegree": 1,
+            "links": [],
+            "revision": 2,
+            "slug": "prefix-reuse-f00000000002",
+            "sourcePaperId": "f00000000002",
+            "summary": "A detailed, controlled procedure for measuring exact prefix reuse.",
+            "tags": [],
+            "title": "Prefix reuse f00000000002",
+            "updatedAt": "2000-01-01T00:00:00Z"
+          },
+          "sources": [
+            {
+              "available": true,
+              "pages": [
+                1
+              ],
+              "paperId": "f00000000002",
+              "passages": 1,
+              "projectId": "f00000000006",
+              "sections": [],
+              "title": "Refused Claim Study one"
+            }
+          ]
+        },
+        "status": 200
+      }
+    ],
+    "GET /api/memory/projects/{projectId}/dependents": [
+      {
+        "case": "a filed project",
+        "json": {
+          "pages": [
+            {
+              "kind": "source",
+              "slug": "prefix-reuse-notes",
+              "title": "Prefix reuse notes"
+            },
+            {
+              "kind": "source",
+              "slug": "refused-claim-study-one",
+              "title": "Refused Claim Study one"
+            },
+            {
+              "kind": "concept",
+              "slug": "prefix-reuse-f00000000002",
+              "title": "Prefix reuse f00000000002"
+            },
+            {
+              "kind": "concept",
+              "slug": "prefix-reuse-f00000000005",
+              "title": "Prefix reuse f00000000005"
+            }
+          ]
+        },
+        "status": 200
+      }
+    ],
+    "GET /api/search": [
+      {
+        "case": "Memory, a document and a chat",
+        "json": {
+          "query": "prefix",
+          "results": {
+            "conversations": [
+              {
+                "conversationId": "f0000000000000000000000000000001",
+                "conversationKind": "memory_chat",
+                "kind": "conversation",
+                "lastEngagedAt": "2000-01-01T00:00:00Z",
+                "occurrences": 2,
+                "paperSlug": "",
+                "projectSlug": "",
+                "score": 16,
+                "snippet": "What does Memory hold on [[prefix-reuse-f00000000002]]?",
+                "subtitle": "Memory",
+                "title": "What does Memory hold on [[prefix-reuse-f00000000002]]?"
+              }
+            ],
+            "documents": [
+              {
+                "documentKind": "pdf",
+                "done": false,
+                "kind": "document",
+                "locator": "1",
+                "locatorKind": "page",
+                "occurrences": 2,
+                "paperId": "f00000000005",
+                "paperSlug": "prefix-reuse-notes",
+                "projectId": "f00000000006",
+                "projectSlug": "cache-studies",
+                "score": 3.8317766166719345,
+                "snippet": "Notes on reusing a prompt prefix A request that repeats an earlier prefix can skip the work for that prefix. Only an exact token match counts; a paraphrase starts over. Put what changes, the question, at the end.",
+                "subtitle": "Cache studies · p. 1",
+                "title": "Prefix reuse notes"
+              },
+              {
+                "documentKind": "pdf",
+                "done": false,
+                "kind": "document",
+                "locator": "1",
+                "locatorKind": "page",
+                "occurrences": 2,
+                "paperId": "f00000000002",
+                "paperSlug": "refused-claim-study-one",
+                "projectId": "f00000000006",
+                "projectSlug": "cache-studies",
+                "score": 3.8317766166719345,
+                "snippet": "Notes on reusing a prompt prefix A request that repeats an earlier prefix can skip the work for that prefix. Only an exact token match counts; a paraphrase starts over. Put what changes, the question, at the end.",
+                "subtitle": "Cache studies · p. 1",
+                "title": "Refused Claim Study one"
+              }
+            ],
+            "memory": [
+              {
+                "kind": "memory",
+                "occurrences": 1,
+                "pageKind": "concept",
+                "score": 8,
+                "slug": "prefix-reuse-f00000000005",
+                "snippet": "Understand exact prefix reuse and test its limitations.",
+                "subtitle": "Cache research",
+                "title": "Prefix reuse f00000000005"
+              },
+              {
+                "kind": "memory",
+                "occurrences": 1,
+                "pageKind": "source",
+                "score": 8,
+                "slug": "prefix-reuse-notes",
+                "snippet": "A matching token prefix is reusable even when the question suffix changes.",
+                "subtitle": "Cache research",
+                "title": "Prefix reuse notes"
+              },
+              {
+                "kind": "memory",
+                "occurrences": 1,
+                "pageKind": "concept",
+                "score": 7,
+                "slug": "prefix-latency-f00000000002",
+                "snippet": "In the one controlled comparison, the stable prefix had a median latency of 120 ms against 240 ms for the shuffled one.",
+                "subtitle": "Cache research",
+                "title": "Prefix latency f00000000002"
+              },
+              {
+                "kind": "memory",
+                "occurrences": 1,
+                "pageKind": "concept",
+                "score": 6,
+                "slug": "prefix-reuse-f00000000002",
+                "snippet": "Understand exact prefix reuse.",
+                "subtitle": "Cache research",
+                "title": "Prefix reuse f00000000002"
+              },
+              {
+                "kind": "memory",
+                "occurrences": 1,
+                "pageKind": "domain",
+                "score": 5,
+                "slug": "cache-research",
+                "snippet": "How the pages of this domain connect.",
+                "subtitle": "Cache research",
+                "title": "Cache research"
+              },
+              {
+                "kind": "memory",
+                "occurrences": 1,
+                "pageKind": "source",
+                "score": 4,
+                "slug": "refused-claim-study-one",
+                "snippet": "A matching token prefix is reusable even when the question suffix changes.",
+                "subtitle": "Cache research",
+                "title": "Refused Claim Study one"
+              }
+            ]
+          }
+        },
+        "status": 200
+      }
+    ],
+    "PATCH /api/memory/domains/{slug}": [
+      {
+        "case": "a rename",
+        "json": {
+          "createdAt": "2000-01-01T00:00:00Z",
+          "origin": "reader",
+          "position": -1,
+          "slug": "reading-list",
+          "summary": null,
+          "title": "Reading list, revised",
+          "updatedAt": "2000-01-01T00:00:00Z"
+        },
+        "status": 200
+      }
+    ],
+    "POST /api/chat/conversations": [
+      {
+        "case": "a Memory chat",
+        "json": {
+          "createdAt": "2000-01-01T00:00:00Z",
+          "empty": true,
+          "generation": 0,
+          "id": "f0000000000000000000000000000001",
+          "kind": "memory_chat",
+          "lastChatModel": null,
+          "lastEngagedAt": "2000-01-01T00:00:00Z",
+          "manualTitle": false,
+          "paperId": null,
+          "personaId": null,
+          "projectId": null,
+          "title": "New chat"
+        },
+        "status": 201
+      },
+      {
+        "case": "a chat beside a document",
+        "json": {
+          "createdAt": "2000-01-01T00:00:00Z",
+          "empty": true,
+          "generation": 0,
+          "id": "f0000000000000000000000000000004",
+          "kind": "document_chat",
+          "lastChatModel": null,
+          "lastEngagedAt": "2000-01-01T00:00:00Z",
+          "manualTitle": false,
+          "paperId": "f00000000005",
+          "personaId": null,
+          "projectId": "f00000000006",
+          "title": "New chat"
+        },
+        "status": 201
+      }
+    ],
+    "POST /api/chat/stream": [
+      {
+        "case": "a Memory chat",
+        "events": [
+          {
+            "conversationId": "f0000000000000000000000000000001",
+            "open": {
+              "context": {
+                "index": {
+                  "chats": 1,
+                  "documents": 2,
+                  "pages": 6,
+                  "projects": 1
+                },
+                "start": {
+                  "kind": "question"
+                }
+              },
+              "offset": 0,
+              "startedAt": 0
+            },
+            "requestId": "f0000000000000000000000000000003",
+            "stretch": 0,
+            "type": "trace"
+          },
+          {
+            "conversationId": "f0000000000000000000000000000001",
+            "elapsedMs": 0,
+            "message": "Waiting for Standard capacity",
+            "requestId": "f0000000000000000000000000000003",
+            "stage": "model_wait",
+            "type": "progress"
+          },
+          {
+            "conversationId": "f0000000000000000000000000000001",
+            "elapsedMs": 0,
+            "message": "Response started",
+            "requestId": "f0000000000000000000000000000003",
+            "stage": "model_stream",
+            "type": "progress"
+          },
+          {
+            "conversationId": "f0000000000000000000000000000001",
+            "entry": 0,
+            "requestId": "f0000000000000000000000000000003",
+            "set": {
+              "at": 0,
+              "kind": "thought",
+              "text": ""
+            },
+            "stretch": 0,
+            "type": "trace"
+          },
+          {
+            "conversationId": "f0000000000000000000000000000001",
+            "entry": 0,
+            "requestId": "f0000000000000000000000000000003",
+            "stretch": 0,
+            "text": "I will check the stored evidence and distinguish reuse from latency.",
+            "type": "trace"
+          },
+          {
+            "conversationId": "f0000000000000000000000000000001",
+            "requestId": "f0000000000000000000000000000003",
+            "text": "I will check the stored evidence and distinguish reuse from latency.",
+            "type": "reasoning"
+          },
+          {
+            "conversationId": "f0000000000000000000000000000001",
+            "requestId": "f0000000000000000000000000000003",
+            "type": "reasoning_break"
+          },
+          {
+            "conversationId": "f0000000000000000000000000000001",
+            "requestId": "f0000000000000000000000000000003",
+            "text": "Opening the pages that matter",
+            "type": "status"
+          },
+          {
+            "conversationId": "f0000000000000000000000000000001",
+            "entry": 1,
+            "requestId": "f0000000000000000000000000000003",
+            "set": {
+              "args": {},
+              "at": 0,
+              "kind": "tool",
+              "running": true,
+              "tool": "open_memory",
+              "writing": true
+            },
+            "stretch": 0,
+            "type": "trace"
+          },
+          {
+            "conversationId": "f0000000000000000000000000000001",
+            "requestId": "f0000000000000000000000000000003",
+            "text": "",
+            "type": "status"
+          },
+          {
+            "conversationId": "f0000000000000000000000000000001",
+            "entry": 1,
+            "requestId": "f0000000000000000000000000000003",
+            "set": {
+              "args": {},
+              "at": 0,
+              "kind": "tool",
+              "queued": true,
+              "running": true,
+              "tool": "open_memory"
+            },
+            "stretch": 0,
+            "type": "trace"
+          },
+          {
+            "conversationId": "f0000000000000000000000000000001",
+            "entry": 1,
+            "requestId": "f0000000000000000000000000000003",
+            "set": {
+              "args": {},
+              "at": 0,
+              "kind": "tool",
+              "running": true,
+              "tool": "open_memory"
+            },
+            "stretch": 0,
+            "type": "trace"
+          },
+          {
+            "conversationId": "f0000000000000000000000000000001",
+            "entry": 1,
+            "requestId": "f0000000000000000000000000000003",
+            "set": {
+              "args": {},
+              "at": 0,
+              "kind": "tool",
+              "ms": 0,
+              "ok": true,
+              "results": [
+                {
+                  "kind": "concept",
+                  "slug": "prefix-reuse-f00000000002",
+                  "title": "Prefix reuse f00000000002"
+                }
+              ],
+              "tool": "open_memory"
+            },
+            "stretch": 0,
+            "type": "trace"
+          },
+          {
+            "conversationId": "f0000000000000000000000000000001",
+            "entry": 2,
+            "requestId": "f0000000000000000000000000000003",
+            "set": {
+              "at": 0,
+              "kind": "thought",
+              "text": ""
+            },
+            "stretch": 0,
+            "type": "trace"
+          },
+          {
+            "conversationId": "f0000000000000000000000000000001",
+            "entry": 2,
+            "requestId": "f0000000000000000000000000000003",
+            "stretch": 0,
+            "text": "I will check the stored evidence and distinguish reuse from latency.",
+            "type": "trace"
+          },
+          {
+            "conversationId": "f0000000000000000000000000000001",
+            "requestId": "f0000000000000000000000000000003",
+            "text": "I will check the stored evidence and distinguish reuse from latency.",
+            "type": "reasoning"
+          },
+          {
+            "conversationId": "f0000000000000000000000000000001",
+            "requestId": "f0000000000000000000000000000003",
+            "type": "reasoning_break"
+          },
+          {
+            "close": {
+              "endedAt": 0
+            },
+            "conversationId": "f0000000000000000000000000000001",
+            "requestId": "f0000000000000000000000000000003",
+            "stretch": 0,
+            "type": "trace"
+          },
+          {
+            "conversationId": "f0000000000000000000000000000001",
+            "requestId": "f0000000000000000000000000000003",
+            "text": "Prefix caching reuses the unchanged token prefix. A different question suffix leaves that prefix reusable. Keep source ordering stable and measure hit rate sepa",
+            "type": "delta"
+          },
+          {
+            "conversationId": "f0000000000000000000000000000001",
+            "requestId": "f0000000000000000000000000000003",
+            "text": "rately from latency. [[prefix-reuse-f00000000002]]",
+            "type": "delta"
+          },
+          {
+            "conversationId": "f0000000000000000000000000000001",
+            "incomplete": null,
+            "plan": null,
+            "requestId": "f0000000000000000000000000000003",
+            "sources": null,
+            "trace": [
+              {
+                "context": {
+                  "index": {
+                    "chats": 1,
+                    "documents": 2,
+                    "pages": 6,
+                    "projects": 1
+                  },
+                  "start": {
+                    "kind": "question"
+                  }
+                },
+                "endedAt": 0,
+                "entries": [
+                  {
+                    "at": 0,
+                    "kind": "thought",
+                    "text": "I will check the stored evidence and distinguish reuse from latency."
+                  },
+                  {
+                    "args": {},
+                    "at": 0,
+                    "kind": "tool",
+                    "ms": 0,
+                    "ok": true,
+                    "results": [
+                      {
+                        "kind": "concept",
+                        "slug": "prefix-reuse-f00000000002",
+                        "title": "Prefix reuse f00000000002"
+                      }
+                    ],
+                    "tool": "open_memory"
+                  },
+                  {
+                    "at": 0,
+                    "kind": "thought",
+                    "text": "I will check the stored evidence and distinguish reuse from latency."
+                  }
+                ],
+                "offset": 0,
+                "startedAt": 0
+              }
+            ],
+            "type": "done",
+            "viewportEvidence": null
+          }
+        ],
+        "status": 200
+      }
+    ],
+    "POST /api/memory/backfill/papers": [
+      {
+        "case": "a document owed a page",
+        "json": {
+          "inFlight": 0,
+          "queued": 0,
+          "revived": 0,
+          "upgraded": 1
+        },
+        "status": 200
+      },
+      {
+        "case": "every document",
+        "json": {
+          "inFlight": 0,
+          "queued": 1,
+          "revived": 0,
+          "upgraded": 0
+        },
+        "status": 200
+      }
+    ],
+    "POST /api/memory/documents/{paperId}/same-as": [
+      {
+        "case": "use that page",
+        "json": {
+          "used": true
+        },
+        "status": 200
+      }
+    ],
+    "POST /api/memory/domains": [
+      {
+        "case": "a new domain",
+        "json": {
+          "createdAt": "2000-01-01T00:00:00Z",
+          "origin": "reader",
+          "position": -1,
+          "slug": "reading-list",
+          "summary": null,
+          "title": "Reading list",
+          "updatedAt": "2000-01-01T00:00:00Z"
+        },
+        "status": 200
+      }
+    ],
+    "POST /api/memory/lint": [
+      {
+        "case": "a check",
+        "events": [
+          {
+            "elapsedMs": 0,
+            "message": "Checking 9 pages",
+            "requestId": "f0000000000000000000000000000065",
+            "stage": "memory_lint",
+            "type": "progress"
+          },
+          {
+            "figures": [],
+            "method": "Compared the pages supplied, and nothing else.",
+            "pages": [],
+            "requestId": "f0000000000000000000000000000065",
+            "reused": false,
+            "type": "done"
+          }
+        ],
+        "status": 200
+      },
+      {
+        "case": "the model unreachable",
+        "events": [
+          {
+            "elapsedMs": 0,
+            "message": "Checking 10 pages",
+            "requestId": "f0000000000000000000000000000066",
+            "stage": "memory_lint",
+            "type": "progress"
+          },
+          {
+            "message": "All connection attempts failed",
+            "requestId": "f0000000000000000000000000000066",
+            "type": "error"
+          }
+        ],
+        "status": 200
+      }
+    ],
+    "POST /api/memory/maintenance/cancel": [
+      {
+        "case": "a job waiting",
+        "json": {
+          "cancelled": 1
+        },
+        "status": 200
+      }
+    ],
+    "POST /api/memory/maintenance/drain": [
+      {
+        "case": "filing: a job",
+        "events": [
+          {
+            "jobId": "f00000000000000000000016",
+            "message": "Reading Prefix reuse notes",
+            "requestId": "f0000000000000000000000000000067",
+            "stage": "digest_check",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000016",
+            "message": "Checking Prefix reuse notes",
+            "paperId": "f00000000005",
+            "requestId": "f0000000000000000000000000000067",
+            "stage": "digest_check",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000016",
+            "message": "Indexing evidence in Prefix reuse notes",
+            "paperId": "f00000000005",
+            "requestId": "f0000000000000000000000000000067",
+            "stage": "digest_inventory",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000016",
+            "message": "Preparing Prefix reuse notes",
+            "paperId": "f00000000005",
+            "requestId": "f0000000000000000000000000000067",
+            "stage": "file_upload",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000016",
+            "message": "Building research digest for Prefix reuse notes",
+            "paperId": "f00000000005",
+            "requestId": "f0000000000000000000000000000067",
+            "stage": "digest_generate",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000016",
+            "message": "Looking for what bears on Prefix reuse notes",
+            "paperId": "f00000000005",
+            "requestId": "f0000000000000000000000000000067",
+            "stage": "digest_research",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000016",
+            "message": "Waiting for Standard capacity",
+            "paperId": "f00000000005",
+            "requestId": "f0000000000000000000000000000067",
+            "stage": "model_wait",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000016",
+            "message": "Digest response started",
+            "paperId": "f00000000005",
+            "requestId": "f0000000000000000000000000000067",
+            "stage": "model_stream",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000016",
+            "message": "Reading what there is to file",
+            "requestId": "f0000000000000000000000000000067",
+            "stage": "memory_gather",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000016",
+            "message": "Deciding where Prefix reuse notes belongs in Memory",
+            "requestId": "f0000000000000000000000000000067",
+            "stage": "memory_select",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000016",
+            "message": "Reading Memory and writing what belongs in it",
+            "requestId": "f0000000000000000000000000000067",
+            "stage": "memory_maintain",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000016",
+            "message": "Checking what was written against its sources",
+            "requestId": "f0000000000000000000000000000067",
+            "stage": "memory_verify",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000016",
+            "message": "Filing",
+            "requestId": "f0000000000000000000000000000067",
+            "stage": "memory_commit",
+            "type": "progress"
+          },
+          {
+            "cancelled": false,
+            "claimed": true,
+            "jobId": "f00000000000000000000016",
+            "kind": "document",
+            "marker": "paper:f00000000005",
+            "remaining": 3,
+            "requestId": "f0000000000000000000000000000067",
+            "result": {
+              "figures": [],
+              "method": null,
+              "pages": [
+                {
+                  "aliases": [],
+                  "body": "## Problem and approach\n\nPrefix caching reuses exact matching tokens before the changing question. [E1]\n\n## Evidence and limitations\n\nA stable prefix can reduce repeated work. Measure hit rate and repeated latency rather than assuming a universal speedup.\n\n## Reading route\n\nInspect the controlled comparison in [[prefix-reuse-notes]] and ask which confounders remain.",
+                  "citations": [
+                    {
+                      "claimType": "author-claim",
+                      "evidenceId": null,
+                      "id": 1,
+                      "noteId": null,
+                      "page": 1,
+                      "paperId": "f00000000005",
+                      "section": null
+                    }
+                  ],
+                  "createdAt": "2000-01-01T00:00:00Z",
+                  "domain": "cache-research",
+                  "figures": [],
+                  "id": "f00000000000000000000022",
+                  "kind": "concept",
+                  "linkDegree": 0,
+                  "links": [
+                    "prefix-reuse-notes"
+                  ],
+                  "revision": 1,
+                  "slug": "prefix-reuse-f00000000005",
+                  "sourcePaperId": "f00000000005",
+                  "summary": "Understand exact prefix reuse and test its limitations.",
+                  "tags": [],
+                  "title": "Prefix reuse f00000000005",
+                  "updatedAt": "2000-01-01T00:00:00Z"
+                }
+              ],
+              "reused": false
+            },
+            "type": "done"
+          }
+        ],
+        "status": 200
+      },
+      {
+        "case": "nothing due",
+        "events": [
+          {
+            "claimed": false,
+            "remaining": 0,
+            "requestId": "f0000000000000000000000000000068",
+            "type": "done"
+          }
+        ],
+        "status": 200
+      },
+      {
+        "case": "refiling: a job",
+        "events": [
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000054",
+            "message": "Reading what there is to file",
+            "requestId": "f0000000000000000000000000000069",
+            "stage": "memory_gather",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000054",
+            "message": "Deciding where Refused Claim Study one belongs in Memory",
+            "requestId": "f0000000000000000000000000000069",
+            "stage": "memory_select",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000054",
+            "message": "Reading Memory and writing what belongs in it",
+            "requestId": "f0000000000000000000000000000069",
+            "stage": "memory_maintain",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000054",
+            "message": "Checking what was written against its sources",
+            "requestId": "f0000000000000000000000000000069",
+            "stage": "memory_verify",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000054",
+            "message": "Filing",
+            "requestId": "f0000000000000000000000000000069",
+            "stage": "memory_commit",
+            "type": "progress"
+          },
+          {
+            "cancelled": false,
+            "claimed": true,
+            "jobId": "f00000000000000000000054",
+            "kind": "document",
+            "marker": "paper:f00000000002",
+            "remaining": 1,
+            "requestId": "f0000000000000000000000000000069",
+            "result": {
+              "figures": [],
+              "method": null,
+              "pages": [
+                {
+                  "aliases": [],
+                  "body": "## Measured latency\n\nOne controlled comparison measured median latency for a stable and a shuffled prefix. [E1]\n\nIn the one controlled comparison, the stable prefix had a median latency of 120 ms against 240 ms for the shuffled one. [E1]",
+                  "citations": [
+                    {
+                      "claimType": "author-claim",
+                      "evidenceId": null,
+                      "id": 1,
+                      "noteId": null,
+                      "page": 1,
+                      "paperId": "f00000000002",
+                      "section": null
+                    }
+                  ],
+                  "createdAt": "2000-01-01T00:00:00Z",
+                  "domain": "cache-research",
+                  "figures": [],
+                  "id": "f00000000000000000000059",
+                  "kind": "concept",
+                  "linkDegree": 0,
+                  "links": [],
+                  "revision": 1,
+                  "slug": "prefix-latency-f00000000002",
+                  "sourcePaperId": "f00000000002",
+                  "summary": "In the one controlled comparison, the stable prefix had a median latency of 120 ms against 240 ms for the shuffled one.",
+                  "tags": [],
+                  "title": "Prefix latency f00000000002",
+                  "updatedAt": "2000-01-01T00:00:00Z"
+                }
+              ],
+              "reused": false
+            },
+            "type": "done"
+          }
+        ],
+        "status": 200
+      },
+      {
+        "case": "sessions: a job",
+        "events": [
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000049",
+            "message": "Reading what there is to file",
+            "requestId": "f0000000000000000000000000000070",
+            "stage": "memory_gather",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000049",
+            "message": "Recording that nothing was filed",
+            "requestId": "f0000000000000000000000000000070",
+            "stage": "memory_commit",
+            "type": "progress"
+          },
+          {
+            "cancelled": false,
+            "claimed": true,
+            "jobId": "f00000000000000000000049",
+            "kind": "session",
+            "marker": "session:conversation:f0000000000000000000000000000001",
+            "remaining": 0,
+            "requestId": "f0000000000000000000000000000070",
+            "result": {
+              "figures": [],
+              "method": null,
+              "pages": [],
+              "reused": false
+            },
+            "type": "done"
+          }
+        ],
+        "status": 200
+      },
+      {
+        "case": "domains and a rewrite: a job",
+        "events": [
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000060",
+            "message": "Reading what there is to file",
+            "requestId": "f0000000000000000000000000000071",
+            "stage": "memory_gather",
+            "type": "progress"
+          },
+          {
+            "cancelled": false,
+            "claimed": true,
+            "jobId": "f00000000000000000000060",
+            "kind": "domain",
+            "marker": "domain:reading-list",
+            "remaining": 2,
+            "requestId": "f0000000000000000000000000000071",
+            "result": {
+              "figures": [],
+              "method": null,
+              "pages": [],
+              "reused": false
+            },
+            "type": "done"
+          }
+        ],
+        "status": 200
+      },
+      {
+        "case": "a document to delete: a job",
+        "events": [
+          {
+            "jobId": "f00000000000000000000039",
+            "message": "Reading Kept page study",
+            "requestId": "f0000000000000000000000000000072",
+            "stage": "digest_check",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000039",
+            "message": "Checking Kept page study",
+            "paperId": "f00000000030",
+            "requestId": "f0000000000000000000000000000072",
+            "stage": "digest_check",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000039",
+            "message": "Indexing evidence in Kept page study",
+            "paperId": "f00000000030",
+            "requestId": "f0000000000000000000000000000072",
+            "stage": "digest_inventory",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000039",
+            "message": "Preparing Kept page study",
+            "paperId": "f00000000030",
+            "requestId": "f0000000000000000000000000000072",
+            "stage": "file_upload",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000039",
+            "message": "Building research digest for Kept page study",
+            "paperId": "f00000000030",
+            "requestId": "f0000000000000000000000000000072",
+            "stage": "digest_generate",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000039",
+            "message": "Looking for what bears on Kept page study",
+            "paperId": "f00000000030",
+            "requestId": "f0000000000000000000000000000072",
+            "stage": "digest_research",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000039",
+            "message": "Waiting for Standard capacity",
+            "paperId": "f00000000030",
+            "requestId": "f0000000000000000000000000000072",
+            "stage": "model_wait",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000039",
+            "message": "Digest response started",
+            "paperId": "f00000000030",
+            "requestId": "f0000000000000000000000000000072",
+            "stage": "model_stream",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000039",
+            "message": "Reading what there is to file",
+            "requestId": "f0000000000000000000000000000072",
+            "stage": "memory_gather",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000039",
+            "message": "Deciding where Kept page study belongs in Memory",
+            "requestId": "f0000000000000000000000000000072",
+            "stage": "memory_select",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000039",
+            "message": "Reading Memory and writing what belongs in it",
+            "requestId": "f0000000000000000000000000000072",
+            "stage": "memory_maintain",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000039",
+            "message": "Checking what was written against its sources",
+            "requestId": "f0000000000000000000000000000072",
+            "stage": "memory_verify",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000039",
+            "message": "Filing",
+            "requestId": "f0000000000000000000000000000072",
+            "stage": "memory_commit",
+            "type": "progress"
+          },
+          {
+            "cancelled": false,
+            "claimed": true,
+            "jobId": "f00000000000000000000039",
+            "kind": "document",
+            "marker": "paper:f00000000030",
+            "remaining": 2,
+            "requestId": "f0000000000000000000000000000072",
+            "result": {
+              "figures": [],
+              "method": null,
+              "pages": [
+                {
+                  "aliases": [],
+                  "body": "## Problem and approach\n\nPrefix caching reuses exact matching tokens before the changing question. [E1]\n\n## Evidence and limitations\n\nA stable prefix can reduce repeated work. Measure hit rate and repeated latency rather than assuming a universal speedup.\n\n## Reading route\n\nInspect the controlled comparison in [[kept-page-study]] and ask which confounders remain.",
+                  "citations": [
+                    {
+                      "claimType": "author-claim",
+                      "evidenceId": null,
+                      "id": 1,
+                      "noteId": null,
+                      "page": 1,
+                      "paperId": "f00000000030",
+                      "section": null
+                    }
+                  ],
+                  "createdAt": "2000-01-01T00:00:00Z",
+                  "domain": "cache-research",
+                  "figures": [],
+                  "id": "f00000000000000000000058",
+                  "kind": "concept",
+                  "linkDegree": 0,
+                  "links": [
+                    "kept-page-study"
+                  ],
+                  "revision": 1,
+                  "slug": "prefix-reuse-f00000000030",
+                  "sourcePaperId": "f00000000030",
+                  "summary": "Understand exact prefix reuse and test its limitations.",
+                  "tags": [],
+                  "title": "Prefix reuse f00000000030",
+                  "updatedAt": "2000-01-01T00:00:00Z"
+                }
+              ],
+              "reused": false
+            },
+            "type": "done"
+          }
+        ],
+        "status": 200
+      },
+      {
+        "case": "a document like a deleted one: a job",
+        "events": [
+          {
+            "jobId": "f00000000000000000000032",
+            "message": "Reading Kept page study",
+            "requestId": "f0000000000000000000000000000073",
+            "stage": "digest_check",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000032",
+            "message": "Checking Kept page study",
+            "paperId": "f00000000029",
+            "requestId": "f0000000000000000000000000000073",
+            "stage": "digest_check",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000032",
+            "message": "Indexing evidence in Kept page study",
+            "paperId": "f00000000029",
+            "requestId": "f0000000000000000000000000000073",
+            "stage": "digest_inventory",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000032",
+            "message": "Preparing Kept page study",
+            "paperId": "f00000000029",
+            "requestId": "f0000000000000000000000000000073",
+            "stage": "file_upload",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000032",
+            "message": "Building research digest for Kept page study",
+            "paperId": "f00000000029",
+            "requestId": "f0000000000000000000000000000073",
+            "stage": "digest_generate",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000032",
+            "message": "Looking for what bears on Kept page study",
+            "paperId": "f00000000029",
+            "requestId": "f0000000000000000000000000000073",
+            "stage": "digest_research",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000032",
+            "message": "Waiting for Standard capacity",
+            "paperId": "f00000000029",
+            "requestId": "f0000000000000000000000000000073",
+            "stage": "model_wait",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000032",
+            "message": "Digest response started",
+            "paperId": "f00000000029",
+            "requestId": "f0000000000000000000000000000073",
+            "stage": "model_stream",
+            "type": "progress"
+          },
+          {
+            "jobId": "f00000000000000000000032",
+            "message": "Checking pages kept from deleted documents",
+            "requestId": "f0000000000000000000000000000073",
+            "stage": "same_document",
+            "type": "progress"
+          },
+          {
+            "cancelled": false,
+            "claimed": true,
+            "jobId": "f00000000000000000000032",
+            "kind": "document",
+            "marker": "paper:f00000000029",
+            "remaining": 0,
+            "requestId": "f0000000000000000000000000000073",
+            "result": {},
+            "type": "done"
+          }
+        ],
+        "status": 200
+      },
+      {
+        "case": "a document answered: a job",
+        "events": [
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000032",
+            "message": "Reading what there is to file",
+            "requestId": "f0000000000000000000000000000074",
+            "stage": "memory_gather",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000032",
+            "message": "Deciding where Kept page study belongs in Memory",
+            "requestId": "f0000000000000000000000000000074",
+            "stage": "memory_select",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000032",
+            "message": "Reading Memory and writing what belongs in it",
+            "requestId": "f0000000000000000000000000000074",
+            "stage": "memory_maintain",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000032",
+            "message": "Checking what was written against its sources",
+            "requestId": "f0000000000000000000000000000074",
+            "stage": "memory_verify",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000032",
+            "message": "Filing",
+            "requestId": "f0000000000000000000000000000074",
+            "stage": "memory_commit",
+            "type": "progress"
+          },
+          {
+            "cancelled": false,
+            "claimed": true,
+            "jobId": "f00000000000000000000032",
+            "kind": "document",
+            "marker": "paper:f00000000029",
+            "remaining": 1,
+            "requestId": "f0000000000000000000000000000074",
+            "result": {
+              "figures": [],
+              "method": null,
+              "pages": [
+                {
+                  "aliases": [],
+                  "body": "## Problem and approach\n\nPrefix caching reuses exact matching tokens before the changing question. [E1]\n\n## Evidence and limitations\n\nA stable prefix can reduce repeated work. Measure hit rate and repeated latency rather than assuming a universal speedup.\n\n## Reading route\n\nInspect the controlled comparison in [[kept-page-study]] and ask which confounders remain.",
+                  "citations": [
+                    {
+                      "claimType": "author-claim",
+                      "evidenceId": null,
+                      "id": 1,
+                      "noteId": null,
+                      "page": 1,
+                      "paperId": "f00000000029",
+                      "section": null
+                    }
+                  ],
+                  "createdAt": "2000-01-01T00:00:00Z",
+                  "domain": "cache-research",
+                  "figures": [],
+                  "id": "f00000000000000000000056",
+                  "kind": "concept",
+                  "linkDegree": 0,
+                  "links": [
+                    "kept-page-study"
+                  ],
+                  "revision": 1,
+                  "slug": "prefix-reuse-f00000000029",
+                  "sourcePaperId": "f00000000029",
+                  "summary": "Understand exact prefix reuse and test its limitations.",
+                  "tags": [],
+                  "title": "Prefix reuse f00000000029",
+                  "updatedAt": "2000-01-01T00:00:00Z"
+                }
+              ],
+              "reused": false
+            },
+            "type": "done"
+          }
+        ],
+        "status": 200
+      },
+      {
+        "case": "a filing that gives up: a job that failed",
+        "events": [
+          {
+            "jobId": "f00000000000000000000064",
+            "message": "Reading Stalled Selection Study one",
+            "requestId": "f0000000000000000000000000000075",
+            "stage": "digest_check",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000064",
+            "message": "Checking Stalled Selection Study one",
+            "paperId": "f00000000024",
+            "requestId": "f0000000000000000000000000000075",
+            "stage": "digest_check",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000064",
+            "message": "Indexing evidence in Stalled Selection Study one",
+            "paperId": "f00000000024",
+            "requestId": "f0000000000000000000000000000075",
+            "stage": "digest_inventory",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000064",
+            "message": "Preparing Stalled Selection Study one",
+            "paperId": "f00000000024",
+            "requestId": "f0000000000000000000000000000075",
+            "stage": "file_upload",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000064",
+            "message": "Building research digest for Stalled Selection Study one",
+            "paperId": "f00000000024",
+            "requestId": "f0000000000000000000000000000075",
+            "stage": "digest_generate",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000064",
+            "message": "Looking for what bears on Stalled Selection Study one",
+            "paperId": "f00000000024",
+            "requestId": "f0000000000000000000000000000075",
+            "stage": "digest_research",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000064",
+            "message": "Waiting for Standard capacity",
+            "paperId": "f00000000024",
+            "requestId": "f0000000000000000000000000000075",
+            "stage": "model_wait",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000064",
+            "message": "Digest response started",
+            "paperId": "f00000000024",
+            "requestId": "f0000000000000000000000000000075",
+            "stage": "model_stream",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000064",
+            "message": "Reading what there is to file",
+            "requestId": "f0000000000000000000000000000075",
+            "stage": "memory_gather",
+            "type": "progress"
+          },
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000064",
+            "message": "Deciding where Stalled Selection Study one belongs in Memory",
+            "requestId": "f0000000000000000000000000000075",
+            "stage": "memory_select",
+            "type": "progress"
+          },
+          {
+            "jobId": "f00000000000000000000064",
+            "message": "Memory selection for filing was cut off before it finished (max_output_tokens)",
+            "requestId": "f0000000000000000000000000000075",
+            "retryAt": null,
+            "terminal": true,
+            "type": "error"
+          }
+        ],
+        "status": 200
+      },
+      {
+        "case": "a filing that gives up: a job",
+        "events": [
+          {
+            "elapsedMs": 0,
+            "jobId": "f00000000000000000000076",
+            "message": "Reading what there is to file",
+            "requestId": "f0000000000000000000000000000077",
+            "stage": "memory_gather",
+            "type": "progress"
+          },
+          {
+            "cancelled": false,
+            "claimed": true,
+            "jobId": "f00000000000000000000076",
+            "kind": "domain",
+            "marker": "domain:general",
+            "remaining": 0,
+            "requestId": "f0000000000000000000000000000077",
+            "result": {
+              "figures": [],
+              "method": null,
+              "pages": [],
+              "reused": false
+            },
+            "type": "done"
+          }
+        ],
+        "status": 200
+      }
+    ],
+    "POST /api/memory/maintenance/jobs/{jobId}/retry": [
+      {
+        "case": "a job that gave up",
+        "json": {
+          "attempts": 0,
+          "createdAt": "2000-01-01T00:00:00Z",
+          "id": "f00000000000000000000064",
+          "kind": "document",
+          "lastError": null,
+          "leaseExpiresAt": null,
+          "marker": "paper:f00000000024",
+          "payload": {
+            "attemptTelemetry": [
+              {
+                "cause": "answer",
+                "failedAt": "2000-01-01T00:00:00Z",
+                "rejection": "Memory selection for filing was cut off before it finished (max_output_tokens)"
+              }
+            ],
+            "fingerprint": "f000000000000000000000000000000000000000000000000000000000000011",
+            "paperId": "f00000000024",
+            "projectId": "f00000000006",
+            "targetVersion": "knowledge-v6"
+          },
+          "retryAt": null,
+          "status": "pending",
+          "updatedAt": "2000-01-01T00:00:00Z"
+        },
+        "status": 200
+      }
+    ],
+    "POST /api/memory/pages/move": [
+      {
+        "case": "one page",
+        "json": {
+          "pages": [
+            {
+              "aliases": [],
+              "createdAt": "2000-01-01T00:00:00Z",
+              "domain": "reading-list",
+              "id": "f00000000000000000000020",
+              "kind": "concept",
+              "linkDegree": 1,
+              "revision": 1,
+              "slug": "prefix-reuse-f00000000002",
+              "sourcePaperId": "f00000000002",
+              "summary": "Understand exact prefix reuse.",
+              "tags": [],
+              "title": "Prefix reuse f00000000002",
+              "updatedAt": "2000-01-01T00:00:00Z"
+            }
+          ]
+        },
+        "status": 200
+      }
+    ],
+    "POST /api/memory/pages/{slug}/rewrite": [
+      {
+        "case": "with a note",
+        "json": {
+          "attempts": 0,
+          "createdAt": "2000-01-01T00:00:00Z",
+          "id": "f00000000000000000000063",
+          "kind": "page-rewrite",
+          "lastError": null,
+          "leaseExpiresAt": null,
+          "marker": "page:prefix-reuse-f00000000002:rewrite:knowledge-v6:1:f00000000042",
+          "payload": {
+            "pageSlug": "prefix-reuse-f00000000002",
+            "pageTitle": "Prefix reuse f00000000002",
+            "paperId": "f00000000002",
+            "projectId": "f00000000006",
+            "readerNote": "Say how the timing was measured."
+          },
+          "retryAt": null,
+          "status": "pending",
+          "updatedAt": "2000-01-01T00:00:00Z"
+        },
+        "status": 200
+      }
+    ],
+    "POST /api/memory/reorganize/stream": [
+      {
+        "case": "a placement review",
+        "events": [
+          {
+            "message": "Reviewing page placement…",
+            "requestId": "f0000000000000000000000000000078",
+            "type": "progress"
+          },
+          {
+            "domains": [
+              {
+                "createdAt": "2000-01-01T00:00:00Z",
+                "domain": "reading-list",
+                "origin": "reader",
+                "pages": 1,
+                "position": -1,
+                "slug": "reading-list",
+                "summary": null,
+                "title": "Reading list, revised",
+                "updatedAt": "2000-01-01T00:00:00Z"
+              },
+              {
+                "createdAt": "2000-01-01T00:00:00Z",
+                "domain": "cache-research",
+                "origin": "model",
+                "pages": 8,
+                "position": 0,
+                "slug": "cache-research",
+                "summary": null,
+                "title": "Cache research",
+                "updatedAt": "2000-01-01T00:00:00Z"
+              },
+              {
+                "createdAt": "2000-01-01T00:00:00Z",
+                "domain": "general",
+                "origin": "model",
+                "pages": 0,
+                "position": 0,
+                "slug": "general",
+                "summary": null,
+                "title": "General",
+                "updatedAt": "2000-01-01T00:00:00Z"
+              }
+            ],
+            "method": "Checked the supplied membership index.",
+            "moves": [],
+            "requestId": "f0000000000000000000000000000078",
+            "type": "done"
+          }
+        ],
+        "status": 200
+      },
+      {
+        "case": "the model unreachable",
+        "events": [
+          {
+            "message": "Reviewing page placement…",
+            "requestId": "f0000000000000000000000000000079",
+            "type": "progress"
+          },
+          {
+            "message": "All connection attempts failed",
+            "requestId": "f0000000000000000000000000000079",
+            "type": "error"
+          }
+        ],
+        "status": 200
+      }
+    ],
+    "POST /api/memory/sessions/release": [
+      {
+        "case": "a Memory chat",
+        "json": {
+          "released": 1
+        },
+        "status": 200
+      },
+      {
+        "case": "a document",
+        "json": {
+          "released": 0
+        },
+        "status": 200
+      },
+      {
+        "case": "every session",
+        "json": {
+          "released": 0
+        },
+        "status": 200
+      }
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+[
+  {
+    "id": "9f140edd30394d058edd64e1",
+    "pageId": "f46a2f18d6324b62a9742b9c",
+    "caption": "Median latency, stable against shuffled prefix.",
+    "alt": "Two bars: the stable prefix is half the height of the shuffled one.",
+    "origin": {
+      "paperId": "goldenpaperb",
+      "page": 2
+    },
+    "width": 24,
+    "height": 12,
+    "bytes": 70,
+    "kind": "source-figure",
+    "provenance": {
+      "type": "source",
+      "inventoryId": "pdf-figure-1",
+      "paperId": "goldenpaperb",
+      "digestAssetId": "goldenfigurone"
+    },
+    "mimeType": "image/webp",
+    "skillVersion": "source-page-v1",
+    "createdAt": "2026-10-23T06:57:30.029015+00:00",
+    "captured": true,
+    "objectKey": "knowledge/u/reader/figures/9f140edd30394d058edd64e1.webp"
+  }
+]

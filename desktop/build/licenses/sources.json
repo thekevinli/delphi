@@ -1,0 +1,546 @@
+{
+  "_": [
+    "Licence texts that Delphi.app needs and that no shipped file carries, fetched once",
+    "from the upstream named beside each and read by build/notices.mjs. Refresh them at",
+    "a pin bump: the generator refuses an interpreter release other than the one below,",
+    "and any Rust crate, statically linked module or native library it has no text for."
+  ],
+  "python-build-standalone": {
+    "release": "20260901",
+    "python": "3.12.14",
+    "archive": "cpython-3.12.14+20260901-aarch64-apple-darwin-pgo+lto-full.tar.zst",
+    "sha256": "dbefa04d4107b449e17022f9c78d3eacbd37a1aa8c166c6220dbd95addf3f318",
+    "source": "https://github.com/astral-sh/python-build-standalone/releases/tag/20260901",
+    "modules": {
+      "_bz2": {
+        "component": "bzip2",
+        "licence": "bzip2-1.0.6",
+        "file": "python-build-standalone/LICENSE.bzip2.txt",
+        "source": "https://sourceware.org/bzip2/"
+      },
+      "_ctypes": {
+        "component": "libffi",
+        "licence": "MIT",
+        "file": "python-build-standalone/LICENSE.libffi.txt",
+        "source": "https://github.com/libffi/libffi"
+      },
+      "_decimal": {
+        "component": "mpdecimal",
+        "licence": "BSD-2-Clause",
+        "file": "python-build-standalone/LICENSE.mpdecimal.txt",
+        "source": "https://www.bytereef.org/mpdecimal/"
+      },
+      "_hashlib": {
+        "component": "OpenSSL",
+        "licence": "Apache-2.0",
+        "file": "python-build-standalone/LICENSE.openssl-3.txt",
+        "source": "https://github.com/openssl/openssl"
+      },
+      "_ssl": {
+        "component": "OpenSSL",
+        "licence": "Apache-2.0",
+        "file": "python-build-standalone/LICENSE.openssl-3.txt",
+        "source": "https://github.com/openssl/openssl"
+      },
+      "_lzma": {
+        "component": "liblzma (XZ Utils)",
+        "licence": "0BSD",
+        "file": "python-build-standalone/LICENSE.liblzma.txt",
+        "source": "https://github.com/tukaani-project/xz"
+      },
+      "_sqlite3": {
+        "component": "SQLite",
+        "licence": "blessing (public domain)",
+        "file": "python-build-standalone/LICENSE.sqlite.txt",
+        "source": "https://sqlite.org/"
+      },
+      "_uuid": {
+        "component": "libuuid",
+        "licence": "BSD-3-Clause",
+        "file": "python-build-standalone/LICENSE.libuuid.txt",
+        "source": "https://github.com/util-linux/util-linux"
+      },
+      "pyexpat": {
+        "component": "Expat",
+        "licence": "MIT",
+        "file": "python-build-standalone/LICENSE.expat.txt",
+        "source": "https://github.com/libexpat/libexpat"
+      }
+    },
+    "_": "python/licenses/ of this archive (its SHA-256 is the release's own SHA256SUMS line); the install_only_stripped archive the app ships carries only CPython's licence. `modules` is PYTHON.json's map from an extension module to the library it links statically, for the modules that link one on macOS."
+  },
+  "cpython": {
+    "file": "cpython/license.rst",
+    "source": "https://github.com/python/cpython/blob/v3.12.14/Doc/license.rst",
+    "_": "Licenses and Acknowledgements for Incorporated Software, from the documentation, which the interpreter tree does not carry."
+  },
+  "crates": {
+    "_": "Rust crates compiled into a shipped extension module, keyed by name: the generator finds them in the binary. `used` is the licence taken where a crate offers a choice.",
+    "ahash": {
+      "declared": "MIT OR Apache-2.0",
+      "used": "MIT",
+      "seen": [
+        "0.8.12"
+      ],
+      "files": [
+        "rust-crates/ahash/LICENSE-MIT"
+      ],
+      "source": "https://crates.io/crates/ahash/0.8.12"
+    },
+    "aho-corasick": {
+      "declared": "Unlicense OR MIT",
+      "used": "MIT",
+      "seen": [
+        "1.1.3"
+      ],
+      "files": [
+        "rust-crates/aho-corasick/LICENSE-MIT"
+      ],
+      "source": "https://crates.io/crates/aho-corasick/1.1.3"
+    },
+    "base64": {
+      "declared": "MIT OR Apache-2.0",
+      "used": "MIT",
+      "seen": [
+        "0.23.1"
+      ],
+      "files": [
+        "rust-crates/base64/LICENSE-MIT"
+      ],
+      "source": "https://crates.io/crates/base64/0.23.1"
+    },
+    "fsevent-sys": {
+      "declared": "MIT",
+      "used": "MIT",
+      "seen": [
+        "4.1.0"
+      ],
+      "files": [
+        "rust-crates/fsevent-sys/LICENSE"
+      ],
+      "source": "https://crates.io/crates/fsevent-sys/4.1.0"
+    },
+    "hashbrown": {
+      "declared": "MIT OR Apache-2.0",
+      "used": "MIT",
+      "seen": [
+        "0.17.1"
+      ],
+      "files": [
+        "rust-crates/hashbrown/LICENSE-MIT"
+      ],
+      "source": "https://crates.io/crates/hashbrown/0.17.1"
+    },
+    "hex": {
+      "declared": "MIT OR Apache-2.0",
+      "used": "MIT",
+      "seen": [
+        "0.4.3"
+      ],
+      "files": [
+        "rust-crates/hex/LICENSE-MIT"
+      ],
+      "source": "https://crates.io/crates/hex/0.4.3"
+    },
+    "icu_normalizer": {
+      "declared": "Unicode-3.0",
+      "used": "Unicode-3.0",
+      "seen": [
+        "1.5.0"
+      ],
+      "files": [
+        "rust-crates/icu_normalizer/LICENSE"
+      ],
+      "source": "https://crates.io/crates/icu_normalizer/1.5.0"
+    },
+    "idna": {
+      "declared": "MIT OR Apache-2.0",
+      "used": "MIT",
+      "seen": [
+        "1.1.0"
+      ],
+      "files": [
+        "rust-crates/idna/LICENSE-MIT"
+      ],
+      "source": "https://crates.io/crates/idna/1.1.0"
+    },
+    "jiter": {
+      "declared": "MIT",
+      "used": "MIT",
+      "seen": [
+        "0.16.0"
+      ],
+      "files": [
+        "rust-crates/jiter/LICENSE"
+      ],
+      "source": "https://crates.io/crates/jiter/0.16.0"
+    },
+    "lexical-parse-float": {
+      "declared": "MIT OR Apache-2.0",
+      "used": "MIT",
+      "seen": [
+        "1.0.5"
+      ],
+      "files": [
+        "rust-crates/lexical-parse-float/LICENSE-MIT",
+        "rust-crates/lexical-parse-float/LICENSE.md"
+      ],
+      "source": "https://crates.io/crates/lexical-parse-float/1.0.5"
+    },
+    "log": {
+      "declared": "MIT OR Apache-2.0",
+      "used": "MIT",
+      "seen": [
+        "0.4.22"
+      ],
+      "files": [
+        "rust-crates/log/LICENSE-MIT"
+      ],
+      "source": "https://crates.io/crates/log/0.4.22"
+    },
+    "lru": {
+      "declared": "MIT",
+      "used": "MIT",
+      "seen": [
+        "0.18.5"
+      ],
+      "files": [
+        "rust-crates/lru/LICENSE"
+      ],
+      "source": "https://crates.io/crates/lru/0.18.5"
+    },
+    "memchr": {
+      "declared": "Unlicense OR MIT",
+      "used": "MIT",
+      "seen": [
+        "2.7.4"
+      ],
+      "files": [
+        "rust-crates/memchr/LICENSE-MIT"
+      ],
+      "source": "https://crates.io/crates/memchr/2.7.4"
+    },
+    "notify": {
+      "declared": "CC0-1.0",
+      "used": "CC0-1.0",
+      "seen": [
+        "8.0.0"
+      ],
+      "files": [
+        "rust-crates/notify/LICENSE-CC0"
+      ],
+      "source": "https://crates.io/crates/notify/8.0.0"
+    },
+    "num-bigint": {
+      "declared": "MIT OR Apache-2.0",
+      "used": "MIT",
+      "seen": [
+        "0.4.6"
+      ],
+      "files": [
+        "rust-crates/num-bigint/LICENSE-MIT"
+      ],
+      "source": "https://crates.io/crates/num-bigint/0.4.6"
+    },
+    "num-integer": {
+      "declared": "MIT OR Apache-2.0",
+      "used": "MIT",
+      "seen": [
+        "0.1.46"
+      ],
+      "files": [
+        "rust-crates/num-integer/LICENSE-MIT"
+      ],
+      "source": "https://crates.io/crates/num-integer/0.1.46"
+    },
+    "once_cell": {
+      "declared": "MIT OR Apache-2.0",
+      "used": "MIT",
+      "seen": [
+        "1.21.3"
+      ],
+      "files": [
+        "rust-crates/once_cell/LICENSE-MIT"
+      ],
+      "source": "https://crates.io/crates/once_cell/1.21.3"
+    },
+    "percent-encoding": {
+      "declared": "MIT OR Apache-2.0",
+      "used": "MIT",
+      "seen": [
+        "2.3.2"
+      ],
+      "files": [
+        "rust-crates/percent-encoding/LICENSE-MIT"
+      ],
+      "source": "https://crates.io/crates/percent-encoding/2.3.2"
+    },
+    "pyo3": {
+      "declared": "MIT OR Apache-2.0",
+      "used": "MIT",
+      "seen": [
+        "0.29.0",
+        "0.29.2"
+      ],
+      "files": [
+        "rust-crates/pyo3/LICENSE-MIT"
+      ],
+      "source": "https://crates.io/crates/pyo3/0.29.2"
+    },
+    "pyo3-ffi": {
+      "declared": "MIT OR Apache-2.0",
+      "used": "MIT",
+      "seen": [
+        "0.29.0",
+        "0.29.2"
+      ],
+      "files": [
+        "rust-crates/pyo3-ffi/LICENSE-MIT"
+      ],
+      "source": "https://crates.io/crates/pyo3-ffi/0.29.2"
+    },
+    "regex": {
+      "declared": "MIT OR Apache-2.0",
+      "used": "MIT",
+      "seen": [
+        "1.13.1"
+      ],
+      "files": [
+        "rust-crates/regex/LICENSE-MIT"
+      ],
+      "source": "https://crates.io/crates/regex/1.13.1"
+    },
+    "regex-automata": {
+      "declared": "MIT OR Apache-2.0",
+      "used": "MIT",
+      "seen": [
+        "0.4.18"
+      ],
+      "files": [
+        "rust-crates/regex-automata/LICENSE-MIT"
+      ],
+      "source": "https://crates.io/crates/regex-automata/0.4.18"
+    },
+    "regex-syntax": {
+      "declared": "MIT OR Apache-2.0",
+      "used": "MIT",
+      "seen": [
+        "0.8.11"
+      ],
+      "files": [
+        "rust-crates/regex-syntax/LICENSE-MIT"
+      ],
+      "source": "https://crates.io/crates/regex-syntax/0.8.11"
+    },
+    "same-file": {
+      "declared": "Unlicense OR MIT",
+      "used": "MIT",
+      "seen": [
+        "1.0.6"
+      ],
+      "files": [
+        "rust-crates/same-file/LICENSE-MIT"
+      ],
+      "source": "https://crates.io/crates/same-file/1.0.6"
+    },
+    "serde_json": {
+      "declared": "MIT OR Apache-2.0",
+      "used": "MIT",
+      "seen": [
+        "1.0.151"
+      ],
+      "files": [
+        "rust-crates/serde_json/LICENSE-MIT"
+      ],
+      "source": "https://crates.io/crates/serde_json/1.0.151"
+    },
+    "smallvec": {
+      "declared": "MIT OR Apache-2.0",
+      "used": "MIT",
+      "seen": [
+        "1.16.2"
+      ],
+      "files": [
+        "rust-crates/smallvec/LICENSE-MIT"
+      ],
+      "source": "https://crates.io/crates/smallvec/1.16.2"
+    },
+    "speedate": {
+      "declared": "MIT",
+      "used": "MIT",
+      "seen": [
+        "0.17.0"
+      ],
+      "files": [
+        "rust-crates/speedate/LICENSE"
+      ],
+      "source": "https://crates.io/crates/speedate/0.17.0"
+    },
+    "url": {
+      "declared": "MIT OR Apache-2.0",
+      "used": "MIT",
+      "seen": [
+        "2.5.8"
+      ],
+      "files": [
+        "rust-crates/url/LICENSE-MIT"
+      ],
+      "source": "https://crates.io/crates/url/2.5.8"
+    },
+    "uuid": {
+      "declared": "Apache-2.0 OR MIT",
+      "used": "MIT",
+      "seen": [
+        "1.23.4"
+      ],
+      "files": [
+        "rust-crates/uuid/LICENSE-MIT"
+      ],
+      "source": "https://crates.io/crates/uuid/1.23.4"
+    },
+    "walkdir": {
+      "declared": "Unlicense OR MIT",
+      "used": "MIT",
+      "seen": [
+        "2.5.0"
+      ],
+      "files": [
+        "rust-crates/walkdir/LICENSE-MIT"
+      ],
+      "source": "https://crates.io/crates/walkdir/2.5.0"
+    }
+  },
+  "components": {
+    "libuv": {
+      "name": "libuv",
+      "seen": "1.52.1",
+      "licence": "MIT",
+      "files": [
+        "libuv/LICENSE",
+        "libuv/LICENSE-extra"
+      ],
+      "source": "https://github.com/libuv/libuv/tree/v1.52.1",
+      "in": "uvloop"
+    },
+    "libyaml": {
+      "name": "LibYAML",
+      "seen": "0.2.5",
+      "licence": "MIT",
+      "files": [
+        "libyaml/License"
+      ],
+      "source": "https://github.com/yaml/libyaml/tree/0.2.5",
+      "in": "PyYAML"
+    },
+    "squirrel": {
+      "name": "Squirrel.Mac",
+      "licence": "MIT",
+      "files": [
+        "electron/Squirrel.Mac/LICENSE"
+      ],
+      "source": "https://github.com/Squirrel/Squirrel.Mac/tree/8d808803bc89ec0e2aa1450474856dfee3b00c6b"
+    },
+    "reactiveobjc": {
+      "name": "ReactiveObjC",
+      "licence": "MIT",
+      "files": [
+        "electron/ReactiveObjC/LICENSE.md"
+      ],
+      "source": "https://github.com/ReactiveCocoa/ReactiveObjC/tree/74ab5baccc6f7202c8ac69a8d1e152c29dc1ea76"
+    },
+    "mantle": {
+      "name": "Mantle",
+      "licence": "MIT",
+      "files": [
+        "electron/Mantle/LICENSE.md"
+      ],
+      "source": "https://github.com/Mantle/Mantle/tree/2a8e2123a3931038179ee06105c9e6ec336b12ea"
+    },
+    "remark-math": {
+      "name": "remark-math monorepo (remark-math, rehype-katex)",
+      "licence": "MIT",
+      "files": [
+        "npm/remark-math/license"
+      ],
+      "source": "https://github.com/remarkjs/remark-math/blob/rehype-katex%407.0.1/license"
+    },
+    "qpdf": {
+      "name": "qpdf NOTICE",
+      "licence": "Apache-2.0",
+      "files": [
+        "pikepdf/qpdf/NOTICE.md"
+      ],
+      "source": "https://github.com/qpdf/qpdf/blob/v12.2.0/NOTICE.md"
+    },
+    "p11-kit": {
+      "name": "p11-kit",
+      "licence": "BSD-3-Clause",
+      "files": [
+        "pikepdf/p11-kit/COPYING"
+      ],
+      "source": "https://github.com/p11-glue/p11-kit/blob/master/COPYING"
+    },
+    "libjpeg-turbo": {
+      "name": "libjpeg-turbo",
+      "licence": "IJG AND BSD-3-Clause AND Zlib",
+      "files": [
+        "pikepdf/libjpeg-turbo/LICENSE.md",
+        "pikepdf/libjpeg-turbo/README.ijg"
+      ],
+      "source": "https://github.com/libjpeg-turbo/libjpeg-turbo/blob/main/LICENSE.md"
+    },
+    "katex-fonts": {
+      "name": "KaTeX fonts",
+      "licence": "OFL-1.1",
+      "files": [
+        "fonts/katex-OFL.txt"
+      ],
+      "source": "https://github.com/KaTeX/katex-fonts",
+      "_": "Neither KaTeX repository carries an OFL file; the header is the fonts' own licence record (name ID 13), the body the OFL 1.1 text the other fonts here carry."
+    },
+    "aom-patents": {
+      "name": "Alliance for Open Media Patent License 1.0 (libaom, in Pillow's libavif)",
+      "licence": "LicenseRef-AOM-Patent-1.0",
+      "files": [
+        "pillow/aom/PATENTS"
+      ],
+      "source": "https://aomedia.googlesource.com/aom/+/refs/tags/v3.12.1/PATENTS",
+      "in": "pillow"
+    },
+    "libyuv-patents": {
+      "name": "LibYuv additional patent grant (in Pillow's libavif)",
+      "licence": "LicenseRef-LibYuv-Patents",
+      "files": [
+        "pillow/libyuv/PATENTS"
+      ],
+      "source": "https://chromium.googlesource.com/libyuv/libyuv/+/47ba8e2160b71a7cf95c0720cd8944ab771e533e/PATENTS",
+      "in": "pillow"
+    },
+    "vite-plugin-react": {
+      "name": "vite-plugin-react monorepo (@vitejs/plugin-rsc)",
+      "licence": "MIT",
+      "files": [
+        "npm/vite-plugin-react/LICENSE"
+      ],
+      "source": "https://github.com/vitejs/vite-plugin-react/blob/plugin-rsc%400.5.26/LICENSE"
+    }
+  },
+  "common": {
+    "LGPL-2.1": {
+      "file": "common/LGPL-2.1.txt",
+      "source": "https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt"
+    },
+    "LGPL-3.0": {
+      "file": "common/LGPL-3.0.txt",
+      "source": "https://www.gnu.org/licenses/lgpl-3.0.txt"
+    },
+    "GPL-3.0": {
+      "file": "common/GPL-3.0.txt",
+      "source": "https://www.gnu.org/licenses/gpl-3.0.txt"
+    },
+    "MPL-2.0": {
+      "file": "common/MPL-2.0.txt",
+      "source": "https://www.mozilla.org/media/MPL/2.0/index.txt"
+    }
+  }
+}

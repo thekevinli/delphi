@@ -1,0 +1,6 @@
+# A1's exceptions (Plan 4 §3.2): imports the layering forbids, each kept for a
+# stated reason, one per line as `importer : imported : reason`.
+#
+# Empty, and it stays empty: the gates run A1 with --require-empty, so any entry
+# fails them. Fix the import instead; a name a product needs from core joins
+# core's public surface (core/public-surface.txt).

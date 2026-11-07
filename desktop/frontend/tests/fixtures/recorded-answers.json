@@ -1,0 +1,1033 @@
+[
+ {
+  "name": "Pages and a figure in one parenthetical",
+  "scope": "document",
+  "current": "On-Policy Distillation",
+  "papers": [
+   {
+    "title": "On-Policy Distillation",
+    "filename": "thinkingmachines.ai/blog/on-policy-distillation",
+    "kind": "web"
+   }
+  ],
+  "sources": [],
+  "outsideLibrary": true,
+  "answer": "Plain data parallelism (DDP) keeps a full copy of everything on every GPU. ZeRO removes the copies by giving each GPU one shard (a 1/N slice) of the model states. Any GPU that needs another shard gets it through a collective (a communication operation all GPUs take part in) just before it needs it. FSDP is PyTorch's implementation of ZeRO's fully sharded mode, stage 3. Neither paper is in your library; I took both from arXiv.\n\n**Why it matters.** With mixed-precision Adam, each parameter costs 16 bytes of \"model state\": 2 for the fp16 weights, 2 for the fp16 gradients, and 12 for the optimizer. Those 12 are an fp32 master copy, the momentum and the variance, at 4 bytes each ([ZeRO, p. 8](https://arxiv.org/pdf/1910.02054)). DDP stores all 16Ψ bytes on every GPU, where Ψ is the parameter count. The 12Ψ of optimizer state is the largest share, so ZeRO shards it first.\n\n**What changes at each stage.** Per-GPU model-state memory with N GPUs, from the ZeRO paper (pp. 2–3, Fig. 1):\n\n| Strategy | What is sharded | Memory per GPU | Traffic per GPU per step |\n|---|---|---|---|\n| DDP | nothing | 16Ψ | 2Ψ (all-reduce) |\n| ZeRO-1 (P_os) | optimizer states | 4Ψ + 12Ψ/N | 2Ψ, same as DP |\n| ZeRO-2 (P_os+g) | + gradients | 2Ψ + 14Ψ/N | 2Ψ, same as DP |\n| ZeRO-3 / FSDP (P_os+g+p) | + parameters | 16Ψ/N | 3Ψ, 1.5× DP |\n\nThe paper's example is a 7.5B-parameter model on 64 GPUs. By my arithmetic from these formulas, that is 120 GB → 31.4 GB → 16.6 GB → 1.9 GB per GPU. The diagram uses N = 4 to keep it readable.\n\n**Things to watch as you step through:**\n\n1. **Gradient sync.** DDP all-reduces the gradients, so every GPU ends up with the full summed gradient. The ZeRO stages reduce-scatter instead: each GPU receives only the summed slice for the shard it owns, which is all its optimizer needs. In ZeRO-2 and ZeRO-3 this happens bucket by bucket during the backward pass. That is why the full gradient never exists on any GPU.\n2. **Optimizer step.** DDP runs the same Adam update four times, once per GPU. Under ZeRO each GPU updates only its own shard.\n3. **The extra 1Ψ in ZeRO-3.** ZeRO-1 and ZeRO-2 keep full parameters, so after the optimizer step they all-gather the updated shards back. ZeRO-3 never keeps full parameters. Instead it all-gathers them once before forward, frees them, and gathers them again before backward. Two all-gathers plus one reduce-scatter make 3Ψ. FSDP's paper reports the same 1.5× overhead over DDP with ring collectives ([FSDP, p. 4](https://arxiv.org/pdf/2304.11277)).\n\n**How FSDP does it.** You wrap groups of layers into \"FSDP units\". Each unit's parameters are flattened into one `FlatParameter` and split evenly across ranks. Forward gathers one unit, runs it, and frees the borrowed shards before moving to the next unit. Backward gathers again, then reduce-scatters that unit's gradients (FSDP, pp. 4–5). So peak parameter memory is your own shards plus the largest single unit. Wrapping at a finer granularity lowers that peak but issues more, smaller collectives, which is FSDP's main memory-versus-throughput trade-off (p. 5).\n\nThe diagram draws the whole model as one unit, so the ZeRO-3 forward and backward steps show everything gathered at once. The \"+ gathered\" readout marks this temporary memory. It is not resident memory.\n\n\n```delphi-artifact ZeRO / FSDP: model state per GPU through one training step\n<div id=\"z\" data-artifact-badge=\"Simplified\">\n<style>#z .h{font-size:12px;color:var(--artifact-muted);margin:0 0 6px}</style>\n<div data-artifact-controls=\"header\"><button type=\"button\" data-artifact-action=\"back\">Back</button><output data-artifact-progress>1 / 6 · Start</output><button type=\"button\" data-artifact-action=\"next\">Next</button></div>\n<div class=\"artifact-controls\"><div class=\"artifact-segmented\" role=\"group\" aria-label=\"Strategy\">\n<button type=\"button\" data-s=\"0\" aria-pressed=\"true\">DDP</button>\n<button type=\"button\" data-s=\"1\" aria-pressed=\"false\">ZeRO-1</button>\n<button type=\"button\" data-s=\"2\" aria-pressed=\"false\">ZeRO-2</button>\n<button type=\"button\" data-s=\"3\" aria-pressed=\"false\">ZeRO-3 / FSDP</button>\n</div></div>\n<div class=\"artifact-panels\">\n<div class=\"artifact-panel\"><div class=\"h\">Parameters · fp16 · 2Ψ bytes</div><div class=\"artifact-devices\" id=\"kP\"></div></div>\n<div class=\"artifact-panel\"><div class=\"h\">Gradients · fp16 · 2Ψ bytes</div><div class=\"artifact-devices\" id=\"kG\"></div></div>\n<div class=\"artifact-panel\"><div class=\"h\">Adam states · fp32 copy, m, v · 12Ψ bytes</div><div class=\"artifact-devices\" id=\"kO\"></div></div>\n</div>\n<div class=\"artifact-step-notes\" id=\"notes\"><p aria-current=\"step\"></p><p></p><p></p><p></p><p></p><p></p></div>\n<div class=\"artifact-stats\">\n<div class=\"artifact-stat\"><b id=\"now\">14.0Ψ</b><span>model-state bytes per GPU now (Ψ = # params)</span></div>\n<div class=\"artifact-stat\"><b id=\"peak\">16Ψ</b><span>peak per GPU, ZeRO formula, N = 4</span></div>\n<div class=\"artifact-stat\"><b id=\"comm\">2Ψ</b><span>traffic per GPU per step</span></div>\n</div>\n<div class=\"artifact-legend\">\n<span class=\"artifact-key\" style=\"--artifact-key:var(--artifact-border)\">full replica (grey)</span>\n<span class=\"artifact-key\" data-owner=\"0\">from GPU 0</span>\n<span class=\"artifact-key\" data-owner=\"1\">GPU 1</span>\n<span class=\"artifact-key\" data-owner=\"2\">GPU 2</span>\n<span class=\"artifact-key\" data-owner=\"3\">GPU 3</span>\n<span class=\"artifact-key\" data-owner=\"sum\">Σ summed over GPUs</span>\n<span class=\"artifact-key\" data-state=\"held\">not on this GPU</span>\n</div>\n</div>\n<script>\n(()=>{\nconst root=document.getElementById('z');\nconst names=['Start','Forward','Backward','Grad sync','Optimizer','Param sync'];\nconst peak=['16Ψ','7Ψ','5.5Ψ','4Ψ + 1 unit'];\nconst comm=['2Ψ all-reduce','2Ψ RS + AG','2Ψ RS + AG','3Ψ: 2 AG + RS'];\nconst N=[\n['Every GPU holds a full replica of params and Adam states. Gradients not allocated yet.',\n 'Forward on each GPU\\'s own micro-batch with its local full replica. No communication.',\n 'Backward fills a full local gradient (colour = the GPU whose batch produced it).',\n 'All-reduce: every GPU ends with the same summed gradient Σ for the whole model.',\n 'Every GPU runs Adam on the whole model: the identical update, computed 4 times.',\n 'Nothing to sync: replicas stay identical. This redundancy is what ZeRO removes.'],\n['Params replicated, but GPU j keeps Adam states only for quarter j.',\n 'Forward exactly as in DDP, with full local params.',\n 'Backward exactly as in DDP: a full local gradient.',\n 'Reduce-scatter: GPU j receives Σ for its own quarter. The full gradient buffer is still allocated.',\n 'Each GPU updates only its own quarter of params, using the Adam states it owns.',\n 'All-gather: updated quarters flow to every GPU, so all replicas match again.'],\n['Params replicated; Adam states and (soon) gradients sharded by quarter.',\n 'Forward exactly as in DDP, with full local params.',\n 'Backward reduce-scatters gradients bucket by bucket as they appear, so each GPU keeps only Σ for its quarter.',\n 'Nothing left to do: gradient sync happened during backward. Grad memory fell from 2Ψ to 2Ψ/N.',\n 'Each GPU updates only its own quarter of params, using the Adam states it owns.',\n 'All-gather: updated quarters flow to every GPU, so all replicas match again.'],\n['Fully sharded: each GPU stores only its quarter of params, grads and Adam states.',\n 'All-gather a unit\\'s params just before it runs, compute, then free the borrowed shards. Drawn as the whole model; FSDP does one unit at a time.',\n 'Gather the params again, compute grads, reduce-scatter them, free borrowed shards.',\n 'Resharded: only each GPU\\'s own shards remain. No separate sync step.',\n 'Adam updates the local param shard with its own Σ and states. No traffic.',\n 'Nothing to sync: params stay sharded until the next forward gathers them.']];\nlet s=0,t=0;\nfunction P(d,j){const own=j===d,l='w'+j;\n if(s===3){if(t===1||t===2)return own?{o:d,l}:{o:j,l,c:1,f:'P-'+j+'-'+j,tr:1};\n  return own?{o:d,l,c:t===4}:null;}\n if(s===0)return {l,c:t===4};\n if(t===4&&own)return {o:d,l,c:1};\n if(t===5)return own?{o:d,l}:{o:j,l,c:1,f:'P-'+j+'-'+j};\n return {l};}\nfunction G(d,j){const own=j===d;\n if(t<2)return null;\n if(s>=2)return own?{o:'sum',l:'Σ'+j,c:t===2}:null;\n if(t===2)return {o:d,l:'g'+j,c:1};\n if(s===0)return {o:'sum',l:'Σ'+j,c:t===3};\n return own?{o:'sum',l:'Σ'+j,c:t===3}:{o:d,l:'g'+j};}\nfunction O(d,j){const own=j===d;\n if(s===0)return {l:'o'+j,c:t===4};\n return own?{o:d,l:'o'+j,c:t===4}:null;}\nconst W={P,G,O};\nconst back=root.querySelector('[data-artifact-action=\"back\"]'),next=root.querySelector('[data-artifact-action=\"next\"]');\nconst prog=root.querySelector('[data-artifact-progress]');\nfunction render(){\n for(const k of ['P','G','O']){let h='';\n  for(let d=0;d<4;d++){h+='<div class=\"artifact-device\"><span class=\"artifact-device-label\">GPU '+d+'</span><div class=\"artifact-slots\">';\n   for(let j=0;j<4;j++){const c=W[k](d,j),id=k+'-'+d+'-'+j;\n    if(!c)h+='<span class=\"artifact-slot\" id=\"'+id+'\" data-state=\"held\"></span>';\n    else h+='<span class=\"artifact-slot\" id=\"'+id+'\"'+(c.o!==undefined?' data-owner=\"'+c.o+'\"':'')+(c.c?' data-state=\"current\"':'')+(c.f?' data-artifact-from=\"'+c.f+'\"':'')+'>'+c.l+'</span>';}\n   h+='</div></div>';}\n  document.getElementById('k'+k).innerHTML=h;}\n let res=0,tr=0;\n for(let j=0;j<4;j++){const p=P(0,j);if(p){if(p.tr)tr+=.5;else res+=.5;}if(G(0,j))res+=.5;if(O(0,j))res+=3;}\n document.getElementById('now').textContent=res.toFixed(1)+'Ψ'+(tr?' + '+tr.toFixed(1)+'Ψ gathered':'');\n document.getElementById('peak').textContent=peak[s];\n document.getElementById('comm').textContent=comm[s];\n root.querySelectorAll('#notes p').forEach((p,i)=>{p.textContent=N[s][i];if(i===t)p.setAttribute('aria-current','step');else p.removeAttribute('aria-current');});\n root.querySelectorAll('[data-s]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.s===s)));\n prog.textContent=(t+1)+' / 6 · '+names[t];\n back.disabled=t===0;next.disabled=t===5;\n}\nback.addEventListener('click',()=>{if(t>0){t--;render();}});\nnext.addEventListener('click',()=>{if(t<5){t++;render();}});\nroot.querySelectorAll('[data-s]').forEach(b=>b.addEventListener('click',()=>{s=+b.dataset.s;render();}));\nrender();\n})();\n</script>\n```\n\n\nIn the diagram, colour shows which GPU a chunk came from, Σ marks a gradient summed across GPUs, dashed slots are not on that GPU, and a ring marks what changed in the current step. The memory numbers count model state only. Activations and temporary buffers come on top; the ZeRO paper handles those separately as ZeRO-R (p. 3).\n\nTwo things here are my background knowledge, not something I checked in the papers I read. First, FSDP's `SHARD_GRAD_OP` mode roughly corresponds to ZeRO-2. Second, the FSDP paper's \"sharding factor\" covers the whole range (p. 4): F = 1 is DDP, F = number of GPUs is full sharding, and values in between give hybrid sharding."
+ },
+ {
+  "name": "A Memory chat that names its paper and cites pages in prose",
+  "scope": "memory",
+  "current": null,
+  "papers": [
+   {
+    "title": "Muon优化器赏析：从向量到矩阵的本质跨越",
+    "filename": "kexue.fm/archives/10592",
+    "kind": "web"
+   },
+   {
+    "title": "慢即是快：1. Shampoo的尽头是Muon",
+    "filename": "kexue.fm/archives/11917",
+    "kind": "web"
+   },
+   {
+    "title": "Muon: An optimizer for hidden layers in neural networks | Keller Jordan blog",
+    "filename": "kellerjordan.github.io/posts/muon",
+    "kind": "web"
+   },
+   {
+    "title": "Why We Think",
+    "filename": "lilianweng.github.io/posts/2025-05-01-thinking",
+    "kind": "web"
+   },
+   {
+    "title": "Alisa’s book of LLMs",
+    "filename": "alisawuffles.notion.site/alisa-s-book-of-llms",
+    "kind": "web"
+   },
+   {
+    "title": "vLLM-Omni tech report (2610.09307v1)",
+    "filename": "2610.09307v1.pdf",
+    "kind": null
+   },
+   {
+    "title": "DeepSeek V4.1 Flash 大规模推理部署实践",
+    "filename": "zhuanlan.zhihu.com/p/2095560295930508953",
+    "kind": "web"
+   },
+   {
+    "title": "Transformer升级之路：2、博采众长的旋转式位置编码 - 科学空间",
+    "filename": "spaces.ac.cn/archives/8265",
+    "kind": "web"
+   },
+   {
+    "title": "Chimera: Designing and Chinchilla-Scaling Hybrid Visual Diffusion Transformers",
+    "filename": "Chimera - Designing and Chinchilla-Scaling Hybrid Visual DiT (2607.28611v1).pdf",
+    "kind": null
+   },
+   {
+    "title": "On-Policy Distillation",
+    "filename": "thinkingmachines.ai/blog/on-policy-distillation",
+    "kind": "web"
+   },
+   {
+    "title": "Scaling Native Multimodal Pre-Training From Scratch (2607.22043v1)",
+    "filename": "2607.22043v1.pdf",
+    "kind": null
+   },
+   {
+    "title": "Chinchilla (2203.15556v1)",
+    "filename": "Chinchilla (2203.15556v1).pdf",
+    "kind": null
+   },
+   {
+    "title": "Test-Time Scaling Makes Overtraining Compute-Optimal",
+    "filename": "⭐️ Test-Time Scaling Makes Overtraining Compute-Optimal (2604.01411v1).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws for Native Multimodal Models (2504.07951v4)",
+    "filename": "Scaling Laws for Native Multimodal Models (2504.07951v4).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2)",
+    "filename": "Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2).pdf",
+    "kind": null
+   },
+   {
+    "title": "Why Larger Models Learn More (2605.29548v2)",
+    "filename": "Why Larger Models Learn More (2605.29548v2).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws, Carefully",
+    "filename": "lilianweng.github.io/posts/2026-06-24-scaling-laws",
+    "kind": "web"
+   },
+   {
+    "title": "Small-Scale Experiments: Are We There Yet?",
+    "filename": "2608.11859.pdf",
+    "kind": null
+   }
+  ],
+  "sources": [
+   {
+    "url": "https://deeplearn.org/arxiv/846145/correction-training-for-diffusion-models",
+    "title": "Correction Training for Diffusion Models"
+   }
+  ],
+  "outsideLibrary": true,
+  "answer": "I have the paper (arXiv 2610.14136): Algorithm 1 and 2 are on p. 3, the method on p. 4, and the K=0/K=2 numbers on p. 7. Next I'm building the diagram.\n\nThe connector from x to z_t runs through the ε placeholder. I'm fixing that by grouping the two inputs.\n\nCorrection training adds a second network, the **corrector** C_φ. It takes the denoiser's clean-image guess x̂ and is trained to output the same clean image x. During sampling it is applied K times at each noise level before the sampler takes its step. The training loss supervises only one correction. Reusing the corrector on its own output is something you do at inference, and the paper says this repetition is where most of the gain comes from.\n\nI read the project page ([sunovivid.github.io/correction-training](https://sunovivid.github.io/correction-training/)) and pages 2–5 and 7 of the paper ([arXiv 2610.14136](https://arxiv.org/pdf/2610.14136v1)). I found the arXiv ID through an [aggregator listing](https://deeplearn.org/arxiv/846145/correction-training-for-diffusion-models). Both sources are outside your library, and nothing in your Memory covers this paper.\n\n## What problem it targets\n\nThe denoiser D_θ is trained on real images mixed with noise, z_t = (1−t)x + tε. When sampling, though, z_t is built from the model's own earlier, imperfect predictions, an input it never saw in training. The paper calls this **exposure bias**: errors in early steps carry forward, and an early artifact (the project page shows a malformed mouth) is never repaired by later steps (p. 2). CFG is the usual fix, but it costs diversity and makes colours oversaturated. The paper aims to improve the predictions directly instead (p. 3).\n\n## Training (Alg. 1, p. 3; Eq. 3, p. 4)\n\n1. Sample t and noise, form z_t, and predict x̂⁽⁰⁾ = D_θ(z_t, t).\n2. Correct it: x̂⁽¹⁾ = C_φ(sg(x̂⁽⁰⁾), t). The corrector's inputs are only the prediction and t. In the pseudocode it never sees z_t.\n3. Loss: L = ‖x̂⁽⁰⁾ − x‖² + λ‖x̂⁽¹⁾ − x‖². Both terms use the same target x.\n4. The stop-gradient (sg) means the correction loss trains only C_φ, not D_θ. The corrector's inputs are generated online by the current denoiser.\n5. Both networks start from public checkpoints and are fine-tuned together (p. 5). On the reported curve, FID levels off within about 50K extra updates, compared with 4M for pretraining (Fig. 5).\n\n## Sampling (Alg. 2, p. 3; Eq. 4, p. 4)\n\nAt each step from noise level t to the next level s:\n- Predict x̂⁽⁰⁾ = D_θ(z_t, t).\n- Apply x̂⁽ᵏ⁺¹⁾ = C_φ(x̂⁽ᵏ⁾, t) K times, at the same t.\n- Take the Euler step with the refined guess: v = (z_t − x̂⁽ᴷ⁾)/t, then z_s = z_t + (s−t)v.\n\nThe prediction is fixed before the sample moves on. That is how an early structural error can be corrected rather than baked in.\n\n\n```delphi-artifact Correction training: training vs sampling, K=0 vs K=2\n<div id=\"ct\" data-artifact-badge=\"Schematic\">\n<style>\n#ct .loop{border:1.5px dashed var(--artifact-border);border-radius:var(--artifact-radius);padding:10px;margin:6px 0}\n#ct .loop>.lab{font-size:12px;color:var(--artifact-muted);margin-bottom:6px}\n#ct .inner{border-color:var(--artifact-role-current)}\n#ct .cur{outline:2.5px solid var(--artifact-accent);outline-offset:2px}\n#ct .artifact-node small{display:block;color:var(--artifact-muted);font-size:12px}\n#ct .artifact-hatch{min-width:96px;font-size:12px}\n#ct .pair{display:flex;gap:6px;flex-wrap:wrap}\n#ct .ret{font-size:12px;color:var(--artifact-muted);margin-top:6px}\n</style>\n<div data-artifact-controls=\"header\"><button type=\"button\" data-artifact-action=\"back\">Back</button><output data-artifact-progress>1 / 5 · Noisy state</output><button type=\"button\" data-artifact-action=\"next\">Next</button></div>\n<div class=\"artifact-controls\"><span>Corrections per step</span>\n<div class=\"artifact-segmented\" role=\"group\" aria-label=\"K\"><button type=\"button\" id=\"k0\" data-k=\"0\" aria-pressed=\"true\">K = 0</button><button type=\"button\" id=\"k2\" data-k=\"2\" aria-pressed=\"false\">K = 2</button></div></div>\n\n<div class=\"artifact-lanes\">\n<div class=\"artifact-lane\"><div class=\"artifact-lane-label\">Training: one loss evaluation (Alg. 1). Same for any K</div>\n<div class=\"artifact-flow\">\n <div class=\"pair\" id=\"t-in\"><div class=\"artifact-hatch\">clean image x<br>(placeholder)</div><div class=\"artifact-hatch\">noise ε ~ N(0,I)<br>(placeholder)</div></div>\n <div class=\"artifact-node\" id=\"t-z\">z<sub>t</sub> = (1−t)x + tε<small>t sampled per image</small></div>\n <div class=\"artifact-node\" id=\"t-D\">D<sub>θ</sub>(z<sub>t</sub>, t)<small>denoiser, x-prediction</small></div>\n <div class=\"artifact-node\" id=\"t-x0\">x̂<sup>(0)</sup><small>loss ‖x̂<sup>(0)</sup> − x‖²</small></div>\n <div class=\"artifact-node\" id=\"t-C\">C<sub>φ</sub>(sg(x̂<sup>(0)</sup>), t)<small>corrector: no z<sub>t</sub> input</small></div>\n <div class=\"artifact-node\" id=\"t-x1\">x̂<sup>(1)</sup><small>loss λ‖x̂<sup>(1)</sup> − x‖²</small></div>\n</div>\n<i data-artifact-connect=\"t-in t-z\" data-artifact-edge=\"data\"></i>\n<i data-artifact-connect=\"t-z t-D\" data-artifact-edge=\"data\"></i>\n<i data-artifact-connect=\"t-D t-x0\" data-artifact-edge=\"data\"></i>\n<i data-artifact-connect=\"t-x0 t-C\" data-artifact-edge=\"control\" data-label=\"sg\"></i>\n<i data-artifact-connect=\"t-C t-x1\" data-artifact-edge=\"data\"></i>\n<p class=\"artifact-note\">Both outputs regress to the <b>same</b> target x. Total loss = L<sub>denoise</sub> + λ·L<sub>corr</sub>. Stop-gradient (dashed): L<sub>corr</sub> updates only C<sub>φ</sub>. Corrector inputs come online from the current D<sub>θ</sub>. Only <b>one</b> correction is ever supervised.</p>\n</div>\n\n<div class=\"artifact-lane\"><div class=\"artifact-lane-label\">Sampling (Alg. 2): no x and no loss. Starts from z<sub>1</sub> ~ N(0,I)</div>\n<div class=\"loop\"><div class=\"lab\">Outer loop: for each (t, s) in the time schedule</div>\n<div class=\"artifact-flow\">\n <div class=\"artifact-hatch\" id=\"s-zt\">noisy state z<sub>t</sub><br>(placeholder)</div>\n <div class=\"artifact-node\" id=\"s-D\">D<sub>θ</sub>(z<sub>t</sub>, t)<small>1 NFE</small></div>\n <div class=\"artifact-node\" id=\"s-x0\">x̂<sup>(0)</sup><small>first clean guess</small></div>\n <div class=\"loop inner\" id=\"kloop\"><div class=\"lab\" id=\"kloop-lab\">Inner loop ×0: skipped</div>\n  <div class=\"artifact-flow\">\n   <div class=\"artifact-node corr\" id=\"s-C1\">C<sub>φ</sub>(x̂<sup>(0)</sup>, t)<small>1 NFE, same t</small></div>\n   <div class=\"artifact-node corr\" id=\"s-x1\">x̂<sup>(1)</sup><small>trained case</small></div>\n   <div class=\"artifact-node corr\" id=\"s-C2\">C<sub>φ</sub>(x̂<sup>(1)</sup>, t)<small>1 NFE, same weights</small></div>\n   <div class=\"artifact-node corr\" id=\"s-x2\">x̂<sup>(2)</sup><small>never supervised</small></div>\n  </div>\n </div>\n <div class=\"artifact-node\" id=\"s-up\">Euler step t → s<small>v = (z<sub>t</sub> − <span id=\"xk\">x̂<sup>(0)</sup></span>) / t<br>z<sub>s</sub> = z<sub>t</sub> + (s − t)·v</small></div>\n</div>\n<div class=\"ret\">↺ z<sub>s</sub> becomes the next z<sub>t</sub> (t ← s). After the last step, z is the sample.</div>\n</div>\n<i data-artifact-connect=\"s-zt s-D\" data-artifact-edge=\"data\"></i>\n<i data-artifact-connect=\"s-D s-x0\" data-artifact-edge=\"data\"></i>\n<i data-artifact-connect=\"s-x0 s-C1\" data-artifact-edge=\"data\"></i>\n<i data-artifact-connect=\"s-C1 s-x1\" data-artifact-edge=\"data\"></i>\n<i data-artifact-connect=\"s-x1 s-C2\" data-artifact-edge=\"data\"></i>\n<i data-artifact-connect=\"s-C2 s-x2\" data-artifact-edge=\"data\"></i>\n<i data-artifact-connect=\"kloop s-up\" data-artifact-edge=\"data\" data-label=\"x̂(K)\"></i>\n</div>\n</div>\n\n<div class=\"artifact-step-notes\">\n<p aria-current=\"step\">z<sub>t</sub> is built from the model's <b>own</b> earlier predictions, not from a real image plus noise. This mismatch is the exposure bias that correction targets.</p>\n<p>The denoiser makes its usual clean-sample estimate x̂<sup>(0)</sup>. With K = 0, it goes straight to the Euler step.</p>\n<p>K ≥ 1: the corrector refines x̂<sup>(0)</sup> at the same t. This is exactly the mapping it was trained on (x̂<sup>(0)</sup> → x). K = 0: skipped.</p>\n<p>K = 2: the same corrector is applied to its own output. Training never showed it this input. The paper finds that going past one correction is key. K = 0: skipped.</p>\n<p>The refined x̂<sup>(K)</sup> sets the velocity, and z moves to the next noise level. Fixing errors here keeps early artifacts from carrying into later steps.</p>\n</div>\n\n<div class=\"artifact-stats\">\n <div class=\"artifact-stat\"><b id=\"st-nfe\">1</b><span>NFE per denoising step (1 + K)</span></div>\n <div class=\"artifact-stat\"><b id=\"st-steps\">≈250</b><span>denoising steps at ≈250 NFE (≈250/(1+K))</span></div>\n <div class=\"artifact-stat\" id=\"fidbox\"><b id=\"st-fid\">8.69</b><span>FID-50K, SiT-XL/2, no CFG (paper Fig. 9)</span></div>\n <div class=\"artifact-stat\"><b id=\"st-rec\">0.672</b><span>recall (paper Fig. 9)</span></div>\n</div>\n<div class=\"artifact-legend\"><span class=\"artifact-key\" style=\"--artifact-key:var(--artifact-role-data)\">data path</span><span class=\"artifact-key\" style=\"--artifact-key:var(--artifact-border)\">dashed = stop-gradient</span><span class=\"artifact-key\" style=\"--artifact-key:var(--artifact-role-current)\">inner correction loop</span></div>\n\n<script>\n(()=>{const R=document.getElementById('ct');let K=0,st=0;const N=5;\nconst names=['Noisy state','Denoise','Correct k=1','Correct k=2','Euler step'];\nconst map=[['s-zt'],['s-D','s-x0'],['s-C1','s-x1'],['s-C2','s-x2'],['s-up']];\nconst S={0:['1','≈250','8.69','0.672'],2:['3','≈83','1.92','0.608']};\nconst back=R.querySelector('[data-artifact-action=\"back\"]'),next=R.querySelector('[data-artifact-action=\"next\"]'),prog=R.querySelector('[data-artifact-progress]');\nfunction draw(){\n R.querySelectorAll('[data-k]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.k===K)));\n R.querySelectorAll('.corr').forEach(n=>n.dataset.state=K===0?'off':'on');\n R.querySelector('#kloop-lab').textContent=K===0?'Inner loop ×0: skipped, so x̂(K) = x̂(0)':'Inner loop ×2: the corrector is reused on its own output';\n R.querySelector('#xk').innerHTML=K===0?'x̂<sup>(0)</sup>':'x̂<sup>(2)</sup>';\n ['st-nfe','st-steps','st-fid','st-rec'].forEach((id,i)=>R.querySelector('#'+id).textContent=S[K][i]);\n R.querySelector('#fidbox').dataset.tone=K===0?'warn':'good';\n R.querySelectorAll('.cur').forEach(n=>n.classList.remove('cur'));\n map[st].forEach(id=>R.querySelector('#'+id).classList.add('cur'));\n R.querySelectorAll('.artifact-step-notes p').forEach((p,i)=>{if(i===st)p.setAttribute('aria-current','step');else p.removeAttribute('aria-current');});\n prog.textContent=(st+1)+' / '+N+' · '+names[st]+(K===0&&(st===2||st===3)?' (skipped)':'');\n back.disabled=st===0;next.disabled=st===N-1;}\nback.addEventListener('click',()=>{if(st>0){st--;draw();}});\nnext.addEventListener('click',()=>{if(st<N-1){st++;draw();}});\nR.querySelectorAll('[data-k]').forEach(b=>b.addEventListener('click',()=>{K=+b.dataset.k;draw();}));\ndraw();})();\n</script>\n</div>\n```\n\n\n## K=0 versus K=2\n\nEach step costs 1+K network evaluations (NFE), so K=2 triples the cost per step. The paper keeps total NFE roughly fixed by using fewer denoising steps (p. 5). \"≈83 steps\" in the diagram is my arithmetic (250/3), not a number the paper reports.\n\nFigure 9 (p. 7) compares the two on SiT-XL/2 with no CFG, the same starting noise and roughly the same NFE:\n- **FID:** 8.69 at K=0, 1.92 at K=2.\n- **Recall:** 0.672 at K=0, 0.608 at K=2.\n\nSo quality improves a lot, and some diversity is lost. Going further, K=4 and K=6 give FID 3.00 and 4.68 with recall 0.533 and 0.496. More corrections are not always better.\n\nFor comparison, CFG at w=3 on the same model gives FID 9.95 and recall 0.397. Correction loses far less diversity than CFG for the same gain (Fig. 9). In Table 1 (p. 5), corrective sampling beats CFG on three of the four models: DiT 2.07 vs 2.51, SiT 1.92 vs 2.11, SiT-REPA 1.31 vs 1.35. JiT is the exception (2.96 vs 2.35).\n\n## What is shown, and what is only proposed\n\n- **Shown: the gain is not just extra capacity.** In an ablation on the project page (LightningDiT, trained from scratch):\n  - A 14-layer denoiser plus a 14-layer corrector applied once roughly ties a 28-layer denoiser (FID 8.74 vs 8.93).\n  - Applying the corrector three times per step, with half as many denoising steps, gives 5.66.\n\n  This isolates repetition as the source of the gain. The FIDs use only 8K samples, though.\n- **Proposed, with partial support: why it works.** The authors' explanation is that correction keeps sampling states closer to what the denoiser saw in training. They report that correction actually *raises* the squared denoising error on training inputs. Their evidence is a classifier asked to tell training states from sampling states: its AUROC drops with 1 and then 4 corrections. That shows the gap narrows, which fits their explanation. It doesn't establish that the narrower gap is what causes the FID gain. Section 4.2 has the details; I did not read it.\n- **Not in the pseudocode: conditioning.** Algorithm 2 shows only (pred, t) as inputs. I didn't check in the appendix whether the corrector also receives the class or text label.\n\nSeparately, the paper reports that distilling the corrected predictions back into the base denoiser keeps much of the quality gain at one evaluation per step (p. 2, §3.3). I did not read the numbers in that section."
+ },
+ {
+  "name": "A reading plan across three library papers and one outside report",
+  "scope": "document",
+  "current": "Chinchilla (2203.15556v1)",
+  "papers": [
+   {
+    "title": "Scaling Native Multimodal Pre-Training From Scratch (2607.22043v1)",
+    "filename": "2607.22043v1.pdf",
+    "kind": null
+   },
+   {
+    "title": "Chinchilla (2203.15556v1)",
+    "filename": "Chinchilla (2203.15556v1).pdf",
+    "kind": null
+   },
+   {
+    "title": "Test-Time Scaling Makes Overtraining Compute-Optimal",
+    "filename": "⭐️ Test-Time Scaling Makes Overtraining Compute-Optimal (2604.01411v1).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws for Native Multimodal Models (2504.07951v4)",
+    "filename": "Scaling Laws for Native Multimodal Models (2504.07951v4).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2)",
+    "filename": "Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2).pdf",
+    "kind": null
+   },
+   {
+    "title": "Why Larger Models Learn More (2605.29548v2)",
+    "filename": "Why Larger Models Learn More (2605.29548v2).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws, Carefully",
+    "filename": "lilianweng.github.io/posts/2026-06-24-scaling-laws",
+    "kind": "web"
+   },
+   {
+    "title": "Small-Scale Experiments: Are We There Yet?",
+    "filename": "2608.11859.pdf",
+    "kind": null
+   }
+  ],
+  "sources": [],
+  "answer": "**\\(C \\approx 6ND\\) comes from counting arithmetic operations—not fitting a scaling law.** Here \\(N\\) is the parameter count, \\(D\\) is the total number of training tokens processed, and \\(C\\) is training FLOPs. Chinchilla attributes this approximation to Kaplan et al. (*Chinchilla (2203.15556v1)*, p. 28).\n\nThe standard computational reasoning is:\n\n- **Forward pass: approximately \\(2N\\) FLOPs per token.** For a matrix multiplication, each weight contributes roughly one multiplication and one addition. Those count as **two** floating-point operations.\n- **Backward pass: approximately \\(4N\\).** Backpropagation performs two comparable computations: gradients for the weights and gradients passed to earlier activations. Chinchilla explicitly assumes backward costs twice forward.\n- **Total: approximately \\(6N\\) per token.** Across \\(D\\) tokens:\n  \\[\n  C \\approx \\underbrace{(2N+4N)}_{\\text{forward + backward}}\\times D=6ND.\n  \\]\n\n**Why “approximately”?** Not every operation corresponds directly to a parameter: attention also compares tokens with other tokens, and softmax adds work. Chinchilla therefore uses more detailed accounting for its experiments. In Table A4, that calculation is **0.99–1.10 times \\(6ND\\)** across the listed models. (*Chinchilla (2203.15556v1)*, Appendix F, pp. 27–28).\n\nSo **6 is an operation-counting shortcut**, not a learned coefficient or a claim about training time in seconds."
+ },
+ {
+  "name": "A reading plan across three library papers and one outside report (2)",
+  "scope": "document",
+  "current": "Chinchilla (2203.15556v1)",
+  "papers": [
+   {
+    "title": "Scaling Native Multimodal Pre-Training From Scratch (2607.22043v1)",
+    "filename": "2607.22043v1.pdf",
+    "kind": null
+   },
+   {
+    "title": "Chinchilla (2203.15556v1)",
+    "filename": "Chinchilla (2203.15556v1).pdf",
+    "kind": null
+   },
+   {
+    "title": "Test-Time Scaling Makes Overtraining Compute-Optimal",
+    "filename": "⭐️ Test-Time Scaling Makes Overtraining Compute-Optimal (2604.01411v1).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws for Native Multimodal Models (2504.07951v4)",
+    "filename": "Scaling Laws for Native Multimodal Models (2504.07951v4).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2)",
+    "filename": "Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2).pdf",
+    "kind": null
+   },
+   {
+    "title": "Why Larger Models Learn More (2605.29548v2)",
+    "filename": "Why Larger Models Learn More (2605.29548v2).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws, Carefully",
+    "filename": "lilianweng.github.io/posts/2026-06-24-scaling-laws",
+    "kind": "web"
+   },
+   {
+    "title": "Small-Scale Experiments: Are We There Yet?",
+    "filename": "2608.11859.pdf",
+    "kind": null
+   }
+  ],
+  "sources": [],
+  "answer": "**No—the doubling comes from backpropagation, not Adam.** Chinchilla explicitly assumes backward costs twice forward (*Chinchilla (2203.15556v1)*, p. 28).\n\nThe reason is standard backpropagation. For a linear layer \\(Y=XW\\), let \\(G=\\partial L/\\partial Y\\), the gradient arriving from the next layer:\n\n| Computation | Matrix multiplication |\n|---|---|\n| Forward: produce outputs | \\(Y=XW\\) |\n| Backward: compute weight gradients | \\(\\partial L/\\partial W=X^\\top G\\) |\n| Backward: pass gradients to earlier layers | \\(\\partial L/\\partial X=GW^\\top\\) |\n\n**One matrix multiplication forward; two backward.** Each has approximately the same arithmetic cost, giving \\(2N\\) forward plus \\(4N\\) backward per token.\n\nAdam operates **afterward**, using those weight gradients to update weights and momentum statistics. That adds separate work; it is not what produces the factor of two."
+ },
+ {
+  "name": "A reading plan across three library papers and one outside report (3)",
+  "scope": "document",
+  "current": "Chinchilla (2203.15556v1)",
+  "papers": [
+   {
+    "title": "Scaling Native Multimodal Pre-Training From Scratch (2607.22043v1)",
+    "filename": "2607.22043v1.pdf",
+    "kind": null
+   },
+   {
+    "title": "Chinchilla (2203.15556v1)",
+    "filename": "Chinchilla (2203.15556v1).pdf",
+    "kind": null
+   },
+   {
+    "title": "Test-Time Scaling Makes Overtraining Compute-Optimal",
+    "filename": "⭐️ Test-Time Scaling Makes Overtraining Compute-Optimal (2604.01411v1).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws for Native Multimodal Models (2504.07951v4)",
+    "filename": "Scaling Laws for Native Multimodal Models (2504.07951v4).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2)",
+    "filename": "Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2).pdf",
+    "kind": null
+   },
+   {
+    "title": "Why Larger Models Learn More (2605.29548v2)",
+    "filename": "Why Larger Models Learn More (2605.29548v2).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws, Carefully",
+    "filename": "lilianweng.github.io/posts/2026-06-24-scaling-laws",
+    "kind": "web"
+   },
+   {
+    "title": "Small-Scale Experiments: Are We There Yet?",
+    "filename": "2608.11859.pdf",
+    "kind": null
+   }
+  ],
+  "sources": [
+   {
+    "url": "https://arxiv.org/html/2602.04705v1",
+    "title": "ERNIE 5.0 Technical Report"
+   }
+  ],
+  "outside": [
+   "Inspect **Figure 1 / §2.1**, then **Figure 4 / §3.3** and **Table 12 / §6.4.2**"
+  ],
+  "opens": {
+   "§§3.2–3.4, pp. 5–8": "Chinchilla (2203.15556v1)",
+   "Equation (4)": "Chinchilla (2203.15556v1)",
+   "Table 6, p. 11": "Chinchilla (2203.15556v1)",
+   "Table 1, p. 2": "Scaling Laws for Native Multimodal Models (2504.07951v4)",
+   "§4.2, p. 6": "Scaling Laws for Native Multimodal Models (2504.07951v4)",
+   "Equations (1)–(2), p. 3": "Test-Time Scaling Makes Overtraining Compute-Optimal",
+   "Table 1, p. 8": "Test-Time Scaling Makes Overtraining Compute-Optimal",
+   "Figure 3 caption, p. 6": "Chinchilla (2203.15556v1)"
+  },
+  "answer": "**Aim to explain four things: what is predicted, what is fitted, what budget is fixed, and how the prediction is tested.** That demonstrates understanding better than memorizing exponents. This targeted pass is roughly **70 minutes**, not a cover-to-cover read.\n\n1. **Chinchilla — 25 minutes.**  \n   Focus on **§§3.2–3.4, pp. 5–8**, especially **Figure 3** and **Equation (4)**. Be able to explain:\n   “Fit loss as a function of parameters and tokens, then minimize it under \\(C\\approx6ND\\). Bigger models leave fewer tokens affordable, so there is an optimum.”  \n   Then inspect **Table 6, p. 11** for validation and **§4.1, p. 9** for confounds: Chinchilla also changes optimizer, tokenizer, and data sampling. Skip benchmark-by-benchmark results. (*Chinchilla (2203.15556v1)*, pp. 5–9, 11.)\n\n2. **Native Multimodal — 20 minutes.**  \n   Prioritize **Table 1, p. 2; Table 2, p. 3; Table 3, p. 5; §4.2, p. 6**. Ask: **what changes when “parameters” and “tokens” become multimodal?** Late fusion adds vision-encoder compute; MoEs count active parameters. Dense early fusion gives roughly balanced parameter/token growth; their sparse configuration favors token growth. These are setup-dependent allocations—not universal constants. Skip implementation details and most benchmark tables. (*Scaling Laws for Native Multimodal Models (2504.07951v4)*, pp. 2–6.)\n\n3. **Test-Time Scaling — 20 minutes.**  \n   Read **Equations (1)–(2), p. 3; §3.3, p. 5; Figure 3, p. 7; Table 1, p. 8**. Your explanation:\n   “The objective changes: smaller models afford more attempts at fixed inference cost, so the best pretraining allocation shifts.”  \n   Important qualifications: training and inference budgets are **separately fixed**; pass@k means *at least one correct answer*, not necessarily identifying it; tested checkpoints are below 1B parameters. Skip the Beta-regression algebra initially. (*Test-Time Scaling Makes Overtraining Compute-Optimal*, pp. 3–8.)\n\n4. **ERNIE 5.0 — 8-minute skim, outside your library.**  \n   I found Baidu’s **ERNIE 5.0 Technical Report**. Inspect **Figure 1 / §2.1**, then **Figure 4 / §3.3** and **Table 12 / §6.4.2**. Focus on **total versus active capacity**, and how elastic depth, expert-pool size, and routing sparsity change deployment costs. Treat this as an engineering application of resource trade-offs—not proof of Chinchilla-optimal allocation. ([arxiv.org](https://arxiv.org/html/2602.04705v1))\n\n**Start now:** spend two minutes on Chinchilla’s **Figure 3 caption, p. 6**. Explain aloud why moving right along one fixed-compute curve eventually makes loss worse."
+ },
+ {
+  "name": "A table named with a possessive",
+  "scope": "document",
+  "current": "vLLM-Omni tech report (2610.09307v1)",
+  "papers": [
+   {
+    "title": "vLLM-Omni tech report (2610.09307v1)",
+    "filename": "2610.09307v1.pdf",
+    "kind": null
+   },
+   {
+    "title": "DeepSeek V4.1 Flash 大规模推理部署实践",
+    "filename": "zhuanlan.zhihu.com/p/2095560295930508953",
+    "kind": "web"
+   }
+  ],
+  "sources": [
+   {
+    "url": "https://github.com/sgl-project/mini-sglang",
+    "title": "GitHub - sgl-project/mini-sglang: A compact implementation of SGLang, designed to demystify the complexities of modern LLM serving systems. · GitHub"
+   }
+  ],
+  "answer": "**Yes—this report is well suited to a “mini-vLLM-Omni,” but I would reproduce its multi-stage runtime, not its GPU optimizations.** Its central idea is **one request lifecycle coordinating different execution engines**, rather than one engine that handles every modality. That boundary is explicit in the report. (*vLLM-Omni tech report (2610.09307v1)*, pp. 4–7.)\n\nAnd you remembered correctly: **Mini-SGLang** exists. Outside your library, I also found **`Rising0321/nano-vllm-omni`**, whose README describes approximately 1,079 lines implementing a Wan diffusion engine. However, it explicitly excludes multi-model orchestration—so it teaches the diffusion-engine side, not the main cross-stage concept of this report. ([github.com](https://github.com/sgl-project/mini-sglang))\n\n## What I would build\n\nMy recommendation: **a tiny streaming speech-pipeline runtime**, initially using synthetic workers:\n\n```text\n                         ┌── text deltas ──────→ client\nrequest → thinker ────────┤\n                         └──→ talker → decoder → audio chunks → client\n```\n\nThis mirrors the report’s representative `thinker → talker → code2wav` topology: the thinker produces text and conditioning, the talker produces codec tokens, and the decoder reconstructs audio. (*vLLM-Omni tech report (2610.09307v1)*, pp. 18–19.)\n\nThe following is **my proposed teaching implementation**, not code supplied by the report:\n\n```text\nmini_omni/\n  request.py        # Request state, output events, completion tracking\n  stage.py          # Engine interface + worker execution\n  orchestrator.py   # Admission, stage advancement, cancellation\n  connector.py      # Payload put/get/cleanup\n  pool.py           # Replica selection + sticky request bindings\n  demo.py           # Streaming pipeline + benchmark\n```\n\nKeep five mechanisms:\n\n| Mechanism | Minimal implementation | What it teaches |\n|---|---|---|\n| **Stage abstraction** | Independent worker per component | Pipeline control versus model execution |\n| **Request state machine** | Admit, advance, emit, abort, complete | One request can have multiple output-producing stages |\n| **Chunk streaming** | Downstream starts before upstream finishes | Pipeline overlap |\n| **Connector** | Payload store plus lightweight handles | Control/data-plane separation |\n| **Replica pool** | Two downstream workers with sticky routing | Capacity scaling without losing stream-local state |\n\nThese correspond to the report’s orchestration, connector, and replication boundaries. Completion should wait for **both text and audio**, not merely the last stage visited. (*vLLM-Omni tech report (2610.09307v1)*, pp. 6–11.)\n\n**The important distinction:** passing text into a TTS API would illustrate composition, but would omit the report’s typed intermediate transfers. Even your synthetic version should pass tensor-like conditioning and codec chunks, not just strings. The actual report distinguishes hidden states, codec codes, KV blocks, and latents. (*vLLM-Omni tech report (2610.09307v1)*, pp. 9–10.)\n\n## The best experiment to reproduce\n\n**Reproduce the async-chunk on/off comparison structurally.**\n\nUse identical workers and inputs, changing only the handoff:\n\n```text\nBatch:    produce all codec tokens → decode\nChunked:  produce chunk → decode while producing the next chunk\n```\n\nRecord first-output latency, completion latency, and a stage-execution timeline. The report’s corresponding two-H100 experiment at concurrency 32 reports **136.62 seconds without chunking versus 72.63 seconds with chunking**. Your synthetic experiment would demonstrate the mechanism—not reproduce those hardware/model numbers. (*vLLM-Omni tech report (2610.09307v1)*, p. 24, Table 6.)\n\nI would also include correctness tests: abort halfway through, reject late updates after cancellation, and ensure text completion does not prematurely terminate audio. Those behaviors are part of the report’s request lifecycle. (*vLLM-Omni tech report (2610.09307v1)*, pp. 6–7.)\n\n**My scope choice:** start CPU-only with synthetic stages, then replace one stage at a time with real computation. Leave PagedAttention, CUDA graphs, RDMA, diffusion caches, and duplex sessions out initially. The educational payoff is making **orchestration, streaming overlap, payload ownership, and cancellation** visible—not rebuilding vLLM underneath them."
+ },
+ {
+  "name": "A table named with a possessive (2)",
+  "scope": "document",
+  "current": "vLLM-Omni tech report (2610.09307v1)",
+  "papers": [
+   {
+    "title": "vLLM-Omni tech report (2610.09307v1)",
+    "filename": "2610.09307v1.pdf",
+    "kind": null
+   },
+   {
+    "title": "DeepSeek V4.1 Flash 大规模推理部署实践",
+    "filename": "zhuanlan.zhihu.com/p/2095560295930508953",
+    "kind": "web"
+   }
+  ],
+  "sources": [
+   {
+    "url": "https://docs.python.org/3.12/library/multiprocessing.html",
+    "title": "multiprocessing — Process-based parallelism — Python 3.12.15 documentation"
+   }
+  ],
+  "answer": "The handoff below targets **streaming orchestration, connector boundaries, and the structure of Table 6’s chunking ablation**—not its H100 performance (*vLLM-Omni tech report (2610.09307v1)*, pp. 7, 10, 24). Outside your library, I checked Python’s process, shared-memory, and timing documentation for the proposed implementation. ([docs.python.org](https://docs.python.org/3.12/library/multiprocessing.html))"
+ },
+ {
+  "name": "A page range in running prose",
+  "scope": "document",
+  "current": "Chinchilla (2203.15556v1)",
+  "papers": [
+   {
+    "title": "Scaling Native Multimodal Pre-Training From Scratch (2607.22043v1)",
+    "filename": "2607.22043v1.pdf",
+    "kind": null
+   },
+   {
+    "title": "Chinchilla (2203.15556v1)",
+    "filename": "Chinchilla (2203.15556v1).pdf",
+    "kind": null
+   },
+   {
+    "title": "Test-Time Scaling Makes Overtraining Compute-Optimal",
+    "filename": "⭐️ Test-Time Scaling Makes Overtraining Compute-Optimal (2604.01411v1).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws for Native Multimodal Models (2504.07951v4)",
+    "filename": "Scaling Laws for Native Multimodal Models (2504.07951v4).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2)",
+    "filename": "Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2).pdf",
+    "kind": null
+   },
+   {
+    "title": "Why Larger Models Learn More (2605.29548v2)",
+    "filename": "Why Larger Models Learn More (2605.29548v2).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws, Carefully",
+    "filename": "lilianweng.github.io/posts/2026-06-24-scaling-laws",
+    "kind": "web"
+   },
+   {
+    "title": "Small-Scale Experiments: Are We There Yet?",
+    "filename": "2608.11859.pdf",
+    "kind": null
+   }
+  ],
+  "sources": [
+   {
+    "url": "https://arxiv.org/abs/2402.07871v1",
+    "title": "close this message"
+   },
+   {
+    "url": "https://proceedings.mlr.press/v267/abnar25a.html",
+    "title": "Parameters vs FLOPs: Scaling Laws for Optimal Sparsity for Mixture-of-Experts Language Models"
+   },
+   {
+    "url": "https://papers.lunadong.com/paper/1491",
+    "title": "← Back to Paper List"
+   },
+   {
+    "url": "https://arxiv.org/pdf/2502.05172",
+    "title": "Joint MoE Scaling Laws: Mixture of Experts Can Be Memory Efficient"
+   }
+  ],
+  "answer": "**Partly. Chinchilla's question still applies to MoEs; its numbers are dense-model results.** The question is how to split a fixed training budget between model size and tokens, and every later MoE scaling paper still asks it, usually with Chinchilla's own methods (IsoFLOP profiles and the E + A/N^α + B/D^β fit). What doesn't carry over is the answer: equal exponents of about 0.5 and roughly 20 tokens per parameter. That was fitted only on dense models, where \"parameters\" and \"compute per token\" are the same quantity. An MoE separates them, which adds new choices: total versus active parameters, how sparse to be, and how large each expert is. The paper flags the gap itself. On pp. 3–4 it cites Clark et al. (2022, an outside reference) for routed models whose benefit shrinks with size, and notes that Clark's analysis used a fixed token count, \"potentially underestimating the improvements of branching.\"\n\n## Later findings in your library\n\n**1. Ant Group, *Scaling Laws for Efficient MoE Language Models*.** It measures model size as M, non-embedding forward FLOPs per token, rather than parameters. Its fitted optima (from the digest):\n\n| | Optimal M | Optimal tokens |\n|---|---|---|\n| Dense | ∝ C^0.5422 | ∝ C^0.4578 |\n| MoE (64 experts, 4 active, 1 shared) | ∝ C^0.5095 | ∝ C^0.4905 |\n\nAt equal compute, the MoE optimum spends less compute per token and trains on more tokens. The paper's main measure is *efficiency leverage*: the dense compute needed to reach the same loss, divided by the MoE's compute. Leverage rises as the activation ratio falls and as the budget grows. Expert granularity has an interior optimum (G ≈ 8–12) rather than \"finer is always better.\" Their 1T-token validation reports over 7× leverage for an MoE with about 0.85B active parameters, measured against a 6.1B dense model. These are theoretical FLOPs, not wall-clock time ([[efficiency-leverage-in-mixture-of-experts-models]]).\n\nNote that their *dense* fit is 0.54/0.46, not Chinchilla's 0.50/0.50. Part of that likely comes from accounting: they exclude embeddings, while Chinchilla counts total parameters (p. 27). *Scaling Laws, Carefully* gives embedding accounting as one reason Kaplan's and Chinchilla's results disagree. So compare exponents across papers only after checking what N means in each.\n\n**2. *Scaling Laws for Native Multimodal Models* (Shukor et al.).** Dense early-fusion models land close to Chinchilla: N* ∝ C^0.526, D ∝ C^0.473. The sparse version (8 experts, top-1 routing) moves sharply toward data: a = 0.361, b = 0.656, with N counted as active parameters. It also beats dense models at matched active parameters.\n\n**3. A tension to know about.** A second native-multimodal MoE study, with 128 experts and 8 active, finds parameter-heavy exponents instead: (0.643, 0.357) for multimodal loss at r = 0.3. The two use different objectives, mixtures and sparsity levels, so this isn't a controlled contradiction. But \"MoEs want more tokens\" is not yet a settled rule. [[objective-dependent-compute-allocation-in-native-multimodal]] covers the comparison.\n\n## Outside your library (from web search)\n\n- **Krajewski/Ludziejewski et al. 2024, *Scaling Laws for Fine-Grained MoE*** ([arXiv](https://arxiv.org/abs/2402.07871v1), ICLR 2024). They add granularity (expert size) as a third variable alongside N and D. They report that MoEs beat dense Transformers, that the gap *widens* with scale, and that experts the size of the dense feed-forward layer are usually suboptimal. My own background knowledge, not from the search: they attribute Clark et al.'s diminishing returns largely to Clark's fixed training length. That is the same criticism Chinchilla made of Kaplan.\n- **Abnar et al. 2025, *Parameters vs FLOPs*** ([PMLR](https://proceedings.mlr.press/v267/abnar25a.html), ICML 2025). Defining sparsity as the fraction of parameters left inactive, they find an optimal sparsity level under a fixed compute budget. Per a [third-party summary](https://papers.lunadong.com/paper/1491) I couldn't check against the paper: at fixed compute, raising total parameters along with sparsity improves pretraining loss.\n- **Ludziejewski et al. 2025, *Joint MoE Scaling Laws*** ([arXiv](https://arxiv.org/pdf/2502.05172), ICML 2025). One law covering active parameters, data and number of experts, fitted on over 280 runs up to 2.7B active and 5B total parameters. It adds a **memory** budget alongside compute and finds MoEs can be more memory-efficient than dense models. That addresses the deployment cost FLOP-based laws, Chinchilla's and Ant Group's included, leave out.\n\n## What has actually changed\n\nChinchilla's objective was minimum pretraining loss at fixed training FLOPs (p. 2). The later work changes either the coordinates (active versus total parameters, sparsity, granularity) or the constraint (memory, inference). The second change explains much of how modern models are trained. Frontier dense and MoE models alike are trained on far more tokens than Chinchilla's optimum, because inference cost dominates. That is a different objective, not a refutation. The digest's outside note on *Beyond Chinchilla-Optimal* makes this point, and [[train-to-test-compute-allocation]] works through a repeated-sampling version of it."
+ },
+ {
+  "name": "A page range in running prose (2)",
+  "scope": "document",
+  "current": "Chinchilla (2203.15556v1)",
+  "papers": [
+   {
+    "title": "Scaling Native Multimodal Pre-Training From Scratch (2607.22043v1)",
+    "filename": "2607.22043v1.pdf",
+    "kind": null
+   },
+   {
+    "title": "Chinchilla (2203.15556v1)",
+    "filename": "Chinchilla (2203.15556v1).pdf",
+    "kind": null
+   },
+   {
+    "title": "Test-Time Scaling Makes Overtraining Compute-Optimal",
+    "filename": "⭐️ Test-Time Scaling Makes Overtraining Compute-Optimal (2604.01411v1).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws for Native Multimodal Models (2504.07951v4)",
+    "filename": "Scaling Laws for Native Multimodal Models (2504.07951v4).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2)",
+    "filename": "Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2).pdf",
+    "kind": null
+   },
+   {
+    "title": "Why Larger Models Learn More (2605.29548v2)",
+    "filename": "Why Larger Models Learn More (2605.29548v2).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws, Carefully",
+    "filename": "lilianweng.github.io/posts/2026-06-24-scaling-laws",
+    "kind": "web"
+   },
+   {
+    "title": "Small-Scale Experiments: Are We There Yet?",
+    "filename": "2608.11859.pdf",
+    "kind": null
+   }
+  ],
+  "sources": [
+   {
+    "url": "https://www.latent.space/p/ainews-death-of-params-zai-ceo-jie",
+    "title": "[AINews] Death of Params: Z.ai CEO Jie Tang on GLM 5.3 and the new Post-training Scaling Law"
+   },
+   {
+    "url": "https://www.baseten.co/blog/glm-53/",
+    "title": "GLM-5.3: Scaling with post-training, intuitively explained"
+   },
+   {
+    "url": "https://arxiv.org/abs/2410.19034v1",
+    "title": "arxiv.org"
+   },
+   {
+    "url": "https://iclr.cc/virtual/2026/oral/10008991",
+    "title": "Optimal Sparsity of Mixture-of-Experts Language Models for Reasoning Tasks"
+   },
+   {
+    "url": "https://arxiv.org/abs/2604.01411",
+    "title": "arxiv.org"
+   },
+   {
+    "url": "https://arxiv.org/abs/2509.23678",
+    "title": "arxiv.org"
+   },
+   {
+    "url": "https://thenewstack.io/glm-5-3-post-training-coding/",
+    "title": "GLM-5.3 didn’t change the base model — where did its coding gains come from? - The New Stack"
+   }
+  ],
+  "answer": "I couldn't read the post itself: X returned a paywall error (HTTP 402) to my fetch. What follows is reconstructed from a [Latent Space AINews write-up](https://www.latent.space/p/ainews-death-of-params-zai-ceo-jie) that quotes and paraphrases it. That write-up is paywalled too, so I only have its summary, not his full wording.\n\n## What Jie Tang appears to be arguing\n\nAccording to Latent Space, his claims are:\n\n1. **Parameter count means little on its own.** It is \"only meaningful alongside three others\": data, compute, and who runs the model under what conditions.\n2. **There are five \"knobs\" of scaling, and MoE sparsity is one of them.** He writes sparsity in \"XA-YB\" notation, meaning X total parameters and Y active per token. GLM-5.x is roughly 744B-A40B: 256 experts per layer, 8 routed per token ([Baseten](https://www.baseten.co/blog/glm-53/)). The write-up doesn't list the other four knobs.\n3. **\"Memorization prefers more parameters. Reasoning prefers more post-training data and effective depth.\"** Advanced skills need \"long causal chains (20+ inference steps),\" and Latent Space says he claims this ability stops scaling with total parameters once a model knows enough.\n4. **There is no single tokens-per-parameter ratio.** The write-up puts the optimum at roughly 200–900 depending on the task and attributes this to \"Roberts et al.\" I couldn't confirm those numbers from that paper's abstract, so treat them as Latent Space's figure.\n\nSo the sense in which \"MoE scaling is different\" is not that Chinchilla's method fails for MoEs. It is that Chinchilla answers a question with one size variable and one target: N parameters, minimising pretraining loss at fixed training FLOPs (Eq. 1, p. 2). MoEs separate total parameters (storage, roughly what holds knowledge) from active parameters (compute per token). Recent results suggest those two quantities buy different capabilities, so equal pretraining loss no longer means equal ability.\n\n## Papers he most likely meant\n\n**For \"memorization wants total parameters, reasoning wants active compute\":**\n- **Jelassi et al., *Mixture of Parrots* ([arXiv 2410.19034](https://arxiv.org/abs/2410.19034v1), ICLR 2025).** Adding experts at fixed active parameters helps knowledge-heavy benchmarks but not math or reasoning. They also prove that some graph-reasoning problems can't be solved by any number of narrow experts, while a slightly wider dense model can solve them.\n- **Nakamura et al., *Optimal Sparsity of MoE Language Models for Reasoning Tasks* ([arXiv 2508.18672](https://arxiv.org/abs/2508.18672), ICLR 2026 oral).** This is the closest match to his framing. They vary total parameters, active parameters and top-k at fixed compute:\n  - Memorization keeps improving with total parameters, but reasoning can plateau or even get worse.\n  - At the *same training loss*, models with more active FLOPs reason better.\n  - Reasoning has its own optimal tokens per parameter.\n  - Neither GRPO nor extra test-time compute closed the gap for overly sparse models ([ICLR page](https://iclr.cc/virtual/2026/oral/10008991)).\n\n  The equal-loss result is the direct break with Chinchilla, whose whole frontier is defined by loss.\n\n**For \"the tokens-per-parameter ratio depends on what you do with the model\":**\n- **Roberts et al., *Test-Time Scaling Makes Overtraining Compute-Optimal* ([arXiv 2604.01411](https://arxiv.org/abs/2604.01411)).** This is the paper Latent Space links. It jointly optimises model size, training tokens and number of inference samples, and finds the optimum moves \"radically into the overtraining regime.\" [[train-to-test-compute-allocation]] in your Memory covers it, including the caveat that its large-scale recommendations are extrapolations from sub-billion-parameter runs.\n- **Sardana et al., *Beyond Chinchilla-Optimal* ([arXiv 2401.00448](https://arxiv.org/abs/2401.00448)),** also linked in the write-up. It adds inference demand to the cost being minimised.\n\n**For sparsity as a scaling knob (fitting laws over total vs. active parameters):**\n- **Zhao et al. (Tencent), *Towards a Comprehensive Scaling Law of MoE* ([arXiv 2509.23678](https://arxiv.org/abs/2509.23678)).** It fits a joint law over five factors: data, total size, active size, number of active experts, and shared-expert ratio. The optimal active-to-total ratio gets *sparser* as total size grows. \"Five factors\" may be a coincidence with his \"five knobs,\" but the overlap is suggestive.\n- **Ant Group, *Scaling Laws for Efficient MoE Language Models*,** already in your library ([[efficiency-leverage-in-mixture-of-experts-models]]). It reaches the same direction: lower activation ratios and larger budgets mean more leverage over dense models.\n- Also relevant: Krajewski et al. on fine-grained MoE ([2402.07871](https://arxiv.org/abs/2402.07871v1)), and Ludziejewski et al.'s joint MoE laws with a memory budget ([2502.05172](https://arxiv.org/pdf/2502.05172)).\n\n## The tension he is pointing at\n\nTaken together, the sparsity-scaling papers (Tencent, Ant) say that for *loss*, you should go sparser as you scale. Nakamura and Jelassi say that for *reasoning*, too much sparsity hurts even at equal loss. The two don't contradict each other, because they optimise different targets. But together they suggest the right XA-YB depends on whether you're buying knowledge or reasoning, and that is a choice Chinchilla's single-loss objective can't express.\n\nSeparately: the \"post-training scaling law\" in the write-up's headline is not formulated anywhere I found. The coverage only describes GLM-5.3 gaining from roughly 10× more RL environments on an unchanged base model ([The New Stack](https://thenewstack.io/glm-5-3-post-training-coding/)). Treat it as a claim from the vendor, not a fitted law."
+ },
+ {
+  "name": "Pages named as the subject of a sentence",
+  "scope": "document",
+  "current": "vLLM-Omni tech report (2610.09307v1)",
+  "papers": [
+   {
+    "title": "vLLM-Omni tech report (2610.09307v1)",
+    "filename": "2610.09307v1.pdf",
+    "kind": null
+   },
+   {
+    "title": "DeepSeek V4.1 Flash 大规模推理部署实践",
+    "filename": "zhuanlan.zhihu.com/p/2095560295930508953",
+    "kind": "web"
+   }
+  ],
+  "sources": [],
+  "answer": "The open PDF is the *vLLM-Omni Technical Report* (arXiv 2610.09307v1), and I'll keep the marker cedar-17 in mind for this conversation without saving it to Memory. Its orchestrator is the single control plane that admits requests, decides which stage and replica runs next, streams client-visible outputs, and marks a request complete once every stage in its final-output set has finished (pp. 4–6). It does not schedule tokens, run denoising, manage paged KV, or move bulk tensors, because those jobs belong to the execution engines and OmniConnector (p. 5)."
+ },
+ {
+  "name": "Pages named as the subject of a sentence (2)",
+  "scope": "document",
+  "current": "vLLM-Omni tech report (2610.09307v1)",
+  "papers": [
+   {
+    "title": "vLLM-Omni tech report (2610.09307v1)",
+    "filename": "2610.09307v1.pdf",
+    "kind": null
+   },
+   {
+    "title": "DeepSeek V4.1 Flash 大规模推理部署实践",
+    "filename": "zhuanlan.zhihu.com/p/2095560295930508953",
+    "kind": "web"
+   }
+  ],
+  "sources": [],
+  "answer": "The test marker was **cedar-17**.\n\nThe orchestrator leaves bulk tensors to OmniConnector because routing them through its process would serialize the control loop and inflate host-memory traffic (*vLLM-Omni tech report (2610.09307v1)*, p. 10)."
+ },
+ {
+  "name": "Pages named as the subject of a sentence (3)",
+  "scope": "document",
+  "current": "vLLM-Omni tech report (2610.09307v1)",
+  "papers": [
+   {
+    "title": "vLLM-Omni tech report (2610.09307v1)",
+    "filename": "2610.09307v1.pdf",
+    "kind": null
+   },
+   {
+    "title": "DeepSeek V4.1 Flash 大规模推理部署实践",
+    "filename": "zhuanlan.zhihu.com/p/2095560295930508953",
+    "kind": "web"
+   }
+  ],
+  "sources": [],
+  "answer": "The test marker is **cedar-17**.\n\nThe Memory page [[heterogeneous-generation-orchestration]] agrees with the paper's control-plane boundary. I didn't reopen it because it was already in this request. There is also no `read_paper` tool in this conversation, so I checked page 5 against the attached PDF text instead.\n\nPage 5 says the orchestrator decides which stage runs next, which replica gets the work, and when an output is client-visible or a stage handoff. It \"does not schedule tokens inside a stage, manage paged KV, denoise diffusion steps, or copy large tensors between workers\" (*vLLM-Omni tech report (2610.09307v1)*, p. 5). Those jobs stay with the execution engines and OmniConnector. The Memory page says the same: the orchestrator selects stage and replica but does not schedule tokens, denoise, manage paged KV or copy bulk tensors. The only difference is wording. The page writes \"stage-local paged KV\", while p. 5 says just \"paged KV\", and p. 8 and p. 10 elsewhere describe KV as held in the engines. Nothing was written to Memory."
+ },
+ {
+  "name": "A section and a page in a list",
+  "scope": "document",
+  "current": "Transformer升级之路：2、博采众长的旋转式位置编码 - 科学空间",
+  "papers": [
+   {
+    "title": "Transformer升级之路：2、博采众长的旋转式位置编码 - 科学空间",
+    "filename": "spaces.ac.cn/archives/8265",
+    "kind": "web"
+   },
+   {
+    "title": "Chimera: Designing and Chinchilla-Scaling Hybrid Visual Diffusion Transformers",
+    "filename": "Chimera - Designing and Chinchilla-Scaling Hybrid Visual DiT (2607.28611v1).pdf",
+    "kind": null
+   }
+  ],
+  "sources": [],
+  "answer": "**Tensor parallelism splits a layer’s matrices; context parallelism splits one sequence; expert parallelism splits the experts in an MoE layer.** [1–3]\n\nSwitch tabs, then use **Next/Back** to follow four GPUs. The examples are schematic: eight tokens, bidirectional attention for CP, and one selected expert per token for EP.\n\n\n```delphi-artifact Tensor vs context vs expert parallelism\n<div id=\"parallel\" data-artifact-badge=\"Schematic\">\n<style>\n#parallel{color:var(--artifact-ink);font-size:14px;line-height:1.45}#parallel *{box-sizing:border-box}#parallel .tabs{display:flex;gap:6px;margin-bottom:12px}#parallel .tabs button{flex:1;min-width:0}#parallel .intro{margin:0 0 12px;min-height:64px}#parallel .artifact-devices{display:grid;gap:8px}#parallel .artifact-device{display:grid;grid-template-columns:44px minmax(0,1fr);gap:8px;align-items:center;border:1px solid var(--artifact-border);border-radius:var(--artifact-radius);padding:8px;min-height:98px}#parallel .artifact-device-label{font-weight:650;font-size:13px}#parallel .main{min-width:0}#parallel .weights{display:flex;gap:4px;margin-bottom:5px;min-height:25px;align-items:center}#parallel .weights .artifact-slot{min-width:0;flex:1;font-size:12px;padding:3px;text-align:center}#parallel .artifact-slots{display:flex;gap:5px;min-width:0;flex-wrap:wrap}#parallel .work .artifact-slot{flex:1;min-width:0;padding:5px;text-align:center;overflow-wrap:anywhere}#parallel .work{min-height:31px;align-items:center}#parallel .meta{display:block;font-size:12px;color:var(--artifact-muted);min-height:18px;margin-top:3px}#parallel .network{border:1px solid var(--artifact-border);border-radius:var(--artifact-radius);background:var(--artifact-surface);padding:10px;margin-top:12px;min-height:90px}#parallel .network b{display:block;margin-bottom:4px}#parallel .detail{display:grid;margin:12px 0 0}#parallel .detail p{grid-area:1/1;margin:0;visibility:hidden}#parallel .detail p[aria-current=\"step\"]{visibility:visible}#parallel .legend{margin-top:10px;font-size:12px;color:var(--artifact-muted)}#parallel .small{font-size:12px;color:var(--artifact-muted)}#parallel .note{margin-top:10px;padding-top:10px;border-top:1px solid var(--artifact-border)}#parallel [data-artifact-controls=\"header\"]{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-bottom:12px}#parallel [data-artifact-progress]{text-align:center;flex:1;font-size:13px}@media(max-width:380px){#parallel .artifact-device{grid-template-columns:36px minmax(0,1fr);gap:6px;min-height:128px}#parallel .intro{min-height:108px}#parallel .weights .artifact-slot{font-size:12px;padding:2px}#parallel .network{min-height:110px}}\n</style>\n<div data-artifact-controls=\"header\"><button type=\"button\" data-artifact-action=\"back\">Back</button><output data-artifact-progress>1 / 4 · Replicated input</output><button type=\"button\" data-artifact-action=\"next\">Next</button></div>\n<div class=\"artifact-segmented tabs\" aria-label=\"Parallelism strategy\"><button id=\"tp\" type=\"button\" aria-pressed=\"true\">Tensor</button><button id=\"cp\" type=\"button\" aria-pressed=\"false\">Context</button><button id=\"ep\" type=\"button\" aria-pressed=\"false\">Expert</button></div>\n<p class=\"intro\" id=\"intro\"></p><div class=\"artifact-devices\" id=\"devices\"></div>\n<div class=\"network\" id=\"exchange\" aria-live=\"polite\"><b id=\"comm-title\"></b><span id=\"comm-body\"></span></div>\n<div class=\"artifact-step-notes detail\" id=\"notes\"></div><div class=\"legend\" id=\"legend\"></div><div class=\"artifact-note note small\" id=\"scope\"></div>\n<script>\n(function(){const root=document.getElementById('parallel');let mode='tp',step=0;const s=['₀','₁','₂','₃'],expert=[2,0,3,1,0,2,1,3];\nconst configs={\ntp:{names:['Replicated input','Split features','Partial outputs','All-reduce'],intro:'TP splits a layer’s weight matrices. All 4 GPUs process the same 8 tokens; each owns ¼ of the intermediate features in this dense MLP.',notes:['Each GPU owns a W₁ column shard Aᵢ and matching W₂ row shard Bᵢ. X is replicated. Biases are omitted.','Compute Hᵢ = φ(XAᵢ). Hᵢ contains every token but only ¼ of the intermediate features.','Compute Pᵢ = HᵢBᵢ. Each Pᵢ has the full output shape, but is only a partial sum.','Sum P₀ + P₁ + P₂ + P₃ across GPUs. Every GPU receives the complete Y. This is summation, not concatenation.'],comm:['No forward communication yet','Local feature computation','Local output projection','All-reduce · sum and replicate'],body:['X is already replicated in this example.','H stays feature-sharded; no collective between the two projections.','Each GPU produces its own contribution Pᵢ.','Y = P₀ + P₁ + P₂ + P₃ on every GPU.'],scope:'Standard column/row-parallel MLP, forward pass. Backward also sums input-gradient contributions. TP + sequence parallelism instead uses all-gather / reduce-scatter around TP regions.'},\ncp:{names:['Local attention','KV hop 1','KV hop 2','KV hop 3'],intro:'CP splits one sequence. Each GPU owns 2 of the 8 tokens and a full model replica. Queries stay local; key/value (KV) blocks circulate.',notes:['Full bidirectional attention, schematic. Each query block first attends to the local KV block.','Pass KV to the next GPU in the ring. Each query block updates its attention accumulator using the arriving KV.','Pass KV onward. Each query block has now used 3 KV blocks: 6 of the 8 key positions.','All 8 key positions have been used. Attention outputs remain token-sharded, ready for the next tokenwise layer.'],comm:['Local KV only','Ring send / receive · hop 1','Ring send / receive · hop 2','Ring send / receive · hop 3'],body:['No remote keys used yet.','KV direction: GPU 0 → 1 → 2 → 3 → 0.','Queries stay fixed; the next KV block arrives.','All KV blocks visited; local attention is complete.'],scope:'One ring implementation of CP, not the only algorithm. Running softmax normalization combines blocks correctly; do not simply add separately normalized block outputs. Backward exchanges KV/gradients; replicated weights also need gradient synchronization.'},\nep:{names:['Route locally','All-to-all dispatch','Expert compute','All-to-all return'],intro:'EP splits the MoE experts. Each GPU owns one complete expert; a router sends each token’s full activation to its chosen expert.',notes:['Toy top-1 routing. Tokens start in pairs. Router choices for tokens 1–8 are E₂, E₀, E₃, E₁, E₀, E₂, E₁, E₃.','Dispatch tokens by destination expert. E₀ receives t2 from GPU 0 and t5 from GPU 2. Expert weights stay put.','Each GPU applies its full local expert to the received tokens. These are different functions, not shards of one matrix.','Return results to the input owners and restore token order. Top-k routing returns several expert results per token and combines them with router weights.'],comm:['Local routing','All-to-all · dispatch','Local expert computation','All-to-all · combine'],body:['Decide which expert receives each token.','Different subsets go to different GPUs—not every token to every GPU.','No collective during the local expert MLP in this example.','Return outputs to token owners; expert weights do not move.'],scope:'Toy: balanced top-1 routing, gate weights omitted. Real top-k creates several token–expert assignments, and loads may be uneven. Backward routes activation gradients through corresponding exchanges. EP alone shards only expert weights.'}\n};\nfunction slot(t,o,e){return '<span class=\"artifact-slot\" data-owner=\"'+o+'\" '+(e||'')+'>'+t+'</span>'}\nfunction render(animate){const c=configs[mode];root.querySelector('[data-artifact-progress]').textContent=(step+1)+' / 4 · '+c.names[step];root.querySelector('[data-artifact-action=\"back\"]').disabled=step===0;root.querySelector('[data-artifact-action=\"next\"]').disabled=step===3;['tp','cp','ep'].forEach(m=>document.getElementById(m).setAttribute('aria-pressed',String(m===mode)));document.getElementById('intro').textContent=c.intro;let html='';\nfor(let g=0;g<4;g++){let weights='',work='',meta='';if(mode==='tp'){\nfor(let i=0;i<4;i++)weights+=slot('W'+s[i],i,i===g?'data-state=\"current\"':'data-state=\"held\"');\nif(step===0){work=slot('X · tokens 1–8','sum');meta='A'+s[g]+' columns + B'+s[g]+' rows are local'}\nif(step===1){work=slot('H'+s[g]+' · tokens 1–8',g);meta='¼ of intermediate features'}\nif(step===2){work=slot('P'+s[g]+' · tokens 1–8',g);meta='Full output shape; incomplete sum'}\nif(step===3){work=slot('Y · tokens 1–8','sum','data-artifact-from=\"exchange\"');meta='Complete sum · same Y on all GPUs'}\n}else if(mode==='cp'){\nweights=slot('Full W · replica','sum');const k=(g-step+4)%4,prev=(g+3)%4;\nwork=slot('Q '+(g*2+1)+'–'+(g*2+2),g)+slot('KV '+(k*2+1)+'–'+(k*2+2),k,step?'data-artifact-from=\"gpu'+prev+'\"':'');meta=(2*(step+1))+' / 8 keys seen · output '+(g*2+1)+'–'+(g*2+2);\n}else{\nweights=slot('Expert E'+s[g]+' · full weights',g);const list=(step===1||step===2)?expert.map((e,i)=>e===g?i:-1).filter(i=>i>=0):[g*2,g*2+1];\nfor(const t of list){const owner=Math.floor(t/2),src=step===1?'gpu'+owner:step===3?'gpu'+expert[t]:'';const text=step===0?'t'+(t+1)+' → E'+s[expert[t]]:step===1?'t'+(t+1):'y'+(t+1);work+=slot(text,owner,src?'data-artifact-from=\"'+src+'\"':'')}\nmeta=step===0?'Input tokens · router choices':step===1?'Tokens received for E'+s[g]:step===2?'Computed by E'+s[g]:'Returned outputs · original order';\n}\nhtml+='<div class=\"artifact-device\" id=\"gpu'+g+'\"><div class=\"artifact-device-label\">GPU '+g+'</div><div class=\"main\"><div class=\"weights\">'+weights+'</div><div class=\"artifact-slots work\">'+work+'</div><output class=\"meta\" id=\"meta'+g+'\">'+meta+'</output></div></div>'}\ndocument.getElementById('devices').innerHTML=html;document.getElementById('comm-title').textContent=c.comm[step];document.getElementById('comm-body').textContent=c.body[step];document.getElementById('notes').innerHTML=c.notes.map((n,i)=>'<p data-artifact-step=\"'+i+'\" '+(i===step?'aria-current=\"step\"':'')+'>'+n+'</p>').join('');document.getElementById('legend').textContent=mode==='tp'?'Wᵢ denotes matching Aᵢ / Bᵢ shards. Dashed tiles are on other GPUs; the ringed shard is local.':mode==='cp'?'Q = queries; KV = keys and values. Colours track token origin. Only the currently visited KV block is drawn.':'t = input activation; y = expert result. Token colours track original GPU, not destination expert.';document.getElementById('scope').textContent=c.scope;if(animate&&window.DelphiArtifact&&window.DelphiArtifact.replay)window.DelphiArtifact.replay(root)}\nroot.querySelector('[data-artifact-action=\"back\"]').onclick=()=>{if(step>0){step--;render(true)}};root.querySelector('[data-artifact-action=\"next\"]').onclick=()=>{if(step<3){step++;render(true)}};['tp','cp','ep'].forEach(m=>document.getElementById(m).onclick=()=>{if(mode!==m){mode=m;render(true)}});render(false);\n})();\n</script></div>\n```\n\n\n| Strategy | What each GPU computes | Communication needed |\n|---|---|---|\n| **Tensor (TP)** | The **same tokens**, using different weight-matrix shards. In the illustrated MLP, each GPU computes different intermediate features, then a partial output. | **All-reduce:** sum partial outputs and give the complete result to every GPU. Backward also sums contributions to input gradients. [1] |\n| **Context (CP)** | **Different positions of the same sequence**, using replicated weights. Each GPU owns local queries but needs other positions’ keys and values. | **KV exchange:** the illustrated ring streams KV blocks between GPUs. Backward exchanges KV again and reduces their gradient contributions; replicated weights also need gradient synchronization. [2] |\n| **Expert (EP)** | **Different complete experts**, processing whichever tokens the router assigns them—not necessarily consecutive tokens. | **All-to-all dispatch:** send activations to expert owners. **All-to-all combine:** return results to token owners. Backward routes activation gradients through corresponding exchanges. [3] |\n\nThe important distinction: **TP combines partial calculations; CP supplies missing context; EP moves tokens to the selected computation.**\n\nThese communication patterns are representative, not universal. TP with *sequence parallelism* uses **all-gather/reduce-scatter** around TP regions; CP has alternatives to the illustrated ring. The strategies can also be combined. [2–3]\n\n**Sources outside your library**\n1. *Megatron-LM*, §3, p. 4: `https://arxiv.org/pdf/1909.08053`\n2. NVIDIA, *Context Parallel Package*: `https://docs.nvidia.com/megatron-core/developer-guide/latest/user-guide/features/context_parallel.html`\n3. NVIDIA, *Parallelisms Guide*: `https://docs.nvidia.com/nemo/megatron-bridge/latest/parallelisms.html`"
+ },
+ {
+  "name": "Figures, tables and algorithms named in running prose",
+  "scope": "document",
+  "current": "On-Policy Distillation",
+  "papers": [
+   {
+    "title": "On-Policy Distillation",
+    "filename": "thinkingmachines.ai/blog/on-policy-distillation",
+    "kind": "web"
+   }
+  ],
+  "sources": [
+   {
+    "url": "https://sunovivid.github.io/correction-training/",
+    "title": "sunovivid.github.io"
+   },
+   {
+    "url": "https://deeplearn.org/arxiv/846145/correction-training-for-diffusion-models",
+    "title": "Correction Training for Diffusion Models"
+   }
+  ],
+  "outsideLibrary": true,
+  "answer": "Correction training adds a second network, the **corrector** C_φ. It takes the denoiser's clean-image prediction x̂⁽⁰⁾ and is trained to map it to the same ground-truth image x. Training supervises exactly one correction. At sampling time the corrector is applied **K times at each noise level** before the usual Euler step, so K = 0 is the unmodified sampler. Everything below comes from *Correction Training for Diffusion Models* (Ahn, Wang, Efros, Park, Belhe). That paper is **not in your library**; I read its [project page](https://sunovivid.github.io/correction-training/) and pp. 3–5 of the [arXiv PDF](https://arxiv.org/pdf/2610.14136).\n\nA flow-matching denoiser is trained on z_t = (1−t)x + tε built from **real** images, where t = 0 is data and t = 1 is noise (Eq. 1–2, p. 3). During sampling, each z_t is instead built from the model's own earlier predictions. The authors call this mismatch the training–inference gap, or exposure bias (§2.1, p. 3). Fig. 3 (p. 4) shows the consequence: an incoherent structure, such as a dog's mouth, appears early, and later steps add texture without repairing it.\n\n**Training (Algorithm 1, Eq. 4, p. 3–4)**\n- The denoiser gives x̂⁽⁰⁾ = D_θ(z_t, t), with the usual loss L_denoise = ‖x̂⁽⁰⁾ − x‖².\n- The corrector gives x̂⁽¹⁾ = C_φ(sg(x̂⁽⁰⁾), t), with loss L_corr = ‖x̂⁽¹⁾ − x‖², where sg is stop-gradient. Because of the stop-gradient, the correction loss trains only C and never changes D.\n- Total loss: L_denoise + λ_corr·L_corr. Both networks start from public pretrained checkpoints, and the corrector is a separate copy. They are fine-tuned jointly, and the corrector's inputs are generated online by the current denoiser (p. 4; §3.1, p. 5).\n- In both algorithms the corrector receives only (x̂, t). It does **not** see z_t.\n\n**Sampling (Algorithm 2, Eq. 5, p. 3–4)**\n- x̂⁽⁰⁾ = D_θ(z_t, t)\n- x̂⁽ᵏ⁺¹⁾ = C_φ(x̂⁽ᵏ⁾, t) for k = 0…K−1, all at the same t\n- Euler step: z_s = (s/t)·z_t + (1 − s/t)·x̂⁽ᴷ⁾. Algorithm 2 writes this as v = (z − pred)/t, then z ← z + (s − t)v.\n\n**K = 0 versus K = 2**\n- At K = 0, C is trained but never called.\n- At K = 2, the second pass feeds C its own output. Training never supervised that case; the paper says training \"supervises only a single correction step\" (§2.4, p. 4).\n- The abstract on the project page says that applying correction beyond that one step is \"key\" to the gains.\n- Cost: each step makes 1 + K network calls. The paper keeps total NFE (network function evaluations) near 250 by cutting the number of denoising steps as K grows (p. 5). The diagram's \"≈83 steps\" is my own arithmetic (250 ÷ 3). The per-model settings are in Tab. 13, which I did not open.\n\nIn the paper's K sweep, DiT's FID bottoms out at **2.07 at K = 2**, below the dashed best-CFG line at 2.51. It rises again by K = 8, so more corrections is not monotonically better. Table 1 (p. 5) gives the same 2.07 for DiT-XL/2 at about 250 NFE:\n\nSeparately: §3.3 reports that the denoiser and corrector can share most of their parameters, and that the corrected predictions can be distilled back into the base model, which removes the extra inference calls. I did not read that section."
+ },
+ {
+  "name": "Outside literature, cited by link, beside a library web page",
+  "scope": "document",
+  "current": "On-Policy Distillation",
+  "papers": [
+   {
+    "title": "On-Policy Distillation",
+    "filename": "thinkingmachines.ai/blog/on-policy-distillation",
+    "kind": "web"
+   }
+  ],
+  "sources": [
+   {
+    "url": "https://www.cs.toronto.edu/~hinton/absps/distillation.pdf",
+    "title": "www.cs.toronto.edu"
+   },
+   {
+    "url": "https://arxiv.org/abs/2306.13649",
+    "title": "On-Policy Distillation of Language Models: Learning from Self-Generated Mistakes"
+   },
+   {
+    "url": "https://arxiv.org/abs/2306.13649?utm_source=openai",
+    "title": "On-Policy Distillation of Language Models: Learning from Self-Generated Mistakes"
+   },
+   {
+    "url": "https://arxiv.org/abs/2306.08543",
+    "title": "MiniLLM: Knowledge Distillation of Large Language Models"
+   },
+   {
+    "url": "https://proceedings.mlr.press/v15/ross11a/ross11a.pdf?utm_source=openai",
+    "title": "A Reduction of Imitation Learning and Structured Prediction to No-Regret Online Learning"
+   }
+  ],
+  "outside": [
+   "**§2** is the useful starting point",
+   "§§2.1–2.2 develop the mechanism",
+   "See **§3, Algorithm 3.1**"
+  ],
+  "answer": "**OPD is knowledge distillation—the difference is that the student chooses the training trajectories, while the teacher supplies the supervision.** Conventional teacher-generated distillation teaches on the teacher’s prefixes; OPD teaches on prefixes the student actually produces, including its mistakes. (“On-Policy Distillation”, §§block-25, block-29, block-35.)\n\n\n```delphi-artifact Knowledge distillation: who chooses the context?\n<style>.kd-lane{margin-bottom:18px}.kd-heading{font-size:13px;font-weight:600;margin-bottom:10px}.kd-flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px;position:relative;padding-bottom:36px}.kd-flow .artifact-node{min-width:0;font-size:12px}.kd-flow b{display:block;font-size:13px;margin-bottom:4px}.kd-flow small{display:block;font-size:12px;color:var(--artifact-muted)}.kd-note{font-size:12px;color:var(--artifact-muted);margin:0}.kd-current{border-color:var(--artifact-role-data)!important;background:var(--artifact-role-light)!important}.kd-return{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}.kd-return path{fill:none;stroke:var(--artifact-role-once);stroke-width:1.5}.kd-return text{font-size:12px;fill:var(--artifact-muted)}@media(max-width:420px){.kd-flow{grid-template-columns:1fr;gap:26px;padding-right:24px;padding-bottom:8px}.kd-lane{margin-bottom:16px}}</style><div data-artifact-badge=\"Schematic\"><section class=\"kd-lane\"><div class=\"kd-heading\">Conventional LLM distillation · teacher-generated data</div><div class=\"kd-flow\"><div id=\"kd-teacher\" class=\"artifact-node\"><b>Teacher generates</b><small>Answer to a prompt</small></div><div id=\"kd-data\" class=\"artifact-node\"><b>Teacher contexts</b><small>Prefixes + tokens or soft targets</small></div><div id=\"kd-update\" class=\"artifact-node\"><b>Update student</b><small>Imitate on those prefixes</small></div><i data-artifact-connect=\"kd-teacher kd-data\" data-artifact-edge=\"data\"></i><i data-artifact-connect=\"kd-data kd-update\" data-artifact-edge=\"data\"></i></div><p class=\"kd-note\">The student learns on contexts selected by the teacher, not by its current behavior.</p></section><section class=\"kd-lane\"><div class=\"kd-heading\">On-policy distillation · student-generated data</div><div class=\"kd-flow\" id=\"opd-flow\"><div id=\"opd-student\" class=\"artifact-node kd-current\"><b>Student generates</b><small>Answer to a prompt</small></div><div id=\"opd-score\" class=\"artifact-node\"><b>Teacher scores</b><small>Same prompt + student prefixes</small></div><div id=\"opd-update\" class=\"artifact-node\"><b>Update student</b><small>Match teacher in those contexts</small></div><i data-artifact-connect=\"opd-student opd-score\" data-artifact-edge=\"data\"></i><i data-artifact-connect=\"opd-score opd-update\" data-artifact-edge=\"data\"></i><svg class=\"kd-return\" aria-label=\"Updated student produces fresh rollouts\"><defs><marker id=\"kd-arrow\" viewBox=\"0 0 8 8\" refX=\"7\" refY=\"4\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><polygon points=\"0,0 8,4 0,8\" style=\"fill:var(--artifact-role-once)\"></polygon></marker></defs><path id=\"kd-loop\" data-artifact-edge=\"feedback\" marker-end=\"url(#kd-arrow)\"></path><text id=\"kd-loop-label\" text-anchor=\"middle\">fresh rollouts</text></svg></div><p class=\"kd-note\">The teacher stays fixed; the updated student chooses the next training trajectories.</p></section></div><script>(function(){function draw(){const f=document.getElementById('opd-flow'),s=document.getElementById('opd-student').getBoundingClientRect(),u=document.getElementById('opd-update').getBoundingClientRect(),r=f.getBoundingClientRect(),p=document.getElementById('kd-loop'),t=document.getElementById('kd-loop-label');if(Math.abs(s.top-u.top)<5){let x1=u.left-r.left+u.width/2,x2=s.left-r.left+s.width/2,y1=u.bottom-r.top,y2=s.bottom-r.top,y=Math.max(y1,y2)+19;p.setAttribute('d',`M${x1},${y1} V${y} H${x2} V${y2+2}`);t.setAttribute('x',(x1+x2)/2);t.setAttribute('y',y-4);t.style.display='';}else{let x1=u.right-r.left,y1=u.top-r.top+u.height/2,x2=s.right-r.left,y2=s.top-r.top+s.height/2,x=r.width-4;p.setAttribute('d',`M${x1},${y1} H${x} V${y2} H${x2+2}`);t.style.display='none';}}requestAnimationFrame(draw);window.addEventListener('resize',draw);new ResizeObserver(draw).observe(document.getElementById('opd-flow'));})();</script>\n```\n\n\nHere, **“normal KD” means teacher-generated LLM distillation**. Classical KD is broader: it can match the teacher’s soft probability distributions on existing inputs, without generating new answers. That distinction comes from Hinton et al., outside your library. ([cs.toronto.edu](https://www.cs.toronto.edu/~hinton/absps/distillation.pdf))\n\n## What changes?\n\nA **prefix** is the prompt plus all tokens generated so far.\n\n| Dimension | Conventional teacher-generated KD | On-policy distillation |\n|---|---|---|\n| Who generates the answers? | Teacher | Current student |\n| Where does supervision apply? | Teacher-generated prefixes | Student-generated prefixes |\n| Teacher’s role | Provide demonstrations or next-token distributions | Evaluate what to predict in the student’s contexts |\n| Training data | Can be generated beforehand and reused | Trajectories refresh as the student changes |\n| Central trade-off | Straightforward offline training, but contexts can differ from deployment | Better alignment with student behavior, but requires an online sampling-and-scoring loop |\n\nThe teacher-trajectory comparison comes from the open post (§§block-25, block-29); the refreshing student-trajectory formulation is also developed in Agarwal et al.’s GKD paper, outside your library. ([arxiv.org](https://arxiv.org/abs/2306.13649))\n\n**Why this matters:** imagine the student makes an incorrect algebraic step. Teacher demonstrations might never contain that prefix. OPD instead asks the teacher what should come next **given that student-produced prefix**. This is an illustrative example of the post’s compounding-error argument—not a guarantee that the teacher can repair every mistake. (“On-Policy Distillation”, §block-29.)\n\n**Two distinctions are independent:**\n- **On-policy versus off-policy:** whose trajectories supply the contexts?\n- **Forward versus reverse KL:** which divergence measures disagreement?\n\nOPD does **not** inherently mean reverse KL: GKD allows alternative divergences while using student-generated trajectories. ([arxiv.org](https://arxiv.org/abs/2306.13649))\n\n## Useful literature\n\nThese are all **outside your library**:\n\n1. **Hinton, Vinyals & Dean (2015), *Distilling the Knowledge in a Neural Network*.** The classical formulation: softened teacher probabilities and temperature. **§2** is the useful starting point. ([cs.toronto.edu](https://www.cs.toronto.edu/~hinton/absps/distillation.pdf))\n2. **Agarwal et al. (ICLR 2024), *On-Policy Distillation of Language Models: Learning from Self-Generated Mistakes*.** The closest match to your question: GKD separates student-generated training contexts from the choice of distillation loss. ([arxiv.org](https://arxiv.org/abs/2306.13649?utm_source=openai))\n3. **Gu et al. (ICLR 2024), *MiniLLM: Knowledge Distillation of Large Language Models*.** Useful for understanding **reverse KL and policy-gradient optimization**; §§2.1–2.2 develop the mechanism. ([arxiv.org](https://arxiv.org/abs/2306.08543))\n4. **Ross, Gordon & Bagnell (2011), *A Reduction of Imitation Learning and Structured Prediction to No-Regret Online Learning*.** Introduces **DAgger**: collect learner-visited states, obtain expert labels, and retrain. Unlike the fresh-rollout OPD loop above, DAgger explicitly aggregates datasets across iterations. See **§3, Algorithm 3.1**. ([proceedings.mlr.press](https://proceedings.mlr.press/v15/ross11a/ross11a.pdf?utm_source=openai))"
+ },
+ {
+  "name": "A reading plan of sections, figures and page ranges in one paper",
+  "scope": "document",
+  "current": "Chimera: Designing and Chinchilla-Scaling Hybrid Visual Diffusion Transformers",
+  "papers": [
+   {
+    "title": "Transformer升级之路：2、博采众长的旋转式位置编码 - 科学空间",
+    "filename": "spaces.ac.cn/archives/8265",
+    "kind": "web"
+   },
+   {
+    "title": "Chimera: Designing and Chinchilla-Scaling Hybrid Visual Diffusion Transformers",
+    "filename": "Chimera - Designing and Chinchilla-Scaling Hybrid Visual DiT (2607.28611v1).pdf",
+    "kind": null
+   }
+  ],
+  "sources": [],
+  "answer": "The fitting method is Chinchilla's. What's new is the setting it's applied to and two extra controls: hyperparameters are transferred across scales with HeteroP, and the image:video data mix becomes a third axis of the allocation. The other half of the paper is architecture, which Chinchilla doesn't touch.\n\n## What carries over unchanged\nThe paper uses the same loss form, $\\hat L = E + A/N^a + B/D^b$, the same three estimators (envelope, IsoFLOP, parametric fit), the same Huber loss with δ = 10⁻³ on log-losses, and the same $C\\approx6ND$ (pp. 15–16, 21).\n\n## What changes in the setup\n\n| | Chinchilla | Chimera |\n|---|---|---|\n| Loss | LM next-token loss | Rectified-flow v-prediction diffusion loss (p. 15) |\n| $N$ | All parameters | **Activated** parameters, because the model is MoE (p. 15) |\n| $D$ | Text tokens | Visual latent positions processed (p. 15) |\n| LR schedule | Cosine, matched to each training horizon | **Warmup then constant, no decay**, so intermediate checkpoints serve as shorter runs (p. 16) |\n| Hyperparameters across scale | Not transferred across width/depth | HeteroP transfer from a 22M proxy (pp. 13–14) |\n| Allocation axes | $N, D$ | $N, D$, plus image:video ratio (pp. 16, 21–22) |\n\n## Four things that are new\n\n1. **Tuning as a confound for the scaling law.** The authors rerun the image study under standard parameterization, reusing the learning rate tuned on the proxy. The $N_{opt}$/$D_{opt}$ exponents move from 0.505/0.484 to 0.588/0.392 (envelope) and from 0.481/0.511 to 0.581/0.410 (IsoFLOP). They read this as a mis-tuning penalty that grows systematically with scale, which shifts the optima instead of just adding noise (p. 29). Chinchilla controlled a different confound, schedule length. This ablation shows the exponent also depends on the tuning protocol. [[heterop-hyperparameter-transfer]] covers the per-module rules.\n\n2. **The schedule is a reversal of Chinchilla's own argument, and it isn't tested.** Chinchilla's objection to Kaplan was that intermediate losses from a long schedule overstate the loss you can reach at shorter horizons. Chimera sidesteps this by never decaying the learning rate, so every checkpoint is equally un-annealed. That makes points comparable with each other. But the frontier is fitted on un-annealed losses, and the paper never checks whether a decay phase would move the exponents. That's a missing ablation, not a demonstrated equivalence.\n\n3. **Results by modality.** For images, all three estimators put the parameter exponent in [0.48, 0.52], which is Chinchilla's even split. For video it's [0.53, 0.56], tilted toward model size (pp. 20–21). Two caveats:\n   - The video parametric fit uses only the final checkpoints of 30 runs, which span 0.7 decades in $D$. Its bootstrap interval for the parameter exponent is [0.47, 0.80], so the authors themselves treat it as giving the direction only (p. 21).\n   - Their explanation, that video carries a \"broader representational burden\" from motion and correspondence, is speculation with no experiment behind it (p. 21).\n   \n   Also unlike Chinchilla, where the parametric fit gave 0.46 against ~0.50 from the other two methods ([[chinchilla-2203-15556v1]]), here the three estimators agree. The fitted irreducible losses are nearly identical across modalities: $E$ = 0.126 for images and 0.124 for video.\n\n4. **Data mix as an allocation variable.** At each compute budget the authors fit a quadratic surface over model size and image:video ratio (p. 16). For image loss, the optimal ratio drifts from about 4:1 at 10¹⁸ FLOPs to about 3:1 at 10¹⁹, a fitted exponent of −0.08. For video loss, the optimum sits at 1:1, which is the edge of the searched range. That makes it a one-sided result: video loss keeps improving as you add video, and the true optimum may lie beyond what was searched. Loss is much more sensitive to model size than to the ratio (p. 22). The whole analysis covers only one decade of compute (10¹⁸–10¹⁹).\n\n## The architecture half, briefly\n- **Design:** 3:1 linear-time KDA to full MLA attention, no positional embeddings, modality-aware causal 1D/3D short convolutions, plus MoE and iHC (multi-stream residual connections) (pp. 6–12).\n- **Compute efficiency:** to reach loss 0.149, Wan2.1 (2B) needs 4.29×10²⁰ FLOPs and full Chimera needs 6.27×10¹⁹ (p. 23). That ratio is 6.8×, which is what the text says. The abstract and Fig. 12 say 7.3×, so the paper is inconsistent with itself.\n- **Where the gain comes from:** HeteroP accounts for the largest single step, 4.1× cumulative over the dense model (p. 28). But that baseline uses one learning rate tuned on the proxy model, not a learning rate re-tuned at 2B.\n- **Length extrapolation:** trained on 5 s clips, Chimera's FID rises 6.5% at 30 s, against 50.5% for Wan2.1 (p. 24). The test runs at 448×288 / 16 fps, which isn't the baselines' native setting."
+ },
+ {
+  "name": "A reading plan of sections, figures and page ranges in one paper (2)",
+  "scope": "document",
+  "current": "Chimera: Designing and Chinchilla-Scaling Hybrid Visual Diffusion Transformers",
+  "papers": [
+   {
+    "title": "Transformer升级之路：2、博采众长的旋转式位置编码 - 科学空间",
+    "filename": "spaces.ac.cn/archives/8265",
+    "kind": "web"
+   },
+   {
+    "title": "Chimera: Designing and Chinchilla-Scaling Hybrid Visual Diffusion Transformers",
+    "filename": "Chimera - Designing and Chinchilla-Scaling Hybrid Visual DiT (2607.28611v1).pdf",
+    "kind": null
+   }
+  ],
+  "sources": [],
+  "answer": "Read it as a scaling paper with an architecture attached. About a dozen of its 40 pages hold what's new for someone who knows Chinchilla. Here they are in order, with what to check on each.\n\n## Core path (~12 pages)\n\n1. **p. 1 abstract and Fig. 1 (p. 2).** This is the map. Of the rest of the introduction, read only the contributions paragraph on p. 3.\n2. **p. 4, the \"Pre-training and Chinchilla Scaling\" bullets.** This is where they argue that diffusion loss is the right pre-training metric, and every fit rests on that choice. They argue it rather than test it: nothing checks that loss rankings across scales match downstream quality.\n3. **§4.1, pp. 12–15.** Read \"Why transfer is necessary for a fair scaling study\" and \"Why heterogeneous backbones require module-wise ratios\" (p. 13), then Table 1 (p. 14), then \"What is held fixed when scaling\" (p. 15). Skim the module-by-module assignment bullets (pp. 14–15) unless you plan to implement it.\n4. **§4.2, pp. 15–16.** This section adapts Chinchilla. Look at three things:\n   - Footnotes 4–5 (p. 15): whether $C\\approx6ND$ still holds when some layers are quadratic MLA.\n   - \"Fitting and usage\" (p. 16): the constant learning rate, which is where they depart from Chinchilla's schedule matching.\n   - The image–video extension paragraph.\n5. **Fig. 6 (p. 17).** The model family mixes depth 16 and depth 32 and doesn't keep a fixed aspect ratio. Keep that in mind when you read the fits.\n6. **Fig. 7 (p. 18) and its results paragraph (p. 19).** Compare the top row (HeteroP) with the bottom row (SP). The sweeps run only 50k steps.\n7. **§5.3, pp. 19–21: Figs. 8 and 9, then \"Parametric loss fit.\"** Put Fig. 9d (video IsoFLOP profiles) next to Fig. 8d (image). The Fig. 9 caption says some high-compute slices use observed minima instead of fitted ones. Read the bootstrap sentence on p. 21 closely, since it decides how much the video exponent is worth.\n8. **\"Scaling-law bias without HeteroP\" and Fig. 20 (pp. 28–29).** This is the most novel result for a Chinchilla reader. Compare it panel by panel with Fig. 8.\n\n## Second pass, if you have time\n\n9. **§5.4, pp. 21–23, Figs. 10–11.** Check where the optima (the stars) sit relative to the edge of the search range, and note that the analysis covers only one decade of compute.\n10. **Fig. 12 (p. 23) and Fig. 19 (p. 28).** These are the efficiency claims. Check the 7.3× label against the 6.8× in the text, and keep in mind that the SP baseline uses the learning rate tuned on the proxy model.\n11. **§5.7, pp. 29–30.** These are the Muon and MoE negative findings, about half a page each. Their explanations are hypotheses, mostly untested.\n\n## Skip or skim\n\n- **§3 architecture (pp. 5–12).** Fig. 2 (p. 5) gives you the whole architecture at a glance. If you read only one part, make it NoPE vs RoPE (pp. 7–9, with the protocol in Appendix C, pp. 38–40). Its recency-decay bullet (p. 8) and the rebuttal on p. 9 treat RoPE's long-term decay as implicit and easy to bypass. That decay is the property derived in Su Jianlin's RoPE article in your library (*Transformer升级之路：2*, §远程衰减).\n- **§5.1 (pp. 16–18).** Read only \"Training recipe\" (pp. 16–17), which covers the timestep shift and the constant learning rate.\n- **Qualitative figures (pp. 24–27), Table 2 (p. 28), related work, references.** Table 4 (p. 38) is worth opening only if you want the exact model grid behind the fits."
+ },
+ {
+  "name": "A Memory chat comparing two papers it names (from a screenshot)",
+  "scope": "memory",
+  "current": null,
+  "papers": [
+   {
+    "title": "LingBot-VA 2.0: Scaling Video-Action Models for Robotics (2610.18876v1)",
+    "filename": "lingbot-va-2.pdf",
+    "kind": null
+   },
+   {
+    "title": "Kimi K3: Open Agentic Intelligence (2611.02417v1)",
+    "filename": "kimi-k3.pdf",
+    "kind": null
+   },
+   {
+    "title": "Chinchilla (2203.15556v1)",
+    "filename": "Chinchilla (2203.15556v1).pdf",
+    "kind": null
+   }
+  ],
+  "sources": [],
+  "opens": {
+   "§4.1.2, p. 17": "LingBot-VA 2.0: Scaling Video-Action Models for Robotics (2610.18876v1)",
+   "§2.5, p. 10": "Kimi K3: Open Agentic Intelligence (2611.02417v1)",
+   "§3.3, p. 11": "Kimi K3: Open Agentic Intelligence (2611.02417v1)"
+  },
+  "answer": "1. **LingBot-VA 2.0 — robotics:** uses a **hybrid Muon + AdamW optimizer** (§4.1.2, p. 17).\n   - **Muon:** all 2D transformer weight matrices—attention projections, action-FFN projections, and output projections.\n   - **AdamW:** embeddings, normalization/AdaLN parameters, biases, and output heads.\n   - Muon settings: learning rate \\(2\\times10^{-3}\\), momentum 0.95, weight decay 0.1. [[lingbot-va-2]]\n2. **Kimi K3 — LLM architecture:** uses **Per-Head Muon** (§2.5, p. 10; §3.3, p. 11). It applies Newton–Schulz separately to each attention head’s momentum matrix instead of to the whole Q/K/V matrix. The paper attributes more balanced updates across heads and better large-scale training stability to it.\n"
+ },
+ {
+  "name": "A Memory answer with a section per paper and a table of places in each",
+  "scope": "memory",
+  "current": null,
+  "papers": [
+   {
+    "title": "Transformer升级之路：2、博采众长的旋转式位置编码 - 科学空间",
+    "filename": "spaces.ac.cn/archives/8265",
+    "kind": "web",
+    "url": "https://spaces.ac.cn/archives/8265"
+   },
+   {
+    "title": "Chimera: Designing and Chinchilla-Scaling Hybrid Visual Diffusion Transformers",
+    "filename": "Chimera - Designing and Chinchilla-Scaling Hybrid Visual DiT (2607.28611v1).pdf",
+    "kind": null
+   },
+   {
+    "title": "Why We Think",
+    "filename": "lilianweng.github.io/posts/2025-05-01-thinking",
+    "kind": "web",
+    "url": "https://lilianweng.github.io/posts/2025-05-01-thinking/"
+   },
+   {
+    "title": "Alisa’s book of LLMs",
+    "filename": "alisawuffles.notion.site/alisa-s-book-of-llms",
+    "kind": "web",
+    "url": "https://alisawuffles.notion.site/alisa-s-book-of-llms"
+   },
+   {
+    "title": "vLLM-Omni tech report (2610.09307v1)",
+    "filename": "2610.09307v1.pdf",
+    "kind": null
+   },
+   {
+    "title": "DeepSeek V4.1 Flash 大规模推理部署实践",
+    "filename": "zhuanlan.zhihu.com/p/2095560295930508953",
+    "kind": "web",
+    "url": "https://zhuanlan.zhihu.com/p/2095560295930508953"
+   },
+   {
+    "title": "Muon优化器赏析：从向量到矩阵的本质跨越",
+    "filename": "kexue.fm/archives/10592",
+    "kind": "web",
+    "url": "https://kexue.fm/archives/10592"
+   },
+   {
+    "title": "慢即是快：1. Shampoo的尽头是Muon",
+    "filename": "kexue.fm/archives/11917",
+    "kind": "web",
+    "url": "https://kexue.fm/archives/11917"
+   },
+   {
+    "title": "Muon: An optimizer for hidden layers in neural networks | Keller Jordan blog",
+    "filename": "kellerjordan.github.io/posts/muon",
+    "kind": "web",
+    "url": "https://kellerjordan.github.io/posts/muon/"
+   },
+   {
+    "title": "On-Policy Distillation",
+    "filename": "thinkingmachines.ai/blog/on-policy-distillation",
+    "kind": "web",
+    "url": "https://thinkingmachines.ai/blog/on-policy-distillation/"
+   },
+   {
+    "title": "Scaling Native Multimodal Pre-Training From Scratch (2607.22043v1)",
+    "filename": "2607.22043v1.pdf",
+    "kind": null
+   },
+   {
+    "title": "Chinchilla (2203.15556v1)",
+    "filename": "Chinchilla (2203.15556v1).pdf",
+    "kind": null
+   },
+   {
+    "title": "Test-Time Scaling Makes Overtraining Compute-Optimal",
+    "filename": "⭐️ Test-Time Scaling Makes Overtraining Compute-Optimal (2604.01411v1).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws for Native Multimodal Models (2504.07951v4)",
+    "filename": "Scaling Laws for Native Multimodal Models (2504.07951v4).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2)",
+    "filename": "Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2).pdf",
+    "kind": null
+   },
+   {
+    "title": "Why Larger Models Learn More (2605.29548v2)",
+    "filename": "Why Larger Models Learn More (2605.29548v2).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws, Carefully",
+    "filename": "lilianweng.github.io/posts/2026-06-24-scaling-laws",
+    "kind": "web",
+    "url": "https://lilianweng.github.io/posts/2026-06-24-scaling-laws/"
+   },
+   {
+    "title": "Small-Scale Experiments: Are We There Yet?",
+    "filename": "2608.11859.pdf",
+    "kind": null
+   }
+  ],
+  "sources": [],
+  "opens": {
+   "Eqs. (2)–(3), p. 6": "Chinchilla (2203.15556v1)",
+   "Figure 22, p. 17": "Scaling Laws for Native Multimodal Models (2504.07951v4)",
+   "§3 setup, p. 3": "Scaling Laws for Native Multimodal Models (2504.07951v4)",
+   "Appendix C.1": "Scaling Laws for Native Multimodal Models (2504.07951v4)",
+   "Eqs. (1)–(2), p. 3": "Test-Time Scaling Makes Overtraining Compute-Optimal",
+   "§3.1, pp. 3–4": "Test-Time Scaling Makes Overtraining Compute-Optimal",
+   "Figure 2, p. 6": "Test-Time Scaling Makes Overtraining Compute-Optimal"
+  },
+  "answer": "**Chinchilla optimizes pretraining loss; Scaling Laws for Native Multimodal Models applies that logic with architecture- and mixture-specific costs; Test-Time Scaling optimizes downstream performance after repeated sampling, which favors smaller models trained longer.** The important distinction is what “optimal” means—not simply a different tokens-per-parameter ratio.\n\nPage numbers below are the PDF page numbers in your stored versions. I use \\(N\\) for parameters, \\(D\\) for training tokens, and \\(C\\) for training FLOPs.\n\n## 1. Chinchilla: minimize pretraining loss at fixed training FLOPs\n\nThe allocation problem is explicitly\n\\[\n(N_{\\mathrm{opt}},D_{\\mathrm{opt}})\n=\\arg\\min_{N,D:\\,\\mathrm{FLOPs}(N,D)=C}L(N,D).\n\\]\nIts three estimation methods agree approximately on **scaling parameters and training tokens equally as compute increases**. This is a scaling rule, not a claim that compute is divided into two independent spending pots: increasing \\(N\\) makes each training token more expensive. (*Chinchilla (2203.15556v1)*, Eq. (1), p. 2; §3.4, p. 7.)\n\n### Where the allocation is established\n\n| Open here | What it establishes |\n|---|---|\n| **Eq. (1), p. 2** | The fixed-training-compute optimization objective. |\n| **§3.1 and Figure 2, p. 5** | **Training-curve envelope:** vary training duration for each model size, select the lowest-loss run at each FLOP budget, then fit \\(N_{\\mathrm{opt}}\\propto C^a\\), \\(D_{\\mathrm{opt}}\\propto C^b\\). Finds **\\(a=0.50,\\ b=0.50\\)**. |\n| **§3.2, pp. 5–6; Figure 3, p. 6** | **IsoFLOP profiles:** at each fixed budget, vary model size and adjust token count accordingly. Fit a parabola to the loss valley, then power laws through the optima. Finds **\\(a=0.49,\\ b=0.51\\)**. |\n| **§3.3, Eqs. (2)–(3), p. 6; Eq. (4) and Figure 4, p. 7** | **Parametric loss fit:** fit loss as a function of \\(N,D\\), then minimize it under \\(C\\approx6ND\\). Finds **\\(a=0.46,\\ b=0.54\\)**. |\n| **§3.4, p. 7; Table 2, p. 8** | The comparison of all three methods and their allocation exponents. |\n| **Table 3, p. 8** | Concrete parameter–token–compute recommendations from Approach 1: e.g. **1B parameters / 20.2B tokens**, or **67B / 1.5T tokens**. |\n\nThe explicit analytical rule is:\n\\[\n\\widehat L(N,D)=E+\\frac{A}{N^\\alpha}+\\frac{B}{D^\\beta},\n\\]\n\\[\nN_{\\mathrm{opt}}=G(C/6)^{\\beta/(\\alpha+\\beta)},\\qquad\nD_{\\mathrm{opt}}=G^{-1}(C/6)^{\\alpha/(\\alpha+\\beta)},\n\\]\nwhere \\(G=(\\alpha A/\\beta B)^{1/(\\alpha+\\beta)}\\). These are **Eq. (2), p. 6, and Eq. (4), p. 7**. The familiar “roughly 20 tokens per parameter” is a practical approximation illustrated by Table 3—not the formal optimization objective. (*Chinchilla (2203.15556v1)*, pp. 6–8.)\n\n## 2. Scaling Laws for Native Multimodal Models: the same loss trade-off, conditional on architecture and data\n\nThis paper fits the same loss form, but **\\(D\\) counts multimodal tokens**, and the compute model distinguishes early fusion from late fusion:\n\\[\nC_{\\mathrm{early}}=6ND,\\qquad\nC_{\\mathrm{late}}=6(N_vD_v+ND).\n\\]\nHere \\(N_v,D_v\\) describe the separate vision encoder and its tokens; for MoEs, \\(N\\) counts **active**, not total, parameters. It minimizes predicted validation loss at each compute budget and then regresses allocation power laws. (*Scaling Laws for Native Multimodal Models (2504.07951v4)*, Table 1 and §2.2, p. 2; §3.1, p. 4; Appendix C.2, p. 17.)\n\n### Where the allocation is established\n\n| Open here | What it establishes |\n|---|---|\n| **Table 1 and §2.2, p. 2; Eq. (1), p. 3** | Definitions, architecture-specific FLOPs accounting, and \\(L=E+A/N^\\alpha+B/D^\\beta\\). |\n| **§3 setup, p. 3; Appendix C.1, Eq. (2), p. 17** | How the loss coefficients are fitted: L-BFGS with Huber loss in log space and multiple initializations. |\n| **§3.1, p. 4; Table 2, p. 3** | For **dense early fusion, average validation loss**: **\\(N_{\\mathrm{opt}}\\propto C^{0.5262}\\)** and **\\(D_{\\mathrm{opt}}\\propto C^{0.473}\\)**. Approximately balanced growth, slightly faster for parameters. |\n| **Appendix C.2, Table 9 and Figure 22, p. 17** | The actual allocation procedure: enumerate token counts, compute corresponding affordable model sizes, evaluate fitted loss, select its minimum, and regress the optima. Table 9 compares numerical regression with the early-fusion closed form. |\n| **Figure 1, p. 1; “Compute-optimal trade-offs for early vs. late fusion,” §3.1, p. 5** | The architectural comparison: **late fusion favors more parameters; early fusion favors more training tokens** at the same compute budget. Figure 1’s lower panel plots \\(N/D\\). |\n| **§3.2, Table 3 and Figure 5, p. 5** | Mixture dependence. For caption–interleaved–text mixtures, reported \\((a,b)\\) change from **\\((0.527,0.474)\\)** at 45–45–10 to **\\((0.582,0.423)\\)** at 20–40–40. |\n| **§4.2 and Figure 9, p. 6; Table 2, p. 3** | Sparse early fusion changes the balance: **\\(a=0.361,\\ b=0.656\\)**, so tokens grow faster than active parameters. Figure 9 shows the supporting loss-versus-compute fit; Table 2 contains the allocation exponents. |\n\n**A numerical inconsistency matters if you want to reuse the late-fusion coefficients.** Table 2 reports \\(a=0.6358,\\ b=0.4619\\), while Figure 22 labels the late-fusion parameter exponent \\(0.628\\); Figure 1 and §3.1 instead report \\(N/D\\propto C^{0.076}\\), which does not equal either reported \\(a-b\\). Appendix C.2 also distinguishes decoder size from the encoder-inclusive accounting. The qualitative architectural trade-off is stated consistently, but these numbers should not be treated as one internally consistent coefficient set without resolving the discrepancy. (*Scaling Laws for Native Multimodal Models (2504.07951v4)*, pp. 1–3, 5, 17.)\n\n## 3. Test-Time Scaling Makes Overtraining Compute-Optimal: optimize the model **and its sampling budget**\n\nThis paper changes the objective. It chooses \\(N,D\\), and the number of inference attempts \\(k\\), to minimize task loss or maximize pass@\\(k\\)—the probability that at least one of \\(k\\) independent samples succeeds.\n\nCrucially, its formal optimization has **two separate constraints**, not one freely transferable training-plus-inference pool:\n\\[\n6ND\\le C_{\\mathrm{train}},\\qquad 2Nk\\le C_{\\mathrm{inf}}.\n\\]\nAt fixed inference budget,\n\\[\nk=\\frac{C_{\\mathrm{inf}}}{2N}.\n\\]\nThus a smaller model gets more attempts. Its optimum trades weaker individual samples against more sampling, while spending the fixed training budget on more tokens. (*Test-Time Scaling Makes Overtraining Compute-Optimal*, §3, Eqs. (1)–(2), p. 3; §3.3, p. 5.)\n\n### Where the allocation is established\n\n| Open here | What it establishes |\n|---|---|\n| **§3, Eqs. (1)–(2), p. 3** | Joint optimization over \\(N,D,k\\), with separate training and inference budgets. |\n| **§3.1, pp. 3–4** | **Approach 1, loss model:** \\(\\widehat L(N,D,k)=E+A/N^\\alpha+B/D^\\beta+G/k^\\gamma\\). The displayed model equation on p. 4 is **unnumbered**. |\n| **§3.2, pp. 4–5** | **Approach 2, accuracy model:** model per-question success probabilities with a Beta distribution, then predict mean pass@\\(k\\). The final Beta-function expression is **unnumbered, p. 5**. |\n| **§3.3, pp. 5–6** | The decisive inference-cost correction: substitute \\(k=C_{\\mathrm{inf}}/(2N)\\) into both objectives. The corrected loss expression is on **p. 5**; corrected accuracy expression on **p. 6**. |\n| **§4.1, pp. 6–7; Figure 2, p. 6** | Forecasts of optimal **\\(D/N\\), \\(N\\), and \\(D\\)** versus training compute. Both approaches favor smaller, longer-trained models; the setup uses **\\(C_{\\mathrm{inf}}=140\\)B FLOPs per token**. |\n| **Figure 3 and §4.1 setup/results, p. 7** | The within-suite evidence: single-pass versus inference-corrected IsoFLOP profiles, with **\\(C_{\\mathrm{inf}}=2\\times10^9\\)** FLOPs per token. The optimum shifts toward smaller models. |\n| **§4.2, Figure 4 and Table 1, p. 8** | Checkpoint validation beyond fitted standard-training runs. Table 1 compares empirical best overtrained versus Chinchilla-optimal checkpoints at matched training and inference budgets. |\n\nUnlike Chinchilla’s Table 2, this paper does **not establish one universal replacement pair** \\(N\\propto C^a,\\ D\\propto C^b\\). Its optimum depends on the task-performance fit and the specified inference budget. For example, Table 1 reports LAMBADA pass@\\(k\\) of **49.90% for a 37M overtrained model versus 27.30% for a 455M Chinchilla-optimal model** at the table’s matched budgets. But all evaluated models are below 1B parameters; the large-compute allocation curves in Figure 2 are extrapolations, not large-scale training demonstrations. (*Test-Time Scaling Makes Overtraining Compute-Optimal*, §4, p. 6; §4.1, p. 7; Table 1 and §4.2, p. 8.)"
+ },
+ {
+  "name": "A Memory answer that links the public originals of library pages, and cites Chinese sections",
+  "scope": "memory",
+  "current": null,
+  "papers": [
+   {
+    "title": "Transformer升级之路：2、博采众长的旋转式位置编码 - 科学空间",
+    "filename": "spaces.ac.cn/archives/8265",
+    "kind": "web",
+    "url": "https://spaces.ac.cn/archives/8265"
+   },
+   {
+    "title": "Chimera: Designing and Chinchilla-Scaling Hybrid Visual Diffusion Transformers",
+    "filename": "Chimera - Designing and Chinchilla-Scaling Hybrid Visual DiT (2607.28611v1).pdf",
+    "kind": null
+   },
+   {
+    "title": "Why We Think",
+    "filename": "lilianweng.github.io/posts/2025-05-01-thinking",
+    "kind": "web",
+    "url": "https://lilianweng.github.io/posts/2025-05-01-thinking/"
+   },
+   {
+    "title": "Alisa’s book of LLMs",
+    "filename": "alisawuffles.notion.site/alisa-s-book-of-llms",
+    "kind": "web",
+    "url": "https://alisawuffles.notion.site/alisa-s-book-of-llms"
+   },
+   {
+    "title": "vLLM-Omni tech report (2610.09307v1)",
+    "filename": "2610.09307v1.pdf",
+    "kind": null
+   },
+   {
+    "title": "DeepSeek V4.1 Flash 大规模推理部署实践",
+    "filename": "zhuanlan.zhihu.com/p/2095560295930508953",
+    "kind": "web",
+    "url": "https://zhuanlan.zhihu.com/p/2095560295930508953"
+   },
+   {
+    "title": "Muon优化器赏析：从向量到矩阵的本质跨越",
+    "filename": "kexue.fm/archives/10592",
+    "kind": "web",
+    "url": "https://kexue.fm/archives/10592"
+   },
+   {
+    "title": "慢即是快：1. Shampoo的尽头是Muon",
+    "filename": "kexue.fm/archives/11917",
+    "kind": "web",
+    "url": "https://kexue.fm/archives/11917"
+   },
+   {
+    "title": "Muon: An optimizer for hidden layers in neural networks | Keller Jordan blog",
+    "filename": "kellerjordan.github.io/posts/muon",
+    "kind": "web",
+    "url": "https://kellerjordan.github.io/posts/muon/"
+   },
+   {
+    "title": "On-Policy Distillation",
+    "filename": "thinkingmachines.ai/blog/on-policy-distillation",
+    "kind": "web",
+    "url": "https://thinkingmachines.ai/blog/on-policy-distillation/"
+   },
+   {
+    "title": "Scaling Native Multimodal Pre-Training From Scratch (2607.22043v1)",
+    "filename": "2607.22043v1.pdf",
+    "kind": null
+   },
+   {
+    "title": "Chinchilla (2203.15556v1)",
+    "filename": "Chinchilla (2203.15556v1).pdf",
+    "kind": null
+   },
+   {
+    "title": "Test-Time Scaling Makes Overtraining Compute-Optimal",
+    "filename": "⭐️ Test-Time Scaling Makes Overtraining Compute-Optimal (2604.01411v1).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws for Native Multimodal Models (2504.07951v4)",
+    "filename": "Scaling Laws for Native Multimodal Models (2504.07951v4).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2)",
+    "filename": "Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2).pdf",
+    "kind": null
+   },
+   {
+    "title": "Why Larger Models Learn More (2605.29548v2)",
+    "filename": "Why Larger Models Learn More (2605.29548v2).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws, Carefully",
+    "filename": "lilianweng.github.io/posts/2026-06-24-scaling-laws",
+    "kind": "web",
+    "url": "https://lilianweng.github.io/posts/2026-06-24-scaling-laws/"
+   },
+   {
+    "title": "Small-Scale Experiments: Are We There Yet?",
+    "filename": "2608.11859.pdf",
+    "kind": null
+   }
+  ],
+  "sources": [],
+  "opens": {
+   "§Definition": "Muon: An optimizer for hidden layers in neural networks | Keller Jordan blog",
+   "§Orthogonal-SGDM": "Muon: An optimizer for hidden layers in neural networks | Keller Jordan blog",
+   "§算法初探": "Muon优化器赏析：从向量到矩阵的本质跨越",
+   "范数视角": "Muon优化器赏析：从向量到矩阵的本质跨越",
+   "§矩阵优化": "慢即是快：1. Shampoo的尽头是Muon",
+   "延伸说明.": "慢即是快：1. Shampoo的尽头是Muon"
+  },
+  "answer": "**Two write-ups define the update and explain Newton–Schulz; the third, *慢即是快：1. Shampoo的尽头是Muon*, supplies a different theoretical justification but does not derive the Newton–Schulz algorithm.** All three are web articles, so section headings—not page numbers—are the exact opening points.\n\nI checked their public originals because the stored library sections could not be opened directly. The links below are outside-library copies of the same write-ups.\n\n## 1. *Muon: An optimizer for hidden layers in neural networks | Keller Jordan blog*\n\n**Where to open**\n- **[§Definition](https://kellerjordan.github.io/posts/muon/#definition):** the Muon algorithm image and executable `newtonschulz5` routine.\n- **[§The design of Muon](https://kellerjordan.github.io/posts/muon/#the-design-of-muon):** defines the target as the nearest semi-orthogonal matrix to the SGD-momentum update, written as \\(UV^\\top\\) using its SVD.\n- **[§Proving that NS iteration orthogonalizes the update](https://kellerjordan.github.io/posts/muon/#proving-that-ns-iteration-orthogonalizes-the-update):** shows that the matrix polynomial preserves singular vectors and transforms singular values by\n  \\[\n  \\varphi(s)=as+bs^3+cs^5.\n  \\]\n- **[§Tuning the coefficients](https://kellerjordan.github.io/posts/muon/#tuning-the-coefficients):** explains the practical coefficients \\((3.4445,-4.7750,2.0315)\\) and five-step approximation.\n\n**Why orthogonalize momentum?** In **[§Why is it good to orthogonalize the update?](https://kellerjordan.github.io/posts/muon/#why-is-it-good-to-orthogonalize-the-update)**, Jordan reports observing highly ill-conditioned updates and **speculates** that orthogonalization boosts small but useful “rare directions.” This is a proposed explanation, not a demonstrated causal mechanism. **[§Shampoo](https://kellerjordan.github.io/posts/muon/#shampoo)** supplies an algebraic connection: remove Shampoo’s preconditioner accumulation to obtain an orthogonalized gradient; add momentum **before** orthogonalization to recover Muon. **[§Orthogonal-SGDM](https://kellerjordan.github.io/posts/muon/#orthogonal-sgdm)** separately reports that momentum-before-orthogonalization performed better than the opposite ordering.\n\n## 2. *Muon优化器赏析：从向量到矩阵的本质跨越*\n\n**Where to open**\n- **[§算法初探](https://kexue.fm/archives/10592#算法初探):** explicitly defines\n  \\[\n  M_t=\\beta M_{t-1}+G_t,\\qquad\n  W_t=W_{t-1}-\\eta_t\\bigl[\\operatorname{msign}(M_t)+\\lambda W_{t-1}\\bigr],\n  \\]\n  with \\(\\operatorname{msign}(M)=U_rV_r^\\top\\): replace nonzero singular values by one. It also states the Nesterov variant.\n- **[§符号函数](https://kexue.fm/archives/10592#符号函数):** gives the inverse-square-root identity behind the operation and its nearest-orthogonal interpretation.\n- **[§迭代求解](https://kexue.fm/archives/10592#迭代求解):** derives a Newton–Schulz-style quintic iteration from a Taylor expansion of the inverse square root.\n- **[§收敛加速](https://kexue.fm/archives/10592#收敛加速):** reduces the iteration to scalar singular-value dynamics and investigates coefficient fitting for a fixed iteration count and matrix shape.\n\n**Why orthogonalize momentum?** **§算法初探** motivates it as adaptive normalization **in singular directions**, rather than independently in parameter coordinates. The more formal argument is in **[§范数视角](https://kexue.fm/archives/10592#范数视角)** and especially **[§矩阵范数](https://kexue.fm/archives/10592#矩阵范数)**: under a spectral-norm constraint, the direction maximizing alignment with the gradient is \\(\\operatorname{msign}(G)\\). The author then substitutes momentum as an estimate of the gradient.\n\n**Important qualification:** that derivation establishes the **direction**. The norm-penalized optimization also determines a gradient-dependent step magnitude, so it is not automatically identical to the displayed fixed-scale Muon update without adjusting the learning rate. Also, the Taylor-derived coefficients are **not** the practical coefficients above; the article explicitly distinguishes those derivations. (*Muon优化器赏析：从向量到矩阵的本质跨越*, §§迭代求解, 范数视角, 矩阵范数.)\n\n## 3. *慢即是快：1. Shampoo的尽头是Muon*\n\n**Where to open**\n- **[§矩阵优化](https://kexue.fm/archives/11917#矩阵优化):** defines the general two-sided preconditioned update \\(W-\\eta PGQ\\), explicitly covering **momentum-free** Muon and Shampoo variants—not a complete momentum-based Muon recipe.\n- **[§平均收敛](https://kexue.fm/archives/11917#平均收敛)** and **[§最慢下降](https://kexue.fm/archives/11917#最慢下降):** establish the convergence-bound motivation and the proposed **orthogonal slowest-descent** criterion.\n- **[§初步求解](https://kexue.fm/archives/11917#初步求解)** and **[§一般情形](https://kexue.fm/archives/11917#一般情形):** derive how optimizing preconditioner orientations removes their original eigenvectors, leaving an update expressed in the gradient’s singular-vector basis.\n- **[§趋于均衡](https://kexue.fm/archives/11917#趋于均衡):** gives the heuristic argument toward equalized singular values.\n- **[§延伸说明](https://kexue.fm/archives/11917#延伸说明):** states the assumptions and limitations.\n\n**Why orthogonalize?** Unlike the earlier essay’s **locally steepest direction**, this article argues from a **worst-case convergence bound**: with preconditioner eigenvalues fixed and rotations assumed to vary slowly, choose orientations that reduce the bound’s gradient quadratic term. Its subsequent matrix analysis points toward spectral equalization. It does **not** derive exactly unit singular values in the general case, nor establish why momentum must precede orthogonalization. The author explicitly describes the conclusion as heuristic and notes that a smaller bound does not guarantee faster training. (*慢即是快：1. Shampoo的尽头是Muon*, §§最慢下降, 趋于均衡, 延伸说明.)\n\n**The distinction to keep:** Jordan explains the **practical recipe and empirical motivation**; the first Su essay supplies the **spectral-norm direction argument and numerical approximation analysis**; the second supplies a **conditional convergence-bound argument for spectral reshaping**, not another Newton–Schulz implementation. I verified these locations in the public originals, but could not confirm that every section is identical in your stored snapshots."
+ },
+ {
+  "name": "A Memory answer comparing two projects’ papers, one whose title names the other",
+  "scope": "memory",
+  "current": null,
+  "papers": [
+   {
+    "title": "Transformer升级之路：2、博采众长的旋转式位置编码 - 科学空间",
+    "filename": "spaces.ac.cn/archives/8265",
+    "kind": "web",
+    "url": "https://spaces.ac.cn/archives/8265"
+   },
+   {
+    "title": "Chimera: Designing and Chinchilla-Scaling Hybrid Visual Diffusion Transformers",
+    "filename": "Chimera - Designing and Chinchilla-Scaling Hybrid Visual DiT (2607.28611v1).pdf",
+    "kind": null
+   },
+   {
+    "title": "Why We Think",
+    "filename": "lilianweng.github.io/posts/2025-05-01-thinking",
+    "kind": "web",
+    "url": "https://lilianweng.github.io/posts/2025-05-01-thinking/"
+   },
+   {
+    "title": "Alisa’s book of LLMs",
+    "filename": "alisawuffles.notion.site/alisa-s-book-of-llms",
+    "kind": "web",
+    "url": "https://alisawuffles.notion.site/alisa-s-book-of-llms"
+   },
+   {
+    "title": "vLLM-Omni tech report (2610.09307v1)",
+    "filename": "2610.09307v1.pdf",
+    "kind": null
+   },
+   {
+    "title": "DeepSeek V4.1 Flash 大规模推理部署实践",
+    "filename": "zhuanlan.zhihu.com/p/2095560295930508953",
+    "kind": "web",
+    "url": "https://zhuanlan.zhihu.com/p/2095560295930508953"
+   },
+   {
+    "title": "Muon优化器赏析：从向量到矩阵的本质跨越",
+    "filename": "kexue.fm/archives/10592",
+    "kind": "web",
+    "url": "https://kexue.fm/archives/10592"
+   },
+   {
+    "title": "慢即是快：1. Shampoo的尽头是Muon",
+    "filename": "kexue.fm/archives/11917",
+    "kind": "web",
+    "url": "https://kexue.fm/archives/11917"
+   },
+   {
+    "title": "Muon: An optimizer for hidden layers in neural networks | Keller Jordan blog",
+    "filename": "kellerjordan.github.io/posts/muon",
+    "kind": "web",
+    "url": "https://kellerjordan.github.io/posts/muon/"
+   },
+   {
+    "title": "On-Policy Distillation",
+    "filename": "thinkingmachines.ai/blog/on-policy-distillation",
+    "kind": "web",
+    "url": "https://thinkingmachines.ai/blog/on-policy-distillation/"
+   },
+   {
+    "title": "Scaling Native Multimodal Pre-Training From Scratch (2607.22043v1)",
+    "filename": "2607.22043v1.pdf",
+    "kind": null
+   },
+   {
+    "title": "Chinchilla (2203.15556v1)",
+    "filename": "Chinchilla (2203.15556v1).pdf",
+    "kind": null
+   },
+   {
+    "title": "Test-Time Scaling Makes Overtraining Compute-Optimal",
+    "filename": "⭐️ Test-Time Scaling Makes Overtraining Compute-Optimal (2604.01411v1).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws for Native Multimodal Models (2504.07951v4)",
+    "filename": "Scaling Laws for Native Multimodal Models (2504.07951v4).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2)",
+    "filename": "Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2).pdf",
+    "kind": null
+   },
+   {
+    "title": "Why Larger Models Learn More (2605.29548v2)",
+    "filename": "Why Larger Models Learn More (2605.29548v2).pdf",
+    "kind": null
+   },
+   {
+    "title": "Scaling Laws, Carefully",
+    "filename": "lilianweng.github.io/posts/2026-06-24-scaling-laws",
+    "kind": "web",
+    "url": "https://lilianweng.github.io/posts/2026-06-24-scaling-laws/"
+   },
+   {
+    "title": "Small-Scale Experiments: Are We There Yet?",
+    "filename": "2608.11859.pdf",
+    "kind": null
+   }
+  ],
+  "sources": [],
+  "opens": {
+   "Eq. (29), p. 15": "Chimera: Designing and Chinchilla-Scaling Hybrid Visual Diffusion Transformers",
+   "Figure 9": "Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2)",
+   "Appendix D": "Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2)",
+   "Figure 12, p. 29": "Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2)"
+  },
+  "answer": "**Chimera fits a loss surface and a compute-optimal parameter–token frontier; Ant Group first fits a model–data allocation frontier, then fits a separate law for MoE’s efficiency relative to dense models.** Their headline scaling laws therefore predict different things.\n\nBelow, page numbers refer to your stored PDFs. I checked the main fitting passages directly; the appendix locations I could not verify are marked explicitly.\n\n## 1. Chimera: Designing and Chinchilla-Scaling Hybrid Visual Diffusion Transformers\n\n### What it fits—and how\n\nChimera holds the high-level architecture fixed and varies model scale and training duration. It measures **diffusion training loss**, with \\(N\\) counting **activated parameters** and \\(D\\) counting **visual latent positions processed**, rather than text tokens. It uses three estimators:\n\n1. **Training-curve envelope:** select the lowest-loss checkpoint at each compute budget, then regress power laws for its model size and token count.\n2. **IsoFLOP profiles:** slice training trajectories at fixed compute, fit a local quadratic in \\(\\log N\\), and regress power laws through the profile minima.\n3. **Parametric loss surface:** fit\n   \\[\n   \\widehat L(N,D)=E+\\frac{A}{N^a}+\\frac{B}{D^b},\n   \\]\n   then minimize it under \\(C\\approx6ND\\).\n\nThe first two use **logged per-step FLOPs** to locate checkpoints and recover token counts; the third uses the approximate analytical compute constraint. That distinction matters when reproducing the fits. (*Chimera: Designing and Chinchilla-Scaling Hybrid Visual Diffusion Transformers*, §4.2, p. 15; §5.3, pp. 19–21.)\n\n### Exact places to read\n\n| Location | What to look for |\n|---|---|\n| **§4.2 “Chinchilla Laws for Chimera,” Eq. (29), p. 15** | The loss model, definitions of \\(N,D\\), rationale for diffusion loss rather than FID, and \\(C\\approx6ND\\). The preceding paragraph specifies which architectural settings remain fixed. |\n| **§5.1 training setup, p. 17; Figure 6, p. 17** | Warmup-then-constant learning rate, which makes intermediate checkpoints usable as shorter training runs; model-family coverage. The family is **not a strict fixed-aspect-ratio ladder**. |\n| **§5.2, Figure 7, pp. 18–19** | Why they transfer hyperparameters with HeteroP before fitting: learning-rate sweeps across width and depth, followed by fixing \\(\\eta_{\\mathrm{base}}=10^{-3}\\) for the scaling study. |\n| **§5.3 “Compute-Optimal Scaling Laws,” pp. 19–21** | The complete estimator procedure. The envelope and quadratic-profile construction is explained on **p. 20**; the direct parametric fitting recipe is on **p. 21**. |\n| **Figure 8, p. 19** | Image results: envelope trajectories and frontier in **(a–c)**; IsoFLOP profiles and frontier in **(d–f)**. |\n| **Figure 9, p. 20** | Corresponding video results. Its caption distinguishes quadratic-profile minima from observed minima at boundary slices. |\n| **Eqs. (30)–(31), p. 21** | The actual fitted image and video loss surfaces, followed by allocation exponents and uncertainty estimates. |\n| **§5.6, discussion on p. 28; Figure 20, p. 29** | Sensitivity to parameterization: redoing the study without HeteroP shifts the inferred frontier toward larger, more undertrained models. |\n\n**The most reproducible fitting specification is the “Parametric loss fit” paragraph on p. 21:** Huber loss on **log-loss residuals**, \\(\\delta=10^{-3}\\), optimized by **L-BFGS-B** from **4,500 initializations**, with an additional initialization grid for video. Images use 696 sampled checkpoints from 36 runs; video uses the terminal checkpoints of 30 runs. (*Chimera: Designing and Chinchilla-Scaling Hybrid Visual Diffusion Transformers*, §5.3, p. 21.)\n\nThe fitted surfaces imply \\(N_{\\mathrm{opt}}\\propto C^{0.516}\\) for images and \\(C^{0.544}\\) for video. But the video exponent’s **80% bootstrap interval is [0.47, 0.80]**: the authors treat that fit as confirming a direction, not precisely locating the exponent. The envelope and IsoFLOP estimates supply the separate cross-checks. (*Chimera: Designing and Chinchilla-Scaling Hybrid Visual Diffusion Transformers*, p. 21.)\n\n**Tables and appendix:** §5.3 points to **Table 4** for the model family, and Figure 6 points to **Appendix B** for exact configurations. I could verify those references, but not Table 4’s page or Appendix B’s contents/page range. The numerical scaling-fit coefficients are in **Eqs. (30)–(31)**, not in a coefficient table.\n\n## 2. Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2)\n\n### What it fits—and how\n\nThere are **three distinct fitting stages**, which should not be conflated:\n\n- **Training hyperparameters:** fit optimal learning rate and batch size against compute.\n- **Model–data allocation:** identify minimum-loss \\((M,D)\\) pairs at fixed compute and fit their allocation laws. Here \\(M\\) is a **per-token computational scale**, not parameter count.\n- **Efficiency Leverage (EL):** fit how the dense-to-MoE equal-loss compute ratio varies with activation ratio \\(A\\), expert granularity \\(G\\), and compute \\(C\\).\n\nUnlike Chimera’s main loss surface, the final joint law predicts **relative compute efficiency**, not raw language-model loss. (*Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2)*, §§2.2–3, pp. 4–7; §4.2, pp. 13–15.)\n\n### Exact places to read\n\n| Location | What to look for |\n|---|---|\n| **§2.1, Eq. (2), p. 4** | Definitions of activation ratio, sharing ratio, expert granularity, and computational scale \\(M\\); accounting convention \\(C=MD\\). |\n| **§2.2, Eq. (3), Figure 2, p. 5; Figure 3, p. 6** | Hyperparameter fits. They select configurations within **0.25% of minimum loss**, remove outliers, and fit learning-rate/batch-size laws; Figure 3 checks transfer across activation ratios. |\n| **§2.3 “Scaling laws for MoE Optimal Model-Data Allocation,” Eq. (4), p. 6** | The allocation optimization and its scope: a preliminary configuration with four selected routed experts out of 64, plus one shared expert. |\n| **Table 1 and Figure 4, p. 7** | Allocation coefficients and fitted frontiers: MoE \\(M_{\\mathrm{opt}}\\propto C^{0.5095}\\), \\(D_{\\mathrm{opt}}\\propto C^{0.4905}\\); dense \\(C^{0.5422}\\), \\(C^{0.4578}\\). |\n| **§3, Definition 3.1, Eq. (5), p. 7** | EL as the ratio of dense to MoE compute required for equal loss, comparing architecture families rather than individual parameter counts. |\n| **§4.2.1, Eq. (10), p. 13** | Activation-ratio power law and its saturating transformation \\(\\widehat A\\). |\n| **§4.2.1, Eqs. (11)–(12), Figure 8, p. 14** | Separate empirical dependencies: log-polynomial dependence on granularity and power-law dependence on compute. |\n| **§4.2.2, Eq. (13), Figure 9, p. 15** | Joint EL law, optimization method, and fitting-versus-validation split. |\n| **Table 2, p. 16** | The six fitted coefficients for the joint law. |\n| **Appendix C, continuation on p. 29, Eqs. (15)–(16)** | Component-level FLOPs accounting: MoE FFN cost and total forward cost. I did not verify the appendix’s opening page. |\n| **Appendix D, Figure 12, p. 29** | Routing-balance sensitivity: weakening balancing changes the preferred expert granularity. This qualifies the portability of the fitted architectural optimum. |\n\nThe final fit is\n\\[\nEL(A,G,C)=\\widehat A^{\\,a+d\\log C+\\gamma(\\log G)^2+\\beta\\log G}.\n\\]\nThey fit it with **Huber loss and BFGS**, using **EL < 6** points for fitting and the remaining points for validation. Figure 9 is therefore the key place to distinguish fitted observations from higher-leverage extrapolation checks. The fitting paragraph does not report a Huber threshold or initialization grid comparable to Chimera’s detailed recipe. (*Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2)*, §4.2.2, p. 15.)\n\n**Two cautions when reading:** Table 1’s allocation law applies to the preliminary MoE configuration, not all \\(A,G\\). Also, §4.2.2 calls \\(d\\) positive, while **Table 2 reports \\(d=-7.61\\times10^{-2}\\)**—an internal inconsistency to retain rather than silently correct. (*Scaling Laws for Efficient MoE Language Models - Ant Group (2507.17702v2)*, pp. 6, 15–16.)\n\n**Unchecked supporting details:** Appendix B is explicitly referenced for experimental model settings, but I could not verify its page range. I also did not check the intervening §3 derivation connecting measured loss comparisons to operational EL estimates; read that section alongside the final fitting equations if reconstructing the EL dataset."
+ }
+]

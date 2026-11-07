@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    // Explicit `.ts` specifiers, so `node --test --experimental-strip-types`
+    // resolves the shell modules by path.
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "verbatimModuleSyntax": true
+  },
+  "include": ["main/**/*.ts", "tests/**/*.mts", "scripts/**/*.mts"],
+  "exclude": ["vendor", "node_modules"]
+}

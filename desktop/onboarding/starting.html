@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Starting Delphi</title>
+<!--
+  The splash shown while the interpreter starts and the backend imports, which
+  on a first launch is not quick (see "Boundaries" in CLAUDE.md).
+
+  It was a data: URL, which defaults to US-ASCII and so rendered the ellipsis in
+  "Starting Delphi…" as mojibake. A real file with a charset cannot do that, and
+  it lets the window share the palette, the mark and the type of onboarding/
+  rather than being the one screen drawn in the browser's defaults.
+
+  Nothing here loads or scripts: the CSP is the onboarding one minus script-src,
+  and the window carries no preload.
+-->
+<style>
+  /* The reader's own type, at the same relative path as in onboarding/index.html. */
+  @font-face { font-family: "Plus Jakarta Sans"; font-weight: 400 800; src: url("../frontend/public/fonts/plus-jakarta-sans-variable.woff2") format("woff2"); }
+  @font-face { font-family: "Bricolage Grotesque"; font-weight: 200 800; src: url("../frontend/public/fonts/bricolage-grotesque-latin.woff2") format("woff2"); }
+  /* The brand palette of frontend/app/globals.css: burgundy, dawn, and the
+     three accents the Memory graph draws its nodes in. */
+  :root {
+    --clay: #5a2620; --dawn: #ee9d66;
+    --ink: #241412; --muted: #8c756e; --line: #efe7e4;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; display: grid; place-items: center;
+    font: 13px/1.5 "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--ink);
+    background: #fff;
+    -webkit-user-select: none; user-select: none;
+    cursor: default;
+  }
+  main { display: flex; flex-direction: column; align-items: center; gap: 22px; padding: 0 32px; }
+  /* A small memory graph gathering around the mark: the library is what is opening. */
+  .graph { display: block; }
+  .graph .node { transform-box: fill-box; transform-origin: center; animation: settle 2.4s ease-in-out infinite; }
+  .graph .node:nth-of-type(2) { animation-delay: .3s; }
+  .graph .node:nth-of-type(3) { animation-delay: .6s; }
+  .graph .node:nth-of-type(4) { animation-delay: .9s; }
+  .graph .node:nth-of-type(5) { animation-delay: 1.2s; }
+  h1 { margin: 0; font-family: "Bricolage Grotesque", -apple-system, sans-serif; font-size: 26px; font-weight: 600; letter-spacing: -0.02em; text-align: center; }
+  p { margin: 6px 0 0; color: var(--muted); text-align: center; }
+  .progress { position: relative; width: 120px; height: 3px; border-radius: 2px; background: #f3ecea; overflow: hidden; }
+  .progress i {
+    position: absolute; inset: 0; width: 45%; border-radius: 2px;
+    background: linear-gradient(90deg, var(--clay), var(--dawn));
+    animation: travel 1.6s cubic-bezier(.45, 0, .55, 1) infinite;
+  }
+  /* Only transform and opacity animate here — everything else repaints. */
+  @keyframes settle { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.18); opacity: .8; } }
+  @keyframes travel { from { transform: translateX(-100%); } to { transform: translateX(225%); } }
+  @media (prefers-reduced-motion: reduce) {
+    .graph .node, .progress i { animation: none; }
+    .progress i { transform: translateX(60%); }
+  }
+</style>
+</head>
+<body>
+<main>
+  <svg class="graph" width="132" height="84" viewBox="0 0 132 84" fill="none" aria-hidden="true">
+    <g stroke="#eadfdc" stroke-width="1.4">
+      <path d="M18 58 44 30M44 30 66 48M66 48 90 22M90 22 114 52M66 48 86 70M86 70 114 52M18 58 40 74"></path>
+    </g>
+    <circle class="node" cx="18" cy="58" r="5" fill="#f0b3a9"></circle>
+    <circle class="node" cx="44" cy="30" r="7" fill="#e0705f"></circle>
+    <circle class="node" cx="90" cy="22" r="7" fill="#8db4e2"></circle>
+    <circle class="node" cx="114" cy="52" r="5" fill="#e3a941"></circle>
+    <circle class="node" cx="86" cy="70" r="3.5" fill="#dccfcb"></circle>
+    <circle cx="40" cy="74" r="3.5" fill="#dccfcb"></circle>
+    <circle cx="66" cy="48" r="17" fill="#fff" stroke="#efe7e4" stroke-width="1.2"></circle>
+    <svg x="51" y="31" width="30" height="30" viewBox="0 0 120 120">
+      <mask id="gap" maskUnits="userSpaceOnUse" x="0" y="0" width="120" height="120">
+        <rect width="120" height="120" fill="#000"></rect>
+        <circle cx="60" cy="40" r="21" fill="#fff"></circle>
+        <path d="M60 44 L98 98 H22 Z" fill="#000" stroke="#000" stroke-width="12" stroke-linejoin="round" stroke-linecap="round"></path>
+      </mask>
+      <circle cx="60" cy="40" r="21" fill="#ee9d66" mask="url(#gap)"></circle>
+      <path d="M60 44 L98 98 H22 Z" fill="#5a2620" stroke="#5a2620" stroke-width="4" stroke-linejoin="round"></path>
+    </svg>
+  </svg>
+  <div>
+    <h1>Delphi</h1>
+    <p>Opening your library</p>
+  </div>
+  <div class="progress" role="progressbar" aria-label="Starting Delphi"><i></i></div>
+</main>
+</body>
+</html>

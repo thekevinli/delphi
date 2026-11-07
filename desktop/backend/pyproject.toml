@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools==80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "delphi-desktop"
+# Always core's version, and pinned to exactly that core: the two wheels are
+# built from one commit and installed together into the app's runtime
+# (desktop/build/python-runtime.sh). tests/test_desktop_app.py holds the three equal.
+version = "0.1.0"
+description = "The macOS app's layer over delphi-core"
+readme = {text = "The app Delphi.app runs: delphi-core's API on the local stores.", content-type = "text/plain"}
+requires-python = ">=3.11"
+license = "Apache-2.0"
+# The repository's LICENSE and NOTICE, copied beside this file by the wheel
+# build (desktop/build/backend-wheel.sh), as core's are.
+license-files = ["LICENSE", "NOTICE"]
+dependencies = ["delphi-core==0.1.0"]
+
+[tool.setuptools]
+include-package-data = false
+
+[tool.setuptools.packages.find]
+include = ["delphi_desktop", "delphi_desktop.*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

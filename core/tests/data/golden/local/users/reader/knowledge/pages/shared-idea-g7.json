@@ -1,0 +1,40 @@
+{
+  "id": "be6b09f56e504c3698b60cde",
+  "slug": "shared-idea-g7",
+  "createdAt": "2026-10-23T06:57:29.464796+00:00",
+  "revision": 2,
+  "kind": "concept",
+  "domain": "cache-research",
+  "title": "Shared idea g7",
+  "summary": "Understand exact prefix reuse and test its limitations.",
+  "body": "## Problem and approach\n\nPrefix caching reuses exact matching tokens before the changing question. [E1]\n\n## Evidence and limitations\n\nA stable prefix can reduce repeated work. Measure hit rate and repeated latency rather than assuming a universal speedup.\n\n## Reading route\n\nInspect the controlled comparison in [[shared-idea-study-g7-a]] and ask which confounders remain.\n\nThe same reuse is reported again. A stable prefix can reduce repeated work. [E2] The document that reports it has its own page, [[shared-idea-study-g7-b]].",
+  "tags": [],
+  "aliases": [],
+  "citations": [
+    {
+      "id": 1,
+      "claimType": "author-claim",
+      "paperId": "goldenpapera",
+      "page": 1,
+      "section": null,
+      "noteId": null,
+      "evidenceId": null
+    },
+    {
+      "id": 2,
+      "claimType": "author-claim",
+      "paperId": "goldenpaperb",
+      "page": 1,
+      "section": null,
+      "noteId": null,
+      "evidenceId": null
+    }
+  ],
+  "links": [
+    "shared-idea-study-g7-a",
+    "shared-idea-study-g7-b"
+  ],
+  "updatedAt": "2026-10-23T06:57:29.544813+00:00",
+  "sourcePaperId": "goldenpapera",
+  "sourceProjectId": "5fdf2b5c144f"
+}

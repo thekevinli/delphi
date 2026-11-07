@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Welcome to Delphi</title>
+<!--
+  The one screen that is not shared with the web app.
+
+  Delphi has no first-run experience because a deployed install is configured by
+  whoever deploys it. A local app has to ask, so this is deliberately ours: it is
+  small, it is the only thing the user sees before the product, and it must not
+  drag any of the reader's code in behind it.
+
+  The palette is delphi's own tokens (globals.css) so it does not look like a
+  different program.
+-->
+<style>
+  /* The reader's own type, read from the frontend's fonts, which sit at the
+     same relative path in the checkout and in the packaged Resources. */
+  @font-face { font-family: "Plus Jakarta Sans"; font-weight: 400 800; src: url("../frontend/public/fonts/plus-jakarta-sans-variable.woff2") format("woff2"); }
+  @font-face { font-family: "Bricolage Grotesque"; font-weight: 200 800; src: url("../frontend/public/fonts/bricolage-grotesque-latin.woff2") format("woff2"); }
+  /* The brand palette of frontend/app/globals.css: burgundy, with the dawn of
+     the mark for warmth. White ground, as the reader's own sheets are. */
+  :root {
+    --clay: #5a2620; --clay-dark: #3e1914; --dawn: #ee9d66;
+    --ink: #241412; --muted: #76625e; --faint: #8c756e; --wash: #f7f2f1;
+    --line: #efe7e4; --line-strong: #e0d4d0; --danger: #c4483c; --honey: #9a5b12;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    font: 14px/1.5 "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--ink);
+    background: #fff;
+    -webkit-user-select: none; user-select: none;
+  }
+  main { min-height: 100vh; display: flex; flex-direction: column; gap: 18px; padding: 72px 48px 28px; }
+  .intro { display: flex; flex-direction: column; align-items: center; gap: 14px; margin-bottom: 10px; text-align: center; }
+  h1 { margin: 0; font-family: "Bricolage Grotesque", -apple-system, sans-serif; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; }
+  p { margin: 0; }
+  .lede { color: var(--muted); font-size: 15px; }
+  [hidden] { display: none !important; }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  button, input, select { font: inherit; color: var(--ink); }
+  input, select {
+    height: 44px; padding: 0 14px; background: #fff;
+    border: 1px solid var(--line-strong); border-radius: 6px; outline: none;
+    -webkit-user-select: text; user-select: text;
+  }
+  input { width: 100%; }
+  input:focus, select:focus { border-color: var(--clay); box-shadow: 0 0 0 3px rgba(90, 38, 32, .12); }
+  /* One primary per state; while it works, its label says what is happening. */
+  .primary {
+    width: 100%; height: 48px; padding: 0 16px; display: flex; align-items: center; justify-content: center; gap: 10px;
+    font-size: 15px; font-weight: 600; color: #fff; background: var(--clay); border: 0; border-radius: 6px; cursor: pointer;
+  }
+  .primary:hover:not(:disabled) { background: var(--clay-dark); }
+  .primary:disabled { opacity: .55; cursor: default; }
+  .primary.is-busy::before {
+    content: ""; width: 14px; height: 14px; border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, .35); border-top-color: #fff; animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .quiet {
+    justify-self: center; height: 32px; padding: 0 12px; border: 0; border-radius: 6px; background: transparent;
+    font-size: 13px; font-weight: 500; color: var(--muted); cursor: pointer;
+  }
+  .quiet:hover:not(:disabled) { background: var(--wash); color: var(--ink); }
+  .quiet:disabled { opacity: .55; cursor: default; }
+  .quiet.start { justify-self: start; height: 24px; padding: 0 2px; font-size: 12px; color: var(--faint); }
+  /* Connections as cards, the chosen one ringed in burgundy on a dawn wash. */
+  .connections { display: grid; gap: 10px; }
+  .connections button {
+    display: flex; align-items: center; gap: 14px; width: 100%; padding: 14px 16px;
+    text-align: left; background: #fff; cursor: pointer;
+    border: 1px solid var(--line); border-radius: 7px;
+    box-shadow: inset 0 0 0 .5px transparent;
+  }
+  .connections button:hover:not(:disabled) { background: #fdfaf9; border-color: var(--line-strong); }
+  .connections button:disabled { cursor: default; }
+  .connections button[aria-pressed="true"],
+  .connections button[aria-pressed="true"]:hover:not(:disabled) {
+    background: #fef6ef; border-color: var(--clay); box-shadow: inset 0 0 0 .5px var(--clay);
+  }
+  .tile {
+    flex: none; width: 36px; height: 36px; display: grid; place-items: center;
+    border-radius: 5px; background: var(--wash); color: var(--faint);
+  }
+  [aria-pressed="true"] .tile { background: #fff; color: var(--clay); box-shadow: 0 0 0 1px #f1e3de; }
+  .tile svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .tile.is-subscription, [aria-pressed="true"] .tile.is-subscription { background: transparent; box-shadow: none; }
+  .tile img { display: block; width: 100%; height: 100%; object-fit: contain; }
+  .choice { flex: 1; display: grid; gap: 1px; }
+  .choice b { font-size: 15px; font-weight: 600; }
+  .choice small { font-size: 13px; color: var(--muted); }
+  .choice small.is-limited { color: var(--honey); }
+  .radio { flex: none; width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid #dccfcb; display: grid; place-items: center; }
+  [aria-pressed="true"] .radio { border: 0; background: var(--clay); }
+  .radio svg { width: 12px; height: 12px; fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; visibility: hidden; }
+  [aria-pressed="true"] .radio svg { visibility: visible; }
+  .panel { display: grid; gap: 10px; }
+  .error { font-size: 13px; color: var(--danger); }
+  .error:empty { display: none; }
+  .lead { font-size: 13px; color: var(--muted); }
+  .command { display: flex; align-items: center; gap: 8px; padding: 6px 6px 6px 12px; border: 1px solid var(--line-strong); border-radius: 6px; }
+  .command code { flex: 1; min-width: 0; overflow-x: auto; white-space: nowrap; font: 12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; -webkit-user-select: all; user-select: all; }
+  .command button { flex: none; height: 30px; padding: 0 12px; font-size: 13px; font-weight: 600; background: #fff; border: 1px solid var(--line-strong); border-radius: 6px; cursor: pointer; }
+  .command button:hover { border-color: var(--clay); }
+  .key-row { display: flex; gap: 8px; }
+  .provider { position: relative; flex: none; }
+  .provider select { width: 92px; padding: 0 26px 0 12px; font-size: 13px; font-weight: 600; appearance: none; -webkit-appearance: none; cursor: pointer; }
+  .provider svg { position: absolute; top: 17px; right: 10px; width: 10px; height: 10px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; pointer-events: none; }
+  .privacy {
+    margin-top: auto; display: flex; gap: 6px; align-items: center; justify-content: center;
+    font-size: 12px; color: var(--faint); text-align: center;
+  }
+  .privacy svg { flex: none; width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+</head>
+<body>
+<main>
+  <header class="intro">
+    <svg class="mark" width="64" height="64" viewBox="0 0 120 120" aria-hidden="true">
+      <mask id="gap" maskUnits="userSpaceOnUse" x="0" y="0" width="120" height="120">
+        <rect width="120" height="120" fill="#000"></rect>
+        <circle cx="60" cy="40" r="21" fill="#fff"></circle>
+        <path d="M60 44 L98 98 H22 Z" fill="#000" stroke="#000" stroke-width="12" stroke-linejoin="round" stroke-linecap="round"></path>
+      </mask>
+      <circle cx="60" cy="40" r="21" fill="#ee9d66" mask="url(#gap)"></circle>
+      <path d="M60 44 L98 98 H22 Z" fill="#5a2620" stroke="#5a2620" stroke-width="4" stroke-linejoin="round"></path>
+    </svg>
+    <h1 id="heading">Welcome to Delphi</h1>
+    <p id="lede" class="lede">Connect a model to start reading.</p>
+  </header>
+
+  <nav class="connections" aria-label="AI connection">
+    <button type="button" id="choose-chatgpt" aria-pressed="true">
+      <span class="tile is-subscription"><img src="../frontend/public/brand/chatgpt.png" width="36" height="36" alt="" aria-hidden="true"></span>
+      <span class="choice"><b>ChatGPT subscription</b><small id="chatgpt-detail">Plus or above</small></span>
+      <span class="radio" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"></path></svg></span>
+    </button>
+    <button type="button" id="choose-claude" aria-pressed="false">
+      <span class="tile is-subscription"><img src="../frontend/public/brand/claude.png" width="36" height="36" alt="" aria-hidden="true"></span>
+      <span class="choice"><b>Claude subscription</b><small id="claude-detail">Pro or above</small></span>
+      <span class="radio" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"></path></svg></span>
+    </button>
+    <button type="button" id="choose-api" aria-pressed="false">
+      <span class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="15" r="4"></circle><path d="m11 12 8-8M16 7l2.5 2.5M14 9l2 2"></path></svg></span>
+      <span class="choice"><b>API key</b><small id="api-detail">OpenAI or Claude, pay per use</small></span>
+      <span class="radio" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"></path></svg></span>
+    </button>
+  </nav>
+
+  <p id="error" class="error" role="alert"></p>
+  <p id="progress" class="visually-hidden" aria-live="polite"></p>
+
+  <section id="subscription-panel" class="panel" aria-label="Subscription">
+    <div id="claude-install" class="panel" hidden>
+      <p id="claude-install-lead" class="lead"></p>
+      <div class="command"><code id="claude-install-command"></code><button id="copy-install" type="button">Copy</button></div>
+      <button id="install-guide" class="quiet start" type="button">Installation guide</button>
+    </div>
+    <button id="subscription-go" class="primary" type="button"></button>
+    <button id="subscription-alt" class="quiet" type="button" hidden></button>
+  </section>
+  <form id="form" class="panel" aria-label="API key" hidden>
+    <div id="key-fields" class="panel">
+      <div class="key-row">
+        <span class="provider">
+          <select id="provider" aria-label="Provider">
+            <option value="openai">OpenAI</option>
+            <option value="claude">Claude</option>
+            <!-- Other providers will be reached through an OpenAI-compatible base URL. -->
+            <optgroup label="Coming soon">
+              <option value="other" disabled>Other endpoint</option>
+            </optgroup>
+          </select>
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6.4 4 3.6 4-3.6"></path></svg>
+        </span>
+        <input id="key" type="password" autocomplete="off" spellcheck="false" aria-label="API key">
+      </div>
+    </div>
+    <button id="go" class="primary" type="submit"></button>
+    <button id="new-key" class="quiet" type="button" hidden>Use a new key</button>
+  </form>
+
+  <p class="privacy">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3.5" y="7" width="9" height="6.5" rx="1.5"></rect><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"></path></svg>
+    Delphi data stays only on your Mac.
+  </p>
+</main>
+
+<script src="setup.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "8d9ae2e46f8c412f8d25bf34",
+    "kind": "document",
+    "marker": "paper:goldenpaperb",
+    "status": "pending",
+    "payload": {
+      "projectId": "5fdf2b5c144f",
+      "paperId": "goldenpaperb",
+      "fingerprint": "642259ec3e740f60df283dac7babc6a23c5130063eabc38d7f917708a2a043c9",
+      "targetVersion": "knowledge-v6"
+    },
+    "attempts": 0,
+    "leaseExpiresAt": null,
+    "retryAt": null,
+    "lastError": null,
+    "createdAt": "2026-10-23T06:57:30.030872+00:00",
+    "updatedAt": "2026-10-23T06:57:30.030872+00:00"
+  }
+]

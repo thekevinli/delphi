@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools==80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "delphi-core-testkit"
+# Always core's version, and pinned to exactly that core: the kit's tests are
+# core's contract at one release, and its golden snapshot is what that release
+# answered. `scripts/backend_release.py` refuses a kit that names another.
+version = "0.1.0"
+description = "The tests a store or an app built on delphi-core must pass"
+readme = {text = "Conformance tests, the golden Memory snapshot and the scripted provider for products built on delphi-core.", content-type = "text/plain"}
+requires-python = ">=3.11"
+license = "Apache-2.0"
+# The repository's LICENSE and NOTICE, copied beside this file by the build
+# (scripts/backend_release.py), as for core.
+license-files = ["LICENSE", "NOTICE"]
+dependencies = [
+  "delphi-core==0.1.0",
+  "pytest>=8.4,<9",
+  "pytest-asyncio>=1.1,<2",
+  # The scripted provider holds what it answers to the schema sent over the wire.
+  "jsonschema>=4,<5",
+]
+
+[tool.setuptools]
+include-package-data = false
+
+[tool.setuptools.packages.find]
+include = ["delphi_core_testkit", "delphi_core_testkit.*"]
+
+# The golden snapshot is read at run time, so it travels with the package.
+[tool.setuptools.package-data]
+delphi_core_testkit = ["data/golden/*.json"]

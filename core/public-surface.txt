@@ -1,0 +1,556 @@
+# The public surface of delphi_core (Plan 4 §2.3): what a product may import.
+# Rendered by `python -m delphi_core_testkit.abstraction surface render` (A3); never edit it by hand.
+
+delphi_core.app:Lifespan alias: collections.abc.Callable[[fastapi.applications.FastAPI], contextlib.AbstractAsyncContextManager[None]]
+delphi_core.app:Stores class: ()
+delphi_core.app:Stores.__init__ def: (self, storage: collections.abc.Callable[[delphi_core.settings.Settings], delphi_core.storage.Storage], objects: collections.abc.Callable[[delphi_core.settings.Settings], delphi_core.storage.ObjectStore], is_local: bool = False) -> None
+delphi_core.app:Stores.is_local field: bool
+delphi_core.app:Stores.local classmethod def: (cls) -> delphi_core.app.Stores
+delphi_core.app:Stores.objects required field: collections.abc.Callable[[delphi_core.settings.Settings], delphi_core.storage.ObjectStore]
+delphi_core.app:Stores.storage required field: collections.abc.Callable[[delphi_core.settings.Settings], delphi_core.storage.Storage]
+delphi_core.app:create_app def: (settings: delphi_core.settings.Settings, *, stores: delphi_core.app.Stores, routers: collections.abc.Sequence[fastapi.routing.APIRouter] = (), middleware: collections.abc.Sequence[starlette.middleware.Middleware] = (), lifespan: collections.abc.Sequence[collections.abc.Callable[[fastapi.applications.FastAPI], contextlib.AbstractAsyncContextManager[None]]] = ()) -> fastapi.applications.FastAPI
+delphi_core.app:get_current_user def: (delphi_session: str | None = Cookie(None), settings: delphi_core.settings.Settings = Depends(delphi_core.app.get_settings), storage: delphi_core.storage.Storage = Depends(delphi_core.app.get_storage)) -> str
+delphi_core.app:get_object_store def: (request: starlette.requests.Request, settings: delphi_core.settings.Settings = Depends(delphi_core.app.get_settings)) -> delphi_core.storage.ObjectStore
+delphi_core.app:get_settings def: (request: starlette.requests.Request) -> delphi_core.settings.Settings
+delphi_core.app:get_storage def: (request: starlette.requests.Request, settings: delphi_core.settings.Settings = Depends(delphi_core.app.get_settings)) -> delphi_core.storage.Storage
+delphi_core.settings:Settings class: (pydantic_settings.main.BaseSettings)
+delphi_core.settings:Settings.api_base_url property: str
+delphi_core.settings:Settings.api_key property: str
+delphi_core.settings:Settings.app_name field: str = 'Delphi'
+delphi_core.settings:Settings.artifact_max_artifacts field: int = 2
+delphi_core.settings:Settings.artifact_max_attempts field: int = 3
+delphi_core.settings:Settings.artifact_render_memory_mb field: int = 768
+delphi_core.settings:Settings.artifact_render_timeout_seconds field: float = 45
+delphi_core.settings:Settings.artifact_renderer_path field: str = ''
+delphi_core.settings:Settings.chat_image_max_per_question field: int = 2
+delphi_core.settings:Settings.chat_image_max_per_thread field: int = 50
+delphi_core.settings:Settings.chat_image_max_side field: int = 512
+delphi_core.settings:Settings.chat_image_max_source_mb field: int = 20
+delphi_core.settings:Settings.chat_image_max_source_pixels field: int = 40000000
+delphi_core.settings:Settings.chat_image_max_thread_bytes field: int = 33554432
+delphi_core.settings:Settings.chat_image_retention_days field: int = 30
+delphi_core.settings:Settings.chat_image_thumbnail_side field: int = 96
+delphi_core.settings:Settings.compress_jpeg_quality field: int = 80
+delphi_core.settings:Settings.compress_max_image_side field: int = 1800
+delphi_core.settings:Settings.compress_over_mb field: int = 10
+delphi_core.settings:Settings.conversation_title_answer_input_tokens field: int = 700
+delphi_core.settings:Settings.conversation_title_max_output_tokens field: int = 0
+delphi_core.settings:Settings.conversation_title_model field: str = ''
+delphi_core.settings:Settings.conversation_title_reasoning_effort field: str = ''
+delphi_core.settings:Settings.conversation_title_recent_input_tokens field: int = 2000
+delphi_core.settings:Settings.conversation_title_timeout_seconds field: float = 0.0
+delphi_core.settings:Settings.cookie_secure field: bool = False
+delphi_core.settings:Settings.data_dir field: pathlib.Path = Path('.data')
+delphi_core.settings:Settings.digest_claim_seconds field: int = 900
+delphi_core.settings:Settings.digest_context_max_tokens field: int = 30000
+delphi_core.settings:Settings.digest_document_max_tokens property: int
+delphi_core.settings:Settings.digest_max_output_tokens field: int = 0
+delphi_core.settings:Settings.digest_model field: str = ''
+delphi_core.settings:Settings.digest_reasoning_effort field: str = ''
+delphi_core.settings:Settings.digest_research_enabled field: bool = True
+delphi_core.settings:Settings.digest_timeout_seconds field: float = 0.0
+delphi_core.settings:Settings.document_tool_max_calls field: int = 12
+delphi_core.settings:Settings.document_tool_max_chars field: int = 96000
+delphi_core.settings:Settings.every_model_offers_the_effort_it_is_asked_for def: (self) -> delphi_core.settings.Settings
+delphi_core.settings:Settings.external_evidence_reap_grace_seconds field: int = 600
+delphi_core.settings:Settings.frontend_origins field: str = 'http://localhost:3000,http://127.0.0.1:3000'
+delphi_core.settings:Settings.library_search_enabled field: bool = True
+delphi_core.settings:Settings.library_search_max_results field: int = 20
+delphi_core.settings:Settings.library_tool_max_results field: int = 8
+delphi_core.settings:Settings.library_tool_snippet_chars field: int = 320
+delphi_core.settings:Settings.log_level field: str = 'INFO'
+delphi_core.settings:Settings.max_pages_per_paper field: int = 100
+delphi_core.settings:Settings.max_papers_per_project field: int = 10
+delphi_core.settings:Settings.max_papers_total_per_project field: int = 50
+delphi_core.settings:Settings.max_upload_mb field: int = 30
+delphi_core.settings:Settings.max_upload_source_mb field: int = 60
+delphi_core.settings:Settings.memory_domain_max_output_tokens field: int = 0
+delphi_core.settings:Settings.memory_domain_model field: str = ''
+delphi_core.settings:Settings.memory_domain_reasoning_effort field: str = ''
+delphi_core.settings:Settings.memory_domain_settle_seconds field: float = 600.0
+delphi_core.settings:Settings.memory_drain_workers field: int = 3
+delphi_core.settings:Settings.memory_enabled field: bool = True
+delphi_core.settings:Settings.memory_figure_max_per_page field: int = 6
+delphi_core.settings:Settings.memory_figure_max_side field: int = 1024
+delphi_core.settings:Settings.memory_figure_max_views field: int = 2
+delphi_core.settings:Settings.memory_file_select_max_output_tokens field: int = 0
+delphi_core.settings:Settings.memory_file_select_model field: str = ''
+delphi_core.settings:Settings.memory_file_select_reasoning_effort field: str = ''
+delphi_core.settings:Settings.memory_general_tool_max_calls field: int = 12
+delphi_core.settings:Settings.memory_index_max_chars field: int = 120000
+delphi_core.settings:Settings.memory_inline_max_chars field: int = 48000
+delphi_core.settings:Settings.memory_job_deadline_seconds field: float = 900.0
+delphi_core.settings:Settings.memory_job_lease_renew_seconds field: float = 60.0
+delphi_core.settings:Settings.memory_job_lease_seconds field: float = 240.0
+delphi_core.settings:Settings.memory_job_max_attempts field: int = 3
+delphi_core.settings:Settings.memory_maintain_max_output_tokens field: int = 0
+delphi_core.settings:Settings.memory_maintain_model field: str = ''
+delphi_core.settings:Settings.memory_maintain_reasoning_effort field: str = ''
+delphi_core.settings:Settings.memory_max_pages field: int = 1000
+delphi_core.settings:Settings.memory_open_max_chars field: int = 60000
+delphi_core.settings:Settings.memory_page_max_chars field: int = 12000
+delphi_core.settings:Settings.memory_related_hops field: int = 2
+delphi_core.settings:Settings.memory_review_max_output_tokens field: int = 0
+delphi_core.settings:Settings.memory_review_model field: str = ''
+delphi_core.settings:Settings.memory_review_reasoning_effort field: str = ''
+delphi_core.settings:Settings.memory_review_timeout_seconds field: float = 0.0
+delphi_core.settings:Settings.memory_rewrite_note_max_words field: int = 20
+delphi_core.settings:Settings.memory_same_document_max_output_tokens field: int = 0
+delphi_core.settings:Settings.memory_same_document_model field: str = ''
+delphi_core.settings:Settings.memory_same_document_reasoning_effort field: str = ''
+delphi_core.settings:Settings.memory_select_max_output_tokens field: int = 0
+delphi_core.settings:Settings.memory_select_model field: str = ''
+delphi_core.settings:Settings.memory_select_reasoning_effort field: str = ''
+delphi_core.settings:Settings.memory_select_timeout_seconds field: float = 20.0
+delphi_core.settings:Settings.memory_session_idle_seconds field: float = 1800.0
+delphi_core.settings:Settings.memory_summary_max_chars field: int = 400
+delphi_core.settings:Settings.memory_tool_max_calls field: int = 6
+delphi_core.settings:Settings.memory_verify_max_output_tokens field: int = 0
+delphi_core.settings:Settings.memory_verify_model field: str = ''
+delphi_core.settings:Settings.memory_verify_reasoning_effort field: str = ''
+delphi_core.settings:Settings.memory_web_evidence field: bool = False
+delphi_core.settings:Settings.memory_web_frozen_dir field: str = ''
+delphi_core.settings:Settings.model_choices field: str = 'gpt-6-luna,gpt-6.1-sol'
+delphi_core.settings:Settings.model_default field: str = ''
+delphi_core.settings:Settings.model_max_output_tokens field: int = 0
+delphi_core.settings:Settings.model_tool_max_rounds field: int = 6
+delphi_core.settings:Settings.models property: list[str]
+delphi_core.settings:Settings.openai_api_base_url field: str = 'https://api.openai.com/v1'
+delphi_core.settings:Settings.openai_api_key field: str = ''
+delphi_core.settings:Settings.openai_files_enabled field: bool = True
+delphi_core.settings:Settings.openai_prompt_cache_enabled field: bool = True
+delphi_core.settings:Settings.openai_request_timeout_seconds field: float = 900.0
+delphi_core.settings:Settings.openai_service_tier field: str = 'flex'
+delphi_core.settings:Settings.orchestrator_model field: str = 'gpt-6-luna'
+delphi_core.settings:Settings.orchestrator_reasoning_effort field: str = 'xhigh'
+delphi_core.settings:Settings.orchestrator_timeout_seconds field: float = 900.0
+delphi_core.settings:Settings.origins property: list[str]
+delphi_core.settings:Settings.paper_chat_compact_input_enabled field: bool = False
+delphi_core.settings:Settings.paper_tool_max_chars field: int = 12000
+delphi_core.settings:Settings.paper_tool_max_pages field: int = 4
+delphi_core.settings:Settings.persona_browse_page_size field: int = 24
+delphi_core.settings:Settings.persona_marketplace_enabled field: bool = True
+delphi_core.settings:Settings.persona_max_characters field: int = 30000
+delphi_core.settings:Settings.persona_max_name_characters field: int = 40
+delphi_core.settings:Settings.persona_max_tagline_characters field: int = 140
+delphi_core.settings:Settings.reasoning_effort_default field: str = ''
+delphi_core.settings:Settings.reasoning_efforts property: list[str]
+delphi_core.settings:Settings.reasoning_efforts_for def: (self, model: str) -> list[str]
+delphi_core.settings:Settings.required_signup_code property: str
+delphi_core.settings:Settings.research_max_output_tokens field: int = 0
+delphi_core.settings:Settings.research_model field: str = ''
+delphi_core.settings:Settings.research_reasoning_effort field: str = ''
+delphi_core.settings:Settings.sandbox_origin_is_not_the_app def: (self) -> delphi_core.settings.Settings
+delphi_core.settings:Settings.session_days field: int = 30
+delphi_core.settings:Settings.session_secret field: str = 'change-me-in-production'
+delphi_core.settings:Settings.settings_customise_sources classmethod def: (cls, settings_cls, init_settings, env_settings, dotenv_settings, file_secret_settings)
+delphi_core.settings:Settings.signup_code field: str = ''
+delphi_core.settings:Settings.staged_upload_seconds field: int = 900
+delphi_core.settings:Settings.turn_deadline_seconds field: float = 900
+delphi_core.settings:Settings.turn_max_output_tokens field: int = 96000
+delphi_core.settings:Settings.web_browsing_enabled field: bool = True
+delphi_core.settings:Settings.web_documents_enabled field: bool = True
+delphi_core.settings:Settings.web_fetch_timeout_seconds field: float = 25.0
+delphi_core.settings:Settings.web_image_max_bytes field: int = 3145728
+delphi_core.settings:Settings.web_image_max_pixels field: int = 40000000
+delphi_core.settings:Settings.web_image_max_side field: int = 2048
+delphi_core.settings:Settings.web_max_extract_chars field: int = 600000
+delphi_core.settings:Settings.web_max_html_bytes field: int = 8388608
+delphi_core.settings:Settings.web_page_token_seconds field: int = 300
+delphi_core.settings:Settings.web_sandbox_origin field: str = ''
+delphi_core.settings:Settings.web_saved_page_max_bytes field: int = 8388608
+delphi_core.settings:Settings.web_search_enabled field: bool = True
+delphi_core.settings:Settings.web_search_max_calls field: int = 8
+delphi_core.settings:Settings.web_thumbnail_capture_seconds field: float = 30.0
+delphi_core.settings:Settings.web_thumbnail_inline_seconds field: float = 12.0
+delphi_core.settings:Settings.web_thumbnail_queue_seconds field: float = 20.0
+delphi_core.settings:Settings.web_user_agent field: str = 'Mozilla/5.0 (compatible; DelphiReader/1.0; +https://github.com/delphi)'
+delphi_core.settings:Settings.webpage_read_max_chars field: int = 24000
+delphi_core.settings:Settings.workspace_search_max_results field: int = 20
+delphi_core.settings:get_settings def: (request: starlette.requests.Request) -> delphi_core.settings.Settings
+delphi_core.settings:load_settings def: (cls: type[~S] = delphi_core.settings.Settings) -> ~S
+delphi_core.storage:ACCOUNT_CHAT_IMAGE_KEY value: str = 'knowledge-base'
+delphi_core.storage:ALL_CONVERSATIONS value: int = 10000
+delphi_core.storage:ByteRange class: ()
+delphi_core.storage:ByteRange.__init__ def: (self, start: int, end: int) -> None
+delphi_core.storage:ByteRange.content_range def: (self, size: int) -> str
+delphi_core.storage:ByteRange.end required field: int
+delphi_core.storage:ByteRange.length property: int
+delphi_core.storage:ByteRange.start required field: int
+delphi_core.storage:LocalObjectStore class: (delphi_core.storage.ObjectStore)
+delphi_core.storage:LocalObjectStore.__init__ def: (self, root: pathlib.Path, chat_image_retention_days: int = 30)
+delphi_core.storage:LocalObjectStore.copy def: (self, source: str, destination: str) -> bool
+delphi_core.storage:LocalObjectStore.delete def: (self, key: str) -> None
+delphi_core.storage:LocalObjectStore.delete_prefix def: (self, prefix: str) -> None
+delphi_core.storage:LocalObjectStore.exists def: (self, key: str) -> bool
+delphi_core.storage:LocalObjectStore.fetch_to_tempfile def: (self, key: str) -> pathlib.Path
+delphi_core.storage:LocalObjectStore.get_text def: (self, key: str) -> str
+delphi_core.storage:LocalObjectStore.open_range def: (self, key: str, start: int | None = None, end: int | None = None) -> collections.abc.Iterator[bytes]
+delphi_core.storage:LocalObjectStore.put_file def: (self, key: str, path: pathlib.Path, content_type: str) -> None
+delphi_core.storage:LocalObjectStore.put_text def: (self, key: str, text: str) -> None
+delphi_core.storage:LocalObjectStore.size def: (self, key: str) -> int
+delphi_core.storage:LocalStorage class: (delphi_core.storage.Storage)
+delphi_core.storage:LocalStorage.SECTION_ANCHORS_PER_DOCUMENT attribute: int
+delphi_core.storage:LocalStorage.__init__ def: (self, settings: delphi_core.settings.Settings)
+delphi_core.storage:LocalStorage.account_exists def: (self, username: str) -> bool
+delphi_core.storage:LocalStorage.add_chat_image def: (self, username: str, project_id: str | None, thread_key: str | None, image: dict[str, typing.Any], *, max_count: int, max_bytes: int) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.add_highlight def: (self, username: str, project_id: str, paper_id: str, payload: dict[str, typing.Any]) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.add_memory_figure def: (self, username: str, figure: dict[str, typing.Any], *, max_per_page: int) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.add_note def: (self, username: str, project_id: str, paper_id: str, payload: dict[str, typing.Any]) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.add_paper def: (self, username: str, project_id: str, paper: dict[str, typing.Any]) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.adopt_paper_title def: (self, username: str, project_id: str, paper_id: str, title: str) -> dict[str, typing.Any] | None
+delphi_core.storage:LocalStorage.annotation_revision_lock def: (self, username, project_id, paper_id)
+delphi_core.storage:LocalStorage.append_memory_event def: (self, username: str, event: dict[str, typing.Any]) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.append_memory_message def: (self, username: str, message: dict[str, typing.Any], thread_key: str) -> None
+delphi_core.storage:LocalStorage.append_message def: (self, username: str, project_id: str, thread_key: str, message: dict[str, typing.Any]) -> None
+delphi_core.storage:LocalStorage.browse_personas def: (self, username: str, *, query: str = '', cursor: str | None = None, limit: int = 24) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.cancel_memory_jobs def: (self, username: str, *, kinds: collections.abc.Sequence[str]) -> int
+delphi_core.storage:LocalStorage.claim_conversation_title def: (self, username: str, *, project_id: str | None, thread_key: str | None, engagement_id: str, fallback_title: str) -> dict[str, typing.Any] | None
+delphi_core.storage:LocalStorage.claim_digest def: (self, username: str, project_id: str, paper_id: str, *, claim_id: str, expires_at: str, metadata: dict[str, typing.Any], force: bool) -> str
+delphi_core.storage:LocalStorage.claim_memory_job def: (self, username: str, *, now: str, lease_expires_at: str, max_attempts: int, kinds: collections.abc.Sequence[str] | None = None) -> dict[str, typing.Any] | None
+delphi_core.storage:LocalStorage.clear_memory_job def: (self, username: str, marker: str) -> None
+delphi_core.storage:LocalStorage.commit_memory_update def: (self, username: str, *, pages: list[dict[str, typing.Any]], figures: list[dict[str, typing.Any]], event: dict[str, typing.Any], max_pages: int, max_figures_per_page: int, fence_job: tuple[str, int] | None = None, require_revision: bool = False, trigger: str | None = None) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.complete_digest def: (self, username: str, project_id: str, paper_id: str, claim_id: str, metadata: dict[str, typing.Any]) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.complete_memory_job def: (self, username: str, job_id: str, *, expected_lease_expires_at: str | None = None, fingerprint: str | None = None) -> bool
+delphi_core.storage:LocalStorage.count_active_papers def: (self, username: str, project_id: str) -> int
+delphi_core.storage:LocalStorage.create_account def: (self, username: str, email: str | None, salt: str, password_hash: str) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.create_conversation def: (self, username, scope, project_id, paper_id, creation_key)
+delphi_core.storage:LocalStorage.create_persona def: (self, username: str, fields: dict[str, typing.Any]) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.create_project def: (self, username: str, name: str, *, onboarding: bool = False) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.delete_conversation def: (self, username, conversation_id, generation, *, reset = False)
+delphi_core.storage:LocalStorage.delete_highlight def: (self, username: str, project_id: str, paper_id: str, highlight_id: str) -> None
+delphi_core.storage:LocalStorage.delete_memory_domain def: (self, username: str, slug: str) -> None
+delphi_core.storage:LocalStorage.delete_memory_page def: (self, username: str, slug: str) -> delphi_core.storage.Removed
+delphi_core.storage:LocalStorage.delete_note def: (self, username: str, project_id: str, paper_id: str, note_id: str) -> None
+delphi_core.storage:LocalStorage.delete_paper def: (self, username: str, project_id: str, paper_id: str) -> delphi_core.storage.Removed
+delphi_core.storage:LocalStorage.delete_persona def: (self, username: str, persona_id: str) -> None
+delphi_core.storage:LocalStorage.delete_project def: (self, username: str, project_id: str) -> delphi_core.storage.Removed
+delphi_core.storage:LocalStorage.delete_unreferenced_external_evidence def: (self, username: str, *, older_than_seconds: int) -> list[str]
+delphi_core.storage:LocalStorage.delete_unused_chat_image def: (self, username: str, project_id: str | None, thread_key: str | None, image_id: str) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.domain_settle_seconds field: float
+delphi_core.storage:LocalStorage.drop_from_last_user_turn def: (self, username: str, project_id: str | None, thread_key: str, request_id: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:LocalStorage.enqueue_memory_job def: (self, username: str, *, kind: str, marker: str, payload: dict[str, typing.Any], target_version: str | None = None, not_before: str | None = None) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.external_evidence_references def: (self, username: str) -> dict[str, list[dict[str, str]]]
+delphi_core.storage:LocalStorage.fail_digest def: (self, username: str, project_id: str, paper_id: str, claim_id: str, metadata: dict[str, typing.Any]) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.fail_memory_job def: (self, username: str, job_id: str, *, error: str, retry_at: str | None, diagnostics: dict[str, typing.Any] | None = None, expected_lease_expires_at: str | None = None) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.finish_cancelled_trace def: (self, username, conversation_id, generation, request_id, trace)
+delphi_core.storage:LocalStorage.get_account def: (self, username: str) -> dict[str, typing.Any] | None
+delphi_core.storage:LocalStorage.get_chat_image def: (self, username: str, project_id: str | None, thread_key: str | None, image_id: str) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.get_conversation def: (self, username: str, conversation_id: str) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.get_external_evidence def: (self, username: str, evidence_id: str) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.get_memory_figure def: (self, username: str, figure_id: str) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.get_memory_page def: (self, username: str, slug: str) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.get_memory_update def: (self, username: str) -> dict[str, typing.Any] | None
+delphi_core.storage:LocalStorage.get_paper def: (self, username: str, project_id: str, paper_id: str) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.get_persona def: (self, username: str, persona_id: str) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.get_project def: (self, username: str, project_id: str) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.get_thread def: (self, username: str, project_id: str | None, thread_key: str) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.has_memory_event def: (self, username: str, request_id: str, *, operation_id: str | None = None) -> bool
+delphi_core.storage:LocalStorage.index_document_sections def: (self, username: str, project_id: str, paper_id: str, sections: list[dict[str, typing.Any]]) -> int
+delphi_core.storage:LocalStorage.install_persona def: (self, username: str, persona_id: str) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.kind attribute: str
+delphi_core.storage:LocalStorage.latest_marker_events def: (self, username: str, markers: collections.abc.Sequence[str] | None = None) -> dict[str, dict[str, typing.Any]]
+delphi_core.storage:LocalStorage.latest_memory_event def: (self, username: str, *, kind: str) -> dict[str, typing.Any] | None
+delphi_core.storage:LocalStorage.list_chat_images def: (self, username: str, project_id: str | None, thread_key: str | None, now: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:LocalStorage.list_highlights def: (self, username: str, project_id: str, paper_id: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:LocalStorage.list_memory_events def: (self, username: str, *, limit: int = 50) -> list[dict[str, typing.Any]]
+delphi_core.storage:LocalStorage.list_memory_figures def: (self, username: str, *, page_id: str | None = None) -> list[dict[str, typing.Any]]
+delphi_core.storage:LocalStorage.list_memory_jobs def: (self, username: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:LocalStorage.list_memory_links def: (self, username: str) -> list[dict[str, str]]
+delphi_core.storage:LocalStorage.list_memory_pages def: (self, username: str, *, kinds: list[str] | None = None, domains: list[str] | None = None, limit: int = 200) -> list[dict[str, typing.Any]]
+delphi_core.storage:LocalStorage.list_notes def: (self, username: str, project_id: str, paper_id: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:LocalStorage.list_page_versions def: (self, username: str, slug: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:LocalStorage.list_personas def: (self, username: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:LocalStorage.list_projects def: (self, username: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:LocalStorage.list_projects_with_papers def: (self, username: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:LocalStorage.list_recent_conversations def: (self, username: str, *, limit: int = 5) -> list[dict[str, typing.Any]]
+delphi_core.storage:LocalStorage.list_scope_conversations def: (self, username, scope, project_id = None, paper_id = None)
+delphi_core.storage:LocalStorage.list_section_anchors def: (self, username: str, project_id: str) -> dict[str, list[str]]
+delphi_core.storage:LocalStorage.list_unfiled_notes def: (self, username: str, project_id: str, paper_id: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:LocalStorage.list_usernames def: (self) -> list[str]
+delphi_core.storage:LocalStorage.mark_notes_filed def: (self, username: str, project_id: str, paper_id: str, note_ids: list[str], now: str) -> None
+delphi_core.storage:LocalStorage.memory_backlinks def: (self, username: str, slug: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:LocalStorage.memory_domains def: (self, username: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:LocalStorage.memory_event_version def: (self, username: str, request_id: str) -> str | None
+delphi_core.storage:LocalStorage.memory_event_versions def: (self, username: str, request_ids: collections.abc.Sequence[str]) -> dict[str, str | None]
+delphi_core.storage:LocalStorage.memory_graph_revision def: (self, username: str) -> int
+delphi_core.storage:LocalStorage.memory_job_exists def: (self, username: str, job_id: str) -> bool
+delphi_core.storage:LocalStorage.memory_page_bodies def: (self, username: str) -> dict[str, str]
+delphi_core.storage:LocalStorage.move_memory_pages def: (self, username: str, slugs: list[str], domain: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:LocalStorage.move_paper def: (self, username: str, project_id: str, paper_id: str, destination_project_id: str, position: int | None = None) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.note_citations def: (self, username: str, paper_id: str) -> dict[str, list[str]]
+delphi_core.storage:LocalStorage.onboarding_status def: (self, username: str, *, require_filing: bool) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.page_events def: (self, username: str, slug: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:LocalStorage.page_history def: (self, username: str, slugs: collections.abc.Sequence[str]) -> dict[str, dict[str, dict[str, typing.Any] | None]]
+delphi_core.storage:LocalStorage.plan_state def: (self, username)
+delphi_core.storage:LocalStorage.plan_transaction def: (self, username, operation, *, conversation = None)
+delphi_core.storage:LocalStorage.put_external_evidence def: (self, username: str, record: dict[str, typing.Any]) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.reference_chat_images def: (self, username: str, project_id: str | None, thread_key: str | None, image_ids: list[str], now: str, question_excerpt: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:LocalStorage.release_conversation_title_claim def: (self, username: str, conversation_id: str, *, engagement_id: str) -> None
+delphi_core.storage:LocalStorage.release_memory_job def: (self, username: str, job_id: str, *, expected_lease_expires_at: str | None = None) -> None
+delphi_core.storage:LocalStorage.release_memory_jobs def: (self, username: str, *, kind: str | None = None, marker: str | None = None) -> int
+delphi_core.storage:LocalStorage.rename_conversation def: (self, username, conversation_id, title, generation)
+delphi_core.storage:LocalStorage.rename_paper def: (self, username: str, project_id: str, paper_id: str, title: str) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.rename_project def: (self, username: str, project_id: str, name: str) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.renew_answer def: (self, username, conversation_id, generation, request_id)
+delphi_core.storage:LocalStorage.renew_memory_job_lease def: (self, username: str, job_id: str, *, expected_lease_expires_at: str, lease_expires_at: str) -> bool
+delphi_core.storage:LocalStorage.reorder_papers def: (self, username: str, project_id: str, paper_ids: list[str]) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.replace_memory_snapshot def: (self, username: str, snapshot: dict[str, typing.Any], *, max_pages: int) -> None
+delphi_core.storage:LocalStorage.replace_openai_file def: (self, username: str, project_id: str, paper_id: str, expected_file_id: str, file_id: str) -> bool
+delphi_core.storage:LocalStorage.resolve_reader def: (self, username: str, project_slug: str, paper_slug: str | None = None) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.retry_memory_job def: (self, username: str, job_id: str) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.save_highlight_placements def: (self, username, project_id, paper_id, revision, placements)
+delphi_core.storage:LocalStorage.search_documents def: (self, username: str, query: str, *, project_id: str | None = None, paper_id: str | None = None, limit: int = 12) -> list[dict[str, typing.Any]]
+delphi_core.storage:LocalStorage.search_memory_pages def: (self, username: str, query: str, *, domain: str | None = None, limit: int = 12) -> list[dict[str, typing.Any]]
+delphi_core.storage:LocalStorage.search_workspace def: (self, username: str, query: str, *, limit: int = 20) -> dict[str, list[dict[str, typing.Any]]]
+delphi_core.storage:LocalStorage.session_idle_seconds field: float
+delphi_core.storage:LocalStorage.set_conversation_model def: (self, username: str, *, project_id: str | None, thread_key: str | None, model: str) -> None
+delphi_core.storage:LocalStorage.set_conversation_persona def: (self, username: str, *, project_id: str | None, thread_key: str | None, persona_id: str) -> None
+delphi_core.storage:LocalStorage.set_conversation_title def: (self, username: str, conversation_id: str, *, title: str, model: str, updated_at: str, generation: int | None = None) -> None
+delphi_core.storage:LocalStorage.set_memory_filed_through def: (self, username: str, conversation_id: str, request_id: str | None, *, if_present: bool = False) -> bool
+delphi_core.storage:LocalStorage.set_memory_update def: (self, username: str, state: dict[str, typing.Any] | None) -> dict[str, typing.Any] | None
+delphi_core.storage:LocalStorage.set_openai_file def: (self, username: str, project_id: str, paper_id: str, file_id: str) -> None
+delphi_core.storage:LocalStorage.set_paper_done def: (self, username: str, project_id: str, paper_id: str, done: bool) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.set_paper_source_hash def: (self, username: str, project_id: str, paper_id: str, source_hash: str) -> None
+delphi_core.storage:LocalStorage.settle_onboarding def: (self, username: str, *, require_filing: bool, finishing: bool = False) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.store_linked_pdf def: (self, username: str, project_id: str, paper_id: str, fields: dict[str, typing.Any]) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.touch_paper def: (self, username: str, project_id: str, paper_id: str) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.update_account_preferences def: (self, username: str, *, use_standard_tier: bool) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.update_note def: (self, username: str, project_id: str, paper_id: str, note_id: str, body: str) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.update_paper_snapshot def: (self, username: str, project_id: str, paper_id: str, fields: dict[str, typing.Any]) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.update_password def: (self, username: str, salt: str, password_hash: str) -> None
+delphi_core.storage:LocalStorage.update_persona def: (self, username: str, persona_id: str, fields: dict[str, typing.Any], *, expected_revision: int | None = None) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.upsert_memory_domain def: (self, username: str, domain: dict[str, typing.Any]) -> dict[str, typing.Any]
+delphi_core.storage:LocalStorage.upsert_memory_page def: (self, username: str, page: dict[str, typing.Any], *, max_pages: int, trigger: str | None = None, note: str | None = None) -> dict[str, typing.Any]
+delphi_core.storage:MEMORY_CLAIM_TYPES value: tuple = ('author-claim', 'external', 'reader-note', 'derived')
+delphi_core.storage:MEMORY_KINDS value: tuple = ('domain', 'concept', 'source')
+delphi_core.storage:MemoryJobGone class: (Exception)
+delphi_core.storage:ObjectStore class: (abc.ABC)
+delphi_core.storage:ObjectStore.copy abstract def: (self, source: str, destination: str) -> bool
+delphi_core.storage:ObjectStore.delete abstract def: (self, key: str) -> None
+delphi_core.storage:ObjectStore.delete_prefix abstract def: (self, prefix: str) -> None
+delphi_core.storage:ObjectStore.exists abstract def: (self, key: str) -> bool
+delphi_core.storage:ObjectStore.fetch_to_tempfile abstract def: (self, key: str) -> pathlib.Path
+delphi_core.storage:ObjectStore.get_text abstract def: (self, key: str) -> str
+delphi_core.storage:ObjectStore.open_range abstract def: (self, key: str, start: int | None = None, end: int | None = None) -> collections.abc.Iterator[bytes]
+delphi_core.storage:ObjectStore.put_file abstract def: (self, key: str, path: pathlib.Path, content_type: str) -> None
+delphi_core.storage:ObjectStore.put_text abstract def: (self, key: str, text: str) -> None
+delphi_core.storage:ObjectStore.size abstract def: (self, key: str) -> int
+delphi_core.storage:Removed class: ()
+delphi_core.storage:Removed.__init__ def: (self, object_keys: list[str] = <factory>, openai_file_ids: list[str] = <factory>) -> None
+delphi_core.storage:Removed.object_keys field: list[str]
+delphi_core.storage:Removed.openai_file_ids field: list[str]
+delphi_core.storage:Storage class: (abc.ABC)
+delphi_core.storage:Storage.SECTION_ANCHORS_PER_DOCUMENT attribute: int
+delphi_core.storage:Storage.account_exists abstract def: (self, username: str) -> bool
+delphi_core.storage:Storage.add_chat_image abstract def: (self, username: str, project_id: str | None, thread_key: str | None, image: dict[str, typing.Any], *, max_count: int, max_bytes: int) -> dict[str, typing.Any]
+delphi_core.storage:Storage.add_highlight abstract def: (self, username: str, project_id: str, paper_id: str, payload: dict[str, typing.Any]) -> dict[str, typing.Any]
+delphi_core.storage:Storage.add_memory_figure abstract def: (self, username: str, figure: dict[str, typing.Any], *, max_per_page: int) -> dict[str, typing.Any]
+delphi_core.storage:Storage.add_note abstract def: (self, username: str, project_id: str, paper_id: str, payload: dict[str, typing.Any]) -> dict[str, typing.Any]
+delphi_core.storage:Storage.add_paper abstract def: (self, username: str, project_id: str, paper: dict[str, typing.Any]) -> dict[str, typing.Any]
+delphi_core.storage:Storage.adopt_paper_title abstract def: (self, username: str, project_id: str, paper_id: str, title: str) -> dict[str, typing.Any] | None
+delphi_core.storage:Storage.annotation_revision_lock abstract def: (self, username: str, project_id: str, paper_id: str)
+delphi_core.storage:Storage.append_memory_event abstract def: (self, username: str, event: dict[str, typing.Any]) -> dict[str, typing.Any]
+delphi_core.storage:Storage.append_memory_message abstract def: (self, username: str, message: dict[str, typing.Any], thread_key: str) -> None
+delphi_core.storage:Storage.append_message abstract def: (self, username: str, project_id: str, thread_key: str, message: dict[str, typing.Any]) -> None
+delphi_core.storage:Storage.browse_personas abstract def: (self, username: str, *, query: str = '', cursor: str | None = None, limit: int = 24) -> dict[str, typing.Any]
+delphi_core.storage:Storage.cancel_memory_jobs abstract def: (self, username: str, *, kinds: collections.abc.Sequence[str]) -> int
+delphi_core.storage:Storage.claim_conversation_title abstract def: (self, username: str, *, project_id: str | None, thread_key: str | None, engagement_id: str, fallback_title: str) -> dict[str, typing.Any] | None
+delphi_core.storage:Storage.claim_digest abstract def: (self, username: str, project_id: str, paper_id: str, *, claim_id: str, expires_at: str, metadata: dict[str, typing.Any], force: bool) -> str
+delphi_core.storage:Storage.claim_memory_job abstract def: (self, username: str, *, now: str, lease_expires_at: str, max_attempts: int, kinds: collections.abc.Sequence[str] | None = None) -> dict[str, typing.Any] | None
+delphi_core.storage:Storage.clear_memory_job abstract def: (self, username: str, marker: str) -> None
+delphi_core.storage:Storage.commit_memory_update abstract def: (self, username: str, *, pages: list[dict[str, typing.Any]], figures: list[dict[str, typing.Any]], event: dict[str, typing.Any], max_pages: int, max_figures_per_page: int, fence_job: tuple[str, int] | None = None, require_revision: bool = False, trigger: str | None = None) -> dict[str, typing.Any]
+delphi_core.storage:Storage.complete_digest abstract def: (self, username: str, project_id: str, paper_id: str, claim_id: str, metadata: dict[str, typing.Any]) -> dict[str, typing.Any]
+delphi_core.storage:Storage.complete_memory_job abstract def: (self, username: str, job_id: str, *, expected_lease_expires_at: str | None = None, fingerprint: str | None = None) -> bool
+delphi_core.storage:Storage.count_active_papers abstract def: (self, username: str, project_id: str) -> int
+delphi_core.storage:Storage.create_account abstract def: (self, username: str, email: str | None, salt: str, password_hash: str) -> dict[str, typing.Any]
+delphi_core.storage:Storage.create_persona abstract def: (self, username: str, fields: dict[str, typing.Any]) -> dict[str, typing.Any]
+delphi_core.storage:Storage.create_project abstract def: (self, username: str, name: str, *, onboarding: bool = False) -> dict[str, typing.Any]
+delphi_core.storage:Storage.delete_highlight abstract def: (self, username: str, project_id: str, paper_id: str, highlight_id: str) -> None
+delphi_core.storage:Storage.delete_memory_domain abstract def: (self, username: str, slug: str) -> None
+delphi_core.storage:Storage.delete_memory_page abstract def: (self, username: str, slug: str) -> delphi_core.storage.Removed
+delphi_core.storage:Storage.delete_note abstract def: (self, username: str, project_id: str, paper_id: str, note_id: str) -> None
+delphi_core.storage:Storage.delete_paper abstract def: (self, username: str, project_id: str, paper_id: str) -> delphi_core.storage.Removed
+delphi_core.storage:Storage.delete_persona abstract def: (self, username: str, persona_id: str) -> None
+delphi_core.storage:Storage.delete_project abstract def: (self, username: str, project_id: str) -> delphi_core.storage.Removed
+delphi_core.storage:Storage.delete_unreferenced_external_evidence abstract def: (self, username: str, *, older_than_seconds: int) -> list[str]
+delphi_core.storage:Storage.delete_unused_chat_image abstract def: (self, username: str, project_id: str | None, thread_key: str | None, image_id: str) -> dict[str, typing.Any]
+delphi_core.storage:Storage.domain_settle_seconds field: float
+delphi_core.storage:Storage.drop_from_last_user_turn abstract def: (self, username: str, project_id: str | None, thread_key: str, request_id: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:Storage.enqueue_memory_job abstract def: (self, username: str, *, kind: str, marker: str, payload: dict[str, typing.Any], target_version: str | None = None, not_before: str | None = None) -> dict[str, typing.Any]
+delphi_core.storage:Storage.external_evidence_references abstract def: (self, username: str) -> dict[str, list[dict[str, str]]]
+delphi_core.storage:Storage.fail_digest abstract def: (self, username: str, project_id: str, paper_id: str, claim_id: str, metadata: dict[str, typing.Any]) -> dict[str, typing.Any]
+delphi_core.storage:Storage.fail_memory_job abstract def: (self, username: str, job_id: str, *, error: str, retry_at: str | None, diagnostics: dict[str, typing.Any] | None = None, expected_lease_expires_at: str | None = None) -> dict[str, typing.Any]
+delphi_core.storage:Storage.finish_cancelled_trace abstract def: (self, username: str, conversation_id: str, generation: int, request_id: str, trace: list) -> None
+delphi_core.storage:Storage.get_account abstract def: (self, username: str) -> dict[str, typing.Any] | None
+delphi_core.storage:Storage.get_chat_image abstract def: (self, username: str, project_id: str | None, thread_key: str | None, image_id: str) -> dict[str, typing.Any]
+delphi_core.storage:Storage.get_conversation abstract def: (self, username: str, conversation_id: str) -> dict[str, typing.Any]
+delphi_core.storage:Storage.get_external_evidence abstract def: (self, username: str, evidence_id: str) -> dict[str, typing.Any]
+delphi_core.storage:Storage.get_memory_figure abstract def: (self, username: str, figure_id: str) -> dict[str, typing.Any]
+delphi_core.storage:Storage.get_memory_page abstract def: (self, username: str, slug: str) -> dict[str, typing.Any]
+delphi_core.storage:Storage.get_memory_update abstract def: (self, username: str) -> dict[str, typing.Any] | None
+delphi_core.storage:Storage.get_paper abstract def: (self, username: str, project_id: str, paper_id: str) -> dict[str, typing.Any]
+delphi_core.storage:Storage.get_persona abstract def: (self, username: str, persona_id: str) -> dict[str, typing.Any]
+delphi_core.storage:Storage.get_project abstract def: (self, username: str, project_id: str) -> dict[str, typing.Any]
+delphi_core.storage:Storage.get_thread abstract def: (self, username: str, project_id: str | None, thread_key: str) -> dict[str, typing.Any]
+delphi_core.storage:Storage.has_memory_event abstract def: (self, username: str, request_id: str, *, operation_id: str | None = None) -> bool
+delphi_core.storage:Storage.index_document_sections abstract def: (self, username: str, project_id: str, paper_id: str, sections: list[dict[str, typing.Any]]) -> int
+delphi_core.storage:Storage.install_persona abstract def: (self, username: str, persona_id: str) -> dict[str, typing.Any]
+delphi_core.storage:Storage.kind field: str
+delphi_core.storage:Storage.latest_marker_events abstract def: (self, username: str, markers: collections.abc.Sequence[str] | None = None) -> dict[str, dict[str, typing.Any]]
+delphi_core.storage:Storage.latest_memory_event abstract def: (self, username: str, *, kind: str) -> dict[str, typing.Any] | None
+delphi_core.storage:Storage.list_chat_images abstract def: (self, username: str, project_id: str | None, thread_key: str | None, now: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:Storage.list_highlights abstract def: (self, username: str, project_id: str, paper_id: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:Storage.list_memory_events abstract def: (self, username: str, *, limit: int = 50) -> list[dict[str, typing.Any]]
+delphi_core.storage:Storage.list_memory_figures abstract def: (self, username: str, *, page_id: str | None = None) -> list[dict[str, typing.Any]]
+delphi_core.storage:Storage.list_memory_jobs abstract def: (self, username: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:Storage.list_memory_links abstract def: (self, username: str) -> list[dict[str, str]]
+delphi_core.storage:Storage.list_memory_pages abstract def: (self, username: str, *, kinds: list[str] | None = None, domains: list[str] | None = None, limit: int = 200) -> list[dict[str, typing.Any]]
+delphi_core.storage:Storage.list_notes abstract def: (self, username: str, project_id: str, paper_id: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:Storage.list_page_versions abstract def: (self, username: str, slug: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:Storage.list_personas abstract def: (self, username: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:Storage.list_projects abstract def: (self, username: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:Storage.list_projects_with_papers abstract def: (self, username: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:Storage.list_recent_conversations abstract def: (self, username: str, *, limit: int = 5) -> list[dict[str, typing.Any]]
+delphi_core.storage:Storage.list_section_anchors abstract def: (self, username: str, project_id: str) -> dict[str, list[str]]
+delphi_core.storage:Storage.list_unfiled_notes abstract def: (self, username: str, project_id: str, paper_id: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:Storage.list_usernames abstract def: (self) -> list[str]
+delphi_core.storage:Storage.mark_notes_filed abstract def: (self, username: str, project_id: str, paper_id: str, note_ids: list[str], now: str) -> None
+delphi_core.storage:Storage.memory_backlinks abstract def: (self, username: str, slug: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:Storage.memory_domains abstract def: (self, username: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:Storage.memory_event_version abstract def: (self, username: str, request_id: str) -> str | None
+delphi_core.storage:Storage.memory_event_versions abstract def: (self, username: str, request_ids: collections.abc.Sequence[str]) -> dict[str, str | None]
+delphi_core.storage:Storage.memory_graph_revision abstract def: (self, username: str) -> int
+delphi_core.storage:Storage.memory_job_exists abstract def: (self, username: str, job_id: str) -> bool
+delphi_core.storage:Storage.memory_page_bodies abstract def: (self, username: str) -> dict[str, str]
+delphi_core.storage:Storage.move_memory_pages abstract def: (self, username: str, slugs: list[str], domain: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:Storage.move_paper abstract def: (self, username: str, project_id: str, paper_id: str, destination_project_id: str, position: int | None = None) -> dict[str, typing.Any]
+delphi_core.storage:Storage.note_citations abstract def: (self, username: str, paper_id: str) -> dict[str, list[str]]
+delphi_core.storage:Storage.onboarding_status abstract def: (self, username: str, *, require_filing: bool) -> dict[str, typing.Any]
+delphi_core.storage:Storage.page_events abstract def: (self, username: str, slug: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:Storage.page_history abstract def: (self, username: str, slugs: collections.abc.Sequence[str]) -> dict[str, dict[str, dict[str, typing.Any] | None]]
+delphi_core.storage:Storage.plan_state abstract def: (self, username: str) -> dict
+delphi_core.storage:Storage.plan_transaction abstract def: (self, username: str, operation, *, conversation: dict | None = None)
+delphi_core.storage:Storage.put_external_evidence abstract def: (self, username: str, record: dict[str, typing.Any]) -> dict[str, typing.Any]
+delphi_core.storage:Storage.reference_chat_images abstract def: (self, username: str, project_id: str | None, thread_key: str | None, image_ids: list[str], now: str, question_excerpt: str) -> list[dict[str, typing.Any]]
+delphi_core.storage:Storage.release_conversation_title_claim abstract def: (self, username: str, conversation_id: str, *, engagement_id: str) -> None
+delphi_core.storage:Storage.release_memory_job abstract def: (self, username: str, job_id: str, *, expected_lease_expires_at: str | None = None) -> None
+delphi_core.storage:Storage.release_memory_jobs abstract def: (self, username: str, *, kind: str | None = None, marker: str | None = None) -> int
+delphi_core.storage:Storage.rename_paper abstract def: (self, username: str, project_id: str, paper_id: str, title: str) -> dict[str, typing.Any]
+delphi_core.storage:Storage.rename_project abstract def: (self, username: str, project_id: str, name: str) -> dict[str, typing.Any]
+delphi_core.storage:Storage.renew_memory_job_lease abstract def: (self, username: str, job_id: str, *, expected_lease_expires_at: str, lease_expires_at: str) -> bool
+delphi_core.storage:Storage.reorder_papers abstract def: (self, username: str, project_id: str, paper_ids: list[str]) -> dict[str, typing.Any]
+delphi_core.storage:Storage.replace_memory_snapshot abstract def: (self, username: str, snapshot: dict[str, typing.Any], *, max_pages: int) -> None
+delphi_core.storage:Storage.replace_openai_file abstract def: (self, username: str, project_id: str, paper_id: str, expected_file_id: str, file_id: str) -> bool
+delphi_core.storage:Storage.resolve_reader abstract def: (self, username: str, project_slug: str, paper_slug: str | None = None) -> dict[str, typing.Any]
+delphi_core.storage:Storage.retry_memory_job abstract def: (self, username: str, job_id: str) -> dict[str, typing.Any]
+delphi_core.storage:Storage.save_highlight_placements abstract def: (self, username: str, project_id: str, paper_id: str, revision: str, placements: list[dict]) -> None
+delphi_core.storage:Storage.search_documents abstract def: (self, username: str, query: str, *, project_id: str | None = None, paper_id: str | None = None, limit: int = 12) -> list[dict[str, typing.Any]]
+delphi_core.storage:Storage.search_memory_pages abstract def: (self, username: str, query: str, *, domain: str | None = None, limit: int = 12) -> list[dict[str, typing.Any]]
+delphi_core.storage:Storage.search_workspace abstract def: (self, username: str, query: str, *, limit: int = 20) -> dict[str, list[dict[str, typing.Any]]]
+delphi_core.storage:Storage.session_idle_seconds field: float
+delphi_core.storage:Storage.set_conversation_model abstract def: (self, username: str, *, project_id: str | None, thread_key: str | None, model: str) -> None
+delphi_core.storage:Storage.set_conversation_persona abstract def: (self, username: str, *, project_id: str | None, thread_key: str | None, persona_id: str) -> None
+delphi_core.storage:Storage.set_conversation_title abstract def: (self, username: str, conversation_id: str, *, title: str, model: str, updated_at: str) -> None
+delphi_core.storage:Storage.set_memory_filed_through abstract def: (self, username: str, conversation_id: str, request_id: str | None, *, if_present: bool = False) -> bool
+delphi_core.storage:Storage.set_memory_update abstract def: (self, username: str, state: dict[str, typing.Any] | None) -> dict[str, typing.Any] | None
+delphi_core.storage:Storage.set_openai_file abstract def: (self, username: str, project_id: str, paper_id: str, file_id: str) -> None
+delphi_core.storage:Storage.set_paper_done abstract def: (self, username: str, project_id: str, paper_id: str, done: bool) -> dict[str, typing.Any]
+delphi_core.storage:Storage.set_paper_source_hash abstract def: (self, username: str, project_id: str, paper_id: str, source_hash: str) -> None
+delphi_core.storage:Storage.settle_onboarding abstract def: (self, username: str, *, require_filing: bool, finishing: bool = False) -> dict[str, typing.Any]
+delphi_core.storage:Storage.store_linked_pdf abstract def: (self, username: str, project_id: str, paper_id: str, fields: dict[str, typing.Any]) -> dict[str, typing.Any]
+delphi_core.storage:Storage.touch_paper abstract def: (self, username: str, project_id: str, paper_id: str) -> dict[str, typing.Any]
+delphi_core.storage:Storage.update_account_preferences abstract def: (self, username: str, *, use_standard_tier: bool) -> dict[str, typing.Any]
+delphi_core.storage:Storage.update_note abstract def: (self, username: str, project_id: str, paper_id: str, note_id: str, body: str) -> dict[str, typing.Any]
+delphi_core.storage:Storage.update_paper_snapshot abstract def: (self, username: str, project_id: str, paper_id: str, fields: dict[str, typing.Any]) -> dict[str, typing.Any]
+delphi_core.storage:Storage.update_password abstract def: (self, username: str, salt: str, password_hash: str) -> None
+delphi_core.storage:Storage.update_persona abstract def: (self, username: str, persona_id: str, fields: dict[str, typing.Any], *, expected_revision: int | None = None) -> dict[str, typing.Any]
+delphi_core.storage:Storage.upsert_memory_domain abstract def: (self, username: str, domain: dict[str, typing.Any]) -> dict[str, typing.Any]
+delphi_core.storage:Storage.upsert_memory_page abstract def: (self, username: str, page: dict[str, typing.Any], *, max_pages: int, trigger: str | None = None, note: str | None = None) -> dict[str, typing.Any]
+delphi_core.storage:UnsatisfiableRange class: (Exception)
+delphi_core.storage:chat_image_key def: (username: str, project_id: str | None, thread_key: str | None, image_id: str, variant: str) -> str
+delphi_core.storage:chat_image_prefix def: (username: str, project_id: str | None, thread_key: str | None = None) -> str
+delphi_core.storage:evidence_key def: (username: str, paper_id: str, evidence_id: str) -> str
+delphi_core.storage:evidence_prefix def: (username: str, paper_id: str) -> str
+delphi_core.storage:external_evidence_key def: (username: str, evidence_id: str) -> str
+delphi_core.storage:is_web def: (paper: dict[str, typing.Any]) -> bool
+delphi_core.storage:job_payload_is_upgradeable def: (job: dict[str, typing.Any], now: str) -> bool
+delphi_core.storage:memory_figure_key def: (username: str, figure_id: str, *, ext: str = 'webp') -> str
+delphi_core.storage:memory_slug def: (value: str) -> str
+delphi_core.storage:paper_key def: (username: str, project_id: str, paper_id: str, ext: str) -> str
+delphi_core.storage:parse_figure_refs def: (body: str) -> list[str]
+delphi_core.storage:parse_range def: (header: str | None, size: int) -> delphi_core.storage.ByteRange | None
+delphi_core.storage:parse_wiki_links def: (body: str) -> list[str]
+delphi_core.storage:project_prefix def: (username: str, project_id: str) -> str
+delphi_core.storage:rehome_chat_image_key def: (key: str, username: str, source_project_id: str, destination_project_id: str) -> str
+delphi_core.storage:safe_id def: (value: str) -> str
+delphi_core.storage:utc_now def: () -> str
+delphi_core.storage.rules:CAPTURE_JOB_KINDS value: tuple = ('capture',)
+delphi_core.storage.rules:COLLAPSE_FANOUT value: int = 4
+delphi_core.storage.rules:CONVERSATION_TITLE_MAX_CHARS value: int = 120
+delphi_core.storage.rules:DOCUMENT_JOB_KINDS value: tuple = ('document',)
+delphi_core.storage.rules:HELD_JOB_KINDS value: tuple = ()
+delphi_core.storage.rules:KINDS value: dict = {'document': 'document_chat', 'general': 'memory_chat'}
+delphi_core.storage.rules:LIMIT value: int = 10
+delphi_core.storage.rules:LINK_REPAIR_NOTE value: str = 'link to a deleted page became text'
+delphi_core.storage.rules:MEMORY_JOB_KINDS value: tuple = ('domain', 'page-rewrite', 'document', 'session', 'reconcile', 'capture')
+delphi_core.storage.rules:MEMORY_VERSION value: str = 'knowledge-v6'
+delphi_core.storage.rules:ONBOARDING_COMPLETE value: str = 'complete'
+delphi_core.storage.rules:ONBOARDING_RUNNING value: str = 'running'
+delphi_core.storage.rules:PAPER_TITLE_MAX_CHARS value: int = 200
+delphi_core.storage.rules:TITLE_WEIGHT value: float = 4.0
+delphi_core.storage.rules:VERSIONED_KINDS value: tuple = ('concept', 'domain')
+delphi_core.storage.rules:VERSIONS_KEPT value: int = 20
+delphi_core.storage.rules:abandoned_job_error def: (attempts: int) -> str
+delphi_core.storage.rules:allocate_route_slug def: (value: str, fallback: str, used: set[str]) -> str
+delphi_core.storage.rules:build_snippet def: (text: str, terms: list[str], max_chars: int = 240) -> str
+delphi_core.storage.rules:capture_marker def: (paper_id: str) -> str
+delphi_core.storage.rules:check_append def: (messages, message, answering = None)
+delphi_core.storage.rules:check_expected_revision def: (page: dict[str, typing.Any], prior: dict[str, typing.Any] | None, *, required: bool = False) -> None
+delphi_core.storage.rules:check_page_shape def: (page: dict[str, typing.Any]) -> None
+delphi_core.storage.rules:check_version_trigger def: (trigger: str | None) -> None
+delphi_core.storage.rules:clean_aliases def: (values: object, *, title: str = '', slug: str = '') -> list[str]
+delphi_core.storage.rules:collapsed_score def: (best: float, occurrences: int) -> float
+delphi_core.storage.rules:collective_terms def: (query: str) -> list[str]
+delphi_core.storage.rules:conversation_row def: (*, conversation: dict, project: dict | None, paper_slug: str, snippet: str, score: float, occurrences: int = 1) -> dict
+delphi_core.storage.rules:decode_cursor def: (cursor: str | None) -> tuple[str, str] | None
+delphi_core.storage.rules:default_domain_record def: (slug: str, now: str) -> dict[str, typing.Any]
+delphi_core.storage.rules:document_marker def: (paper_id: str, part: int = 0) -> str
+delphi_core.storage.rules:document_row def: (*, paper: dict, project: dict, section_kind: str, locator: str, locator_label: str, snippet: str, score: float, occurrences: int = 1) -> dict
+delphi_core.storage.rules:domain_job def: (slug: str, *, settle_seconds: float) -> dict[str, typing.Any]
+delphi_core.storage.rules:domain_job_marker def: (slug: str) -> str
+delphi_core.storage.rules:domains_owed def: (prior: collections.abc.Mapping[str, typing.Any] | None, written: collections.abc.Mapping[str, typing.Any]) -> list[str]
+delphi_core.storage.rules:empty_plan_state def: () -> dict[str, dict]
+delphi_core.storage.rules:encode_cursor def: (published_at: str, persona_id: str) -> str
+delphi_core.storage.rules:evidence_holders def: (papers: collections.abc.Iterable[dict[str, typing.Any]], pages: collections.abc.Iterable[dict[str, typing.Any]]) -> dict[str, list[dict[str, str]]]
+delphi_core.storage.rules:external_evidence_record def: (record: dict[str, typing.Any], *, object_key: str) -> dict[str, typing.Any]
+delphi_core.storage.rules:fit_conversation_title def: (text: str) -> str
+delphi_core.storage.rules:initial_title def: (paper: dict[str, typing.Any]) -> str | None
+delphi_core.storage.rules:job_fingerprint_moved def: (job: dict[str, typing.Any], fingerprint: str | None) -> bool
+delphi_core.storage.rules:last_user_turn_index def: (messages: list[dict[str, typing.Any]], request_id: str) -> int
+delphi_core.storage.rules:lexical_score def: (terms: list[str], page: dict[str, typing.Any]) -> float
+delphi_core.storage.rules:locator_label def: (kind: str, locator: str, title: str) -> str
+delphi_core.storage.rules:memory_row def: (page: dict, score: float, *, snippet: str, domain_title: str = '', occurrences: int = 1) -> dict
+delphi_core.storage.rules:message_text def: (body: dict) -> str
+delphi_core.storage.rules:note_holders def: (pages: collections.abc.Iterable[collections.abc.Mapping[str, typing.Any]], paper_id: str) -> dict[str, list[str]]
+delphi_core.storage.rules:official_detail def: (persona: delphi_core.personas.OfficialPersona) -> dict[str, typing.Any]
+delphi_core.storage.rules:official_persona def: (key: str | None) -> delphi_core.personas.OfficialPersona | None
+delphi_core.storage.rules:onboarding_tally def: (paper_ids: collections.abc.Sequence[str], filed_markers: set[str], pending_markers: set[str], *, require_filing: bool) -> dict[str, int]
+delphi_core.storage.rules:page_history_entry def: (versions: list[dict[str, typing.Any]]) -> dict[str, typing.Any]
+delphi_core.storage.rules:page_version def: (page: dict[str, typing.Any], *, event_id: str | None, trigger: str | None, note: str | None) -> dict[str, typing.Any]
+delphi_core.storage.rules:plan_route_slug_repairs def: (entries: list[tuple[str, str, object, object]], fallback: str) -> dict[str, str]
+delphi_core.storage.rules:query_terms def: (query: str) -> list[str]
+delphi_core.storage.rules:require_selector def: (key)
+delphi_core.storage.rules:retrieval_terms def: (text: str) -> list[str]
+delphi_core.storage.rules:selector def: (conversation_id, generation = 0)
+delphi_core.storage.rules:session_job def: (*, idle_seconds: float, project_id: str | None = None, paper_id: str | None = None, conversation_id: str | None = None, request_id: str = '', note_id: str = '', stamp: str = '') -> dict[str, typing.Any]
+delphi_core.storage.rules:summary def: (row)
+delphi_core.storage.rules:tsquery_all def: (terms: list[str]) -> str
+delphi_core.storage.rules:tsquery_term def: (term: str) -> str
+delphi_core.storage.rules:turn_to_file def: (messages: collections.abc.Iterable[collections.abc.Mapping[str, typing.Any]], message: collections.abc.Mapping[str, typing.Any], filed_through: str | None) -> tuple[bool, str | None]
+delphi_core.storage.rules:unlink_deleted_page def: (body: str, slug: str, title: str) -> str
+delphi_core.storage.rules:valid_route_slug def: (value: object) -> bool
+delphi_core.storage.rules:validate_scope def: (store, username, scope, project_id, paper_id)
+delphi_core.storage.rules:waits_for_capture def: (job: dict[str, typing.Any], jobs: collections.abc.Iterable[dict[str, typing.Any]]) -> bool
+delphi_core.backfill:COMMANDS value: tuple = ('index', 'thumbnails', 'digests', 'memory', 'memory_rebuild')
+delphi_core.backfill:run def: (command: str, settings: delphi_core.settings.Settings, stores: delphi_core.app.Stores, argv: collections.abc.Sequence[str] = ()) -> int

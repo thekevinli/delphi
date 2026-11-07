@@ -1,0 +1,102 @@
+{
+  "plans": {
+    "d3491ca9dd3c48aaa4f2949786927d9e": {
+      "id": "d3491ca9dd3c48aaa4f2949786927d9e",
+      "revision": 1,
+      "createdAt": "2026-10-23T06:57:29.890753+00:00",
+      "archived": false,
+      "plan": {
+        "version": 4,
+        "title": "Measure prefix cache reuse",
+        "question": "Does a stable prefix reduce repeated processing?",
+        "scope": "A bounded 20-request comparison on one endpoint.",
+        "design": {
+          "settings": [
+            {
+              "id": "a",
+              "label": "Stable prefix",
+              "detail": "20 requests"
+            },
+            {
+              "id": "b",
+              "label": "Shuffled prefix",
+              "detail": "20 requests"
+            }
+          ],
+          "runs": [
+            {
+              "id": "1",
+              "group": "Latency",
+              "label": "Equal token counts",
+              "cells": [
+                {
+                  "setting": "a",
+                  "reports": "hit rate, median latency",
+                  "decisive": true
+                },
+                {
+                  "setting": "b",
+                  "reports": "hit rate, median latency",
+                  "decisive": true
+                }
+              ]
+            }
+          ],
+          "caption": "The two cells of run (1) decide the claim."
+        },
+        "method": "Compare stable and shuffled prefixes with fixed suffix length and request timing.",
+        "order": [
+          "Build the request generator",
+          "Run (1) in (a) and (b)"
+        ],
+        "pseudocode": "for condition in conditions:\n    record(run(condition))",
+        "setup": [
+          {
+            "component": "Trial count",
+            "setting": "20 requests per condition",
+            "basis": "proposed"
+          }
+        ],
+        "readings": [
+          {
+            "when": "(a) beats (b) in repeated runs",
+            "then": "Prefix reuse improves latency here."
+          }
+        ],
+        "limits": "One endpoint and one prefix length.",
+        "reference": [],
+        "web": [],
+        "exhibits": []
+      },
+      "documents": [],
+      "referenceImages": [],
+      "conversationKey": "plans/u/reader/d3491ca9dd3c48aaa4f2949786927d9e/conversation.json",
+      "conversationTruncated": false,
+      "conversationHash": "3f8e0ab0fd99df8a91fef5efd813a2bd71b219ac2cae0134b75d38c7961d84c1",
+      "context": {
+        "conversationId": "9ac906ad7c48478fbd1ec5f0abb58f5a",
+        "generation": 0,
+        "scope": "general",
+        "requestId": "golden_ask_plan",
+        "question": "Plan an experiment that measures prefix reuse."
+      },
+      "contentHash": "d910c3c89e16faadf346fcf94701b8792ff02497b3fdaf149f3ad06c70b2fe9e"
+    }
+  },
+  "receipts": {
+    "11efd72973258af3afd5be06f8c7219c3a481efc7d4ff8d538a1e6f4d0889b35": {
+      "key": "11efd72973258af3afd5be06f8c7219c3a481efc7d4ff8d538a1e6f4d0889b35",
+      "fingerprint": "2674db336ba86828c5441e0eebdd4ccf5abe157f7006136ebcf7f838507acc39",
+      "status": "saved",
+      "token": "34bd0e55d90a2314b23b2c658abf287e",
+      "expiresAt": 1792740449.8350961,
+      "planId": "d3491ca9dd3c48aaa4f2949786927d9e",
+      "conversation": {
+        "id": "9ac906ad7c48478fbd1ec5f0abb58f5a",
+        "generation": 0
+      },
+      "requestId": "golden_ask_plan"
+    }
+  },
+  "grants": {}
+}

@@ -1,0 +1,16 @@
+node_modules/
+dist/
+out/
+*.log
+.DS_Store
+.venv/
+python-runtime/
+.delphi-build/
+
+.runtime/
+.pnpm-store/
+*.tsbuildinfo
+
+# Playwright
+desktop/frontend/test-results/
+desktop/frontend/playwright-report/

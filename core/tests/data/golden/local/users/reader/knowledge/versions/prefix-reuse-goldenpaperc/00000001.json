@@ -1,0 +1,22 @@
+{
+  "slug": "prefix-reuse-goldenpaperc",
+  "revision": 1,
+  "title": "Prefix reuse goldenpaperc",
+  "summary": "Understand exact prefix reuse and test its limitations.",
+  "body": "## Problem and approach\n\nPrefix caching reuses exact matching tokens before the changing question. [E1]\n\n## Evidence and limitations\n\nA stable prefix can reduce repeated work. Measure hit rate and repeated latency rather than assuming a universal speedup.\n\n## Reading route\n\nInspect the controlled comparison in [[cache-notes]] and ask which confounders remain.",
+  "citations": [
+    {
+      "id": 1,
+      "claimType": "author-claim",
+      "paperId": "goldenpaperc",
+      "page": 1,
+      "section": null,
+      "noteId": null,
+      "evidenceId": null
+    }
+  ],
+  "createdAt": "2026-10-23T06:57:29.622956+00:00",
+  "eventId": "bcd93920571f482cbff54c14f485a9db",
+  "trigger": "document",
+  "note": "Filed an evidence-bound page on prefix reuse."
+}

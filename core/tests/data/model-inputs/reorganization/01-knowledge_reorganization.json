@@ -1,0 +1,97 @@
+{
+  "method": "POST",
+  "url": "http://fixture/__fixtures/provider/v1/responses",
+  "body": {
+    "model": "gpt-6.1-sol",
+    "instructions": "You are re-filing one reader's knowledge base into the domains they keep it in.\n\nYou are given every page — slug, kind, current domain, title, summary — and every\ndomain, with the name the reader gave it and what they said it is for. Domains\nmarked `reader` were named deliberately by them; domains marked `model` were\ninvented in passing by an earlier pass and carry no weight.\n\nPropose moves. For each, give the page's `slug`, the domain slug to move it `to`,\nand one clause of `why` — the reason has to be about *this page's subject*, not\nabout balancing the sizes of domains.\n\nRules, because the failure mode is churn:\n\n- Move a page only when its current domain is clearly wrong for it, or when a\n  reader-named domain obviously fits it better. A page that is merely *also*\n  related to another domain stays where it is.\n- Prefer reader-named domains (`origin: reader`) over model-invented ones when the\n  page's subject clearly belongs there. A newly named domain with few or no pages\n  is a strong signal the reader wants things filed into it — propose those\n  moves rather than leaving it empty while a broad model domain keeps holding\n  them.\n- Never move a page out of a domain the reader named unless it plainly does not\n  belong there. They filed it; you did not.\n- Never move a `domain` page. A domain page *is* its domain.\n- Only use domain slugs from the list you were given. Do not invent one.\n- Proposing nothing is a valid and common outcome. An empty `moves` list is the\n  right answer for a base that is already filed sensibly, and a much better\n  answer than moving thirty pages to look busy.\n\nWrite `method` as one line describing what you compared.",
+    "input": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "input_text",
+            "text": "<reader_knowledge_index>\n- [[cache-research]] domain/cache-research — Cache research\n- [[shared-idea-study-k3x9-b]] source/cache-research — Shared Idea Study k3x9 B\n- [[shared-idea-k3x9]] concept/cache-research — Shared idea k3x9\n- [[shared-idea-study-k3x9-a]] source/cache-research — Shared Idea Study k3x9 A\n</reader_knowledge_index>\nReuse a slug above to revise that page; a new slug creates one."
+          },
+          {
+            "type": "input_text",
+            "text": "<citable_sources>\n[]\n</citable_sources>\nThese are the only documents that may be cited, and the only locators that exist in them."
+          },
+          {
+            "type": "input_text",
+            "text": "<domains>\n[{\"slug\": \"cache-research\", \"title\": \"Cache research\", \"summary\": \"\", \"origin\": \"model\", \"pages\": 4}, {\"slug\": \"general\", \"title\": \"General\", \"summary\": \"\", \"origin\": \"model\", \"pages\": 0}, {\"slug\": \"serving-cost\", \"title\": \"Serving cost\", \"summary\": \"What it costs to answer.\", \"origin\": \"reader\", \"pages\": 0}]\n</domains>\nThese are the only domains that exist. Move pages between them."
+          }
+        ]
+      }
+    ],
+    "reasoning": {
+      "effort": "medium"
+    },
+    "text": {
+      "format": {
+        "type": "json_schema",
+        "name": "knowledge_reorganization",
+        "strict": true,
+        "schema": {
+          "$defs": {
+            "KnowledgeMove": {
+              "additionalProperties": false,
+              "properties": {
+                "slug": {
+                  "maxLength": 60,
+                  "minLength": 1,
+                  "title": "Slug",
+                  "type": "string"
+                },
+                "to": {
+                  "maxLength": 60,
+                  "minLength": 1,
+                  "title": "To",
+                  "type": "string"
+                },
+                "why": {
+                  "maxLength": 200,
+                  "minLength": 1,
+                  "title": "Why",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "slug",
+                "to",
+                "why"
+              ],
+              "title": "KnowledgeMove",
+              "type": "object"
+            }
+          },
+          "additionalProperties": false,
+          "properties": {
+            "moves": {
+              "items": {
+                "$ref": "#/$defs/KnowledgeMove"
+              },
+              "maxItems": 60,
+              "title": "Moves",
+              "type": "array"
+            },
+            "method": {
+              "maxLength": 600,
+              "minLength": 1,
+              "title": "Method",
+              "type": "string"
+            }
+          },
+          "required": [
+            "moves",
+            "method"
+          ],
+          "title": "KnowledgeReorganization",
+          "type": "object"
+        }
+      }
+    },
+    "max_output_tokens": 36000,
+    "service_tier": "default",
+    "store": false
+  }
+}

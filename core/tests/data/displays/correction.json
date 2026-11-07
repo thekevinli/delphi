@@ -1,0 +1,425 @@
+{
+ "display": 1,
+ "title": "Correction training: train, then sample",
+ "badge": "From the paper",
+ "control": {
+  "id": "K",
+  "label": "Corrections per step",
+  "options": [
+   {
+    "value": "k0",
+    "label": "K = 0"
+   },
+   {
+    "value": "k2",
+    "label": "K = 2"
+   }
+  ],
+  "default": "k2",
+  "hint": "corrector passes per denoising step; the paper’s main runs use K = 8"
+ },
+ "variants": {
+  "k0": {
+   "xk": {
+    "label": "\\hat{x}^{(0)}"
+   },
+   "cor": {
+    "repeat": {
+     "count": "×0",
+     "off": true
+    }
+   },
+   "f1": {
+    "dim": true
+   },
+   "final": {
+    "text": "Without correction the early error is carried to the end."
+   }
+  },
+  "k2": {
+   "xk": {
+    "label": "\\hat{x}^{(2)}"
+   },
+   "cor": {
+    "repeat": {
+     "count": "×2"
+    }
+   },
+   "f0": {
+    "dim": true
+   },
+   "final": {
+    "text": "With two corrections per step the early error never reaches the end."
+   }
+  }
+ },
+ "steps": [
+  {
+   "name": "Train the denoiser",
+   "note": "A real image is noised to level $t$. The denoiser predicts the clean image $\\hat{x}^{(0)}$, scored by an $L_2$ loss against the original $x$."
+  },
+  {
+   "name": "Train the corrector",
+   "note": "The corrector takes the denoiser’s own prediction at the same $t$, with the gradient stopped (sg), and is trained toward the same target $x$.",
+   "set": {
+    "train2": {
+     "hidden": false
+    }
+   }
+  },
+  {
+   "name": "Sample from noise",
+   "note": "Sampling starts from pure noise at $t = 1$. Training stays faded above, for reference.",
+   "set": {
+    "train": {
+     "faded": true
+    },
+    "samp": {
+     "faded": false
+    },
+    "zt": {
+     "empty": false,
+     "noise": 1
+    },
+    "clock": {
+     "label": "step 1 / 250",
+     "value": 0.004,
+     "right": "$t$ = 1.000",
+     "note": ""
+    }
+   },
+   "variants": {
+    "k0": {
+     "clock": {
+      "accent": "no corrections"
+     }
+    },
+    "k2": {
+     "clock": {
+      "accent": "2 corrections at this step"
+     }
+    }
+   }
+  },
+  {
+   "name": "Denoise, then correct K times",
+   "note": {
+    "k0": "With $K = 0$ there is no corrector: the denoiser’s first guess goes straight on.",
+    "k2": "The denoiser makes a first guess, then the corrector refines it twice at the same noise level."
+   },
+   "set": {
+    "den": {
+     "glow": true
+    },
+    "x0": {
+     "empty": false,
+     "blur": 5
+    }
+   },
+   "variants": {
+    "k0": {
+     "xk": {
+      "empty": false,
+      "blur": 5
+     }
+    },
+    "k2": {
+     "xk": {
+      "empty": false,
+      "blur": 3,
+      "grow": true
+     },
+     "cor": {
+      "repeat": {
+       "count": "×2",
+       "run": true
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "Take the denoising step and repeat",
+   "note": "The prediction is mixed back with noise at the next, lower level and fed in again: an outer loop of 250 steps.",
+   "set": {
+    "x0": {
+     "dim": true
+    },
+    "zt": {
+     "noise": 0.86,
+     "blur": 5,
+     "label": "z_s"
+    },
+    "outer": {
+     "on": true
+    },
+    "clock": {
+     "label": "step 2 / 250",
+     "value": 0.008,
+     "right": "$t$ = 0.996",
+     "note": ""
+    }
+   },
+   "variants": {
+    "k2": {
+     "xk": {
+      "grow": false
+     },
+     "cor": {
+      "repeat": {
+       "count": "×2"
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "Later steps",
+   "note": {
+    "k0": "The same error appears in the denoiser’s guess and, uncorrected, is fed back into every later step.",
+    "k2": "An error appears in the denoiser’s guess (a broken peak). The corrector repairs it before it is fed back."
+   },
+   "set": {
+    "zt": {
+     "noise": 0.32,
+     "blur": 1.8,
+     "label": "z_t"
+    },
+    "x0": {
+     "blur": 0.9,
+     "defect": 1,
+     "ring": true,
+     "dim": false
+    },
+    "outer": {
+     "on": false
+    },
+    "clock": {
+     "label": "step 175 / 250",
+     "value": 0.7,
+     "right": "$t$ = 0.300",
+     "note": "steps 3–174 not shown"
+    }
+   },
+   "variants": {
+    "k0": {
+     "zt": {
+      "defect": 0.7
+     },
+     "xk": {
+      "blur": 0,
+      "defect": 1,
+      "ring": true
+     }
+    },
+    "k2": {
+     "xk": {
+      "blur": 0,
+      "fix": true,
+      "grow": true
+     },
+     "cor": {
+      "repeat": {
+       "count": "×2",
+       "run": true
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "Final sample",
+   "note": {
+    "k0": "The broken peak survives to the final image: the exposure bias the paper targets, from training on clean-plus-noise inputs but sampling from the model’s own predictions.",
+    "k2": "The final image keeps a clean peak. Correction costs $K$ extra passes per step; the paper removes that cost by distilling the corrected predictions back into the base model."
+   },
+   "set": {
+    "zt": {
+     "noise": 0,
+     "blur": 0
+    },
+    "x0": {
+     "blur": 0,
+     "ring": false
+    },
+    "den": {
+     "glow": false
+    },
+    "train": {
+     "faded": false
+    },
+    "final": {
+     "hidden": false
+    },
+    "clock": {
+     "label": "step 250 / 250",
+     "value": 1.0,
+     "right": "$t$ = 0",
+     "note": "steps 176–249 not shown"
+    }
+   },
+   "variants": {
+    "k2": {
+     "xk": {
+      "fix": false,
+      "grow": false
+     },
+     "cor": {
+      "repeat": {
+       "count": "×2"
+      }
+     }
+    }
+   }
+  }
+ ],
+ "figures": [
+  {
+   "kind": "flow",
+   "id": "method",
+   "style": "stretch",
+   "lanes": [
+    {
+     "id": "train",
+     "label": "Training",
+     "rows": [
+      {
+       "items": [
+        {
+         "type": "tile",
+         "label": "z_t",
+         "noise": 0.55
+        },
+        {
+         "type": "node",
+         "label": "Denoise",
+         "math": "D_\\theta(z_t, t)"
+        },
+        {
+         "type": "tile",
+         "label": "\\hat{x}^{(0)}",
+         "blur": 3
+        },
+        {
+         "type": "link",
+         "style": "dashed",
+         "label": "L_2"
+        },
+        {
+         "type": "tile",
+         "label": "x"
+        }
+       ]
+      },
+      {
+       "id": "train2",
+       "hidden": true,
+       "items": [
+        {
+         "type": "tile",
+         "label": "\\hat{x}^{(0)}",
+         "blur": 3,
+         "tag": "sg"
+        },
+        {
+         "type": "node",
+         "label": "Correct",
+         "math": "C_\\phi(\\hat{x}, t)",
+         "tone": "blue"
+        },
+        {
+         "type": "tile",
+         "label": "\\hat{x}^{(1)}",
+         "blur": 0.9
+        },
+        {
+         "type": "link",
+         "style": "dashed",
+         "label": "L_2"
+        },
+        {
+         "type": "tile",
+         "label": "x"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "samp",
+     "label": "Sampling",
+     "faded": true,
+     "rows": [
+      {
+       "items": [
+        {
+         "type": "tile",
+         "id": "zt",
+         "label": "z_t",
+         "empty": true
+        },
+        {
+         "type": "node",
+         "id": "den",
+         "label": "Denoise",
+         "math": "D_\\theta(z_t, t)"
+        },
+        {
+         "type": "tile",
+         "id": "x0",
+         "label": "\\hat{x}^{(0)}",
+         "empty": true
+        },
+        {
+         "type": "node",
+         "id": "cor",
+         "label": "Correct ×K",
+         "math": "C_\\phi(\\hat{x}, t)",
+         "tone": "blue"
+        },
+        {
+         "type": "tile",
+         "id": "xk",
+         "label": "\\hat{x}^{(2)}",
+         "empty": true
+        }
+       ]
+      }
+     ],
+     "loop": {
+      "id": "outer",
+      "label": "denoising step $t \\to s$, fed back"
+     },
+     "progress": {
+      "id": "clock",
+      "label": "step 0 / 250",
+      "value": 0,
+      "right": "$t$ = —"
+     }
+    }
+   ]
+  },
+  {
+   "kind": "compare",
+   "id": "final",
+   "hidden": true,
+   "tiles": [
+    {
+     "type": "tile",
+     "id": "f0",
+     "label": "K = 0",
+     "defect": 1,
+     "ring": true
+    },
+    {
+     "type": "tile",
+     "id": "f1",
+     "label": "K = 2"
+    }
+   ],
+   "lead": "Final samples from the same noise.",
+   "text": ""
+  }
+ ],
+ "footnote": "Images are stand-ins drawn by the library, not the paper’s samples."
+}
