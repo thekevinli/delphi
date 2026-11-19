@@ -1,0 +1,20 @@
+[
+  {
+    "slug": "general",
+    "title": "General",
+    "summary": null,
+    "origin": "model",
+    "position": 0,
+    "createdAt": "2026-10-23T06:57:29.425497+00:00",
+    "updatedAt": "2026-10-23T06:57:29.585140+00:00"
+  },
+  {
+    "slug": "cache-research",
+    "title": "Cache research",
+    "summary": null,
+    "origin": "model",
+    "position": 0,
+    "createdAt": "2026-10-23T06:57:29.465032+00:00",
+    "updatedAt": "2026-10-23T06:57:29.677962+00:00"
+  }
+]

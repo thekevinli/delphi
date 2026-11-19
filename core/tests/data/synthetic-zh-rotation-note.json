@@ -1,0 +1,15 @@
+{
+ "source": "Synthetic fixture written for Delphi's tests: original text in the shape of a saved Chinese blog post, one entry per section as the passage reader shows it (title, then text). Apache-2.0, like the repository. (synthetic Chinese note on rotary position encoding)",
+ "sections": {
+  "top": "位置编码笔记：旋转的办法 - 示例笔记本|Example Notebook\n\n[首页](https://example.org)\n[机器学习](https://example.org/category/ml) 位置编码笔记：旋转的办法",
+  "transformer-2": "位置编码笔记：旋转的办法\n\nBy \n示例作者 |\n2026-01-02 |\n2048位读者\n | \n\n:\n\n这是一篇为测试而写的示例文章：怎样让注意力的打分只依赖两个位置的差，即RoPE。\n\n（英文名：Position Encoding by Rotation Notes）",
+  "基本思路": "基本思路\n\n我们希望注意力的打分只与相对位置有关，RoPE就是这样一个办法。写成式子，就是要找一个对位置$m$和向量$\\boldsymbol{q}$都起作用的变换$f$，使得变换后两个向量的内积只依赖于它们的差$m-n$。\n\n加性的位置信息做不到这一点，因为内积展开后会混入与绝对位置有关的项；所以改为让位置以乘性的方式作用在向量上。",
+  "求解过程": "求解过程\n\n先考虑二维的情形，并借助复数来求解。把二维向量看成一个复数，内积就是一个复数乘积的实部。若令变换为乘上单位模长的复数$e^{\\mathrm{i}m\\theta}$，则两个位置上的变换后向量的内积，实部里出现的是$e^{\\mathrm{i}(m-n)\\theta}$，也就是只与位置差有关。\n\n这说明，旋转是满足要求的一个解，这也是RoPE的出发点。至于是否唯一，需要附加一些光滑性的假设才能讨论。",
+  "编码形式": "编码形式\n\n综上，二维情形的编码就是把向量旋转一个与位置成正比的角度。写成矩阵，就是一个旋转矩阵。\n\n对于更高的维度（RoPE的做法），把维度两两分组，每一组使用各自的旋转频率，整体是一个分块对角的旋转矩阵。实现时不必真的构造这个矩阵，只需把向量与余弦、正弦表做逐元素的乘加。\n\n把这个旋转分别作用到q和k上，两者的内积里只剩下角度之差，于是Attention就自动包含相对位置信息了。",
+  "远程衰减": "远程衰减\n\nRoPE的内积有一个性质：当两个位置相距很远时，各组频率的贡献相互抵消，打分的幅度会缓慢地下降。这符合直觉：相距越远的词，通常关联越弱。\n\n频率的选取决定了衰减的快慢。取成等比数列时，既有高频负责近处的区分，也有低频负责远处的区分。",
+  "线性场景": "线性场景\n\n线性注意力把打分写成两个特征向量的内积（RoPE可以用在这里），没有归一化的指数，因此不能直接在打分上加偏置。而旋转作用在特征向量本身，不改变内积的形式，所以可以与线性注意力一起使用。\n\n这是旋转式编码相对于其他相对位置编码的一个实际优势。",
+  "模型开源": "模型开源\n\nPosition Encoding的示例实现，与一个小型的示例模型，，放在了一个虚构的仓库里：\n\n> **示例模型：<https://example.org/code/example-model>**\n\n欢迎在测试里随意引用它，它并不存在。",
+  "文章小结": "文章小结\n\n本文是一篇示例文章：用旋转表示位置（即RoPE），可以让注意力的打分只依赖相对位置，实现简单，还能与线性注意力兼容。\n\n***转载声明：**这是为测试而写的虚构文章，没有原作者，可以自由使用。*",
+  "section": "你也许还对下面的内容感兴趣\n\n- [示例笔记1：另一个与本文无关的题目](https://example.org/notes/201 \"示例笔记1\")\n- [示例笔记2：另一个与本文无关的题目](https://example.org/notes/202 \"示例笔记2\")\n- [示例笔记3：另一个与本文无关的题目](https://example.org/notes/203 \"示例笔记3\")\n- [示例笔记4：另一个与本文无关的题目](https://example.org/notes/204 \"示例笔记4\")\n- [示例笔记5：另一个与本文无关的题目](https://example.org/notes/205 \"示例笔记5\")\n- [示例笔记6：另一个与本文无关的题目](https://example.org/notes/206 \"示例笔记6\")\n- [示例笔记7：另一个与本文无关的题目](https://example.org/notes/207 \"示例笔记7\")\n- [示例笔记8：另一个与本文无关的题目](https://example.org/notes/208 \"示例笔记8\")\n- [示例笔记9：另一个与本文无关的题目](https://example.org/notes/209 \"示例笔记9\")\n- [示例笔记10：另一个与本文无关的题目](https://example.org/notes/210 \"示例笔记10\")\n\n发表你的看法\n\n访客甲：写得很清楚，收藏了。\n\nReader C: so RoPE is a rotation, and the position enters only as a relative one? That was the part I was missing.\n\n访客丁：期待下一篇。"
+ }
+}

@@ -1,0 +1,736 @@
+{
+ "display": 1,
+ "title": "vLLM-Omni serving Qwen2.5-Omni",
+ "badge": "From the paper",
+ "figures": [
+  {
+   "kind": "grid",
+   "id": "stages",
+   "title": "Stage graph",
+   "subtitle": "Blue: autoregressive stage on vLLM. Sand: diffusion stage. Pills: what one stage hands the next.",
+   "columns": [
+    "node",
+    "link",
+    "node",
+    "link",
+    "node"
+   ],
+   "items": [
+    {
+     "type": "text",
+     "text": "Stage",
+     "col": 1,
+     "row": 1
+    },
+    {
+     "type": "text",
+     "text": "Preprocess, per request",
+     "col": 3,
+     "row": 1
+    },
+    {
+     "type": "text",
+     "text": "Forward, batched",
+     "col": 5,
+     "row": 1
+    },
+    {
+     "type": "node",
+     "label": "Thinker",
+     "note": "AR · vLLM engine",
+     "tone": "blue",
+     "tip": {
+      "title": "Thinker: the multimodal LLM",
+      "line": "Reads text, audio, image and video; emits text tokens and the hidden states the Talker needs."
+     },
+     "col": 1,
+     "row": 2
+    },
+    {
+     "type": "arrow",
+     "dir": "right",
+     "col": 2,
+     "row": 2
+    },
+    {
+     "type": "node",
+     "label": "mm_encode",
+     "note": "media embeddings",
+     "tip": {
+      "title": "mm_encode",
+      "line": "Runs the vision and audio encoders once per request and splices their embeddings into the prompt."
+     },
+     "col": 3,
+     "row": 2
+    },
+    {
+     "type": "arrow",
+     "dir": "right",
+     "col": 4,
+     "row": 2
+    },
+    {
+     "type": "node",
+     "label": "thinker_forward",
+     "note": "text tokens + hidden",
+     "tip": {
+      "title": "thinker_forward",
+      "line": "Ordinary vLLM decoding, batched across requests, with the last hidden layer kept for the next stage."
+     },
+     "col": 5,
+     "row": 2
+    },
+    {
+     "type": "arrow",
+     "dir": "down",
+     "col": 1,
+     "row": 3,
+     "pill": {
+      "type": "node",
+      "label": "Thinker2Talker",
+      "note": "hidden states",
+      "tip": {
+       "title": "Thinker2Talker",
+       "line": "Edge function: hands the Thinker’s hidden states and tokens to the Talker through the connector."
+      }
+     }
+    },
+    {
+     "type": "node",
+     "label": "Talker",
+     "note": "AR · vLLM engine",
+     "tone": "blue",
+     "tip": {
+      "title": "Talker: a smaller AR model",
+      "line": "Turns the Thinker’s hidden states into discrete speech codec tokens."
+     },
+     "col": 1,
+     "row": 4
+    },
+    {
+     "type": "arrow",
+     "dir": "right",
+     "col": 2,
+     "row": 4
+    },
+    {
+     "type": "node",
+     "label": "process_input",
+     "note": "joins Thinker hidden",
+     "tip": {
+      "title": "process_input",
+      "line": "Concatenates the received hidden states with the Talker’s own embeddings before its first step."
+     },
+     "col": 3,
+     "row": 4
+    },
+    {
+     "type": "arrow",
+     "dir": "right",
+     "col": 4,
+     "row": 4
+    },
+    {
+     "type": "node",
+     "label": "talker_forward",
+     "note": "codec tokens",
+     "tip": {
+      "title": "talker_forward",
+      "line": "Batched AR decoding of codec tokens, emitted in chunks so the Vocoder can start early."
+     },
+     "col": 5,
+     "row": 4
+    },
+    {
+     "type": "arrow",
+     "dir": "down",
+     "col": 1,
+     "row": 5,
+     "pill": {
+      "type": "node",
+      "label": "Talker2Vocoder",
+      "note": "codec tokens",
+      "tip": {
+       "title": "Talker2Vocoder",
+       "line": "Edge function: streams codec-token chunks to the Vocoder as they are produced."
+      }
+     }
+    },
+    {
+     "type": "node",
+     "label": "Vocoder",
+     "note": "DiT · diffusion engine",
+     "tone": "saffron",
+     "tip": {
+      "title": "Vocoder: a diffusion transformer",
+      "line": "Not autoregressive, so it runs on a diffusion engine instead of vLLM."
+     },
+     "col": 1,
+     "row": 6
+    },
+    {
+     "type": "arrow",
+     "dir": "right",
+     "col": 2,
+     "row": 6,
+     "cols": 3
+    },
+    {
+     "type": "node",
+     "label": "dit_decode",
+     "note": "codes to waveform",
+     "tip": {
+      "title": "dit_decode",
+      "line": "Denoises each chunk of codec tokens into audio samples."
+     },
+     "col": 5,
+     "row": 6
+    }
+   ]
+  },
+  {
+   "kind": "grid",
+   "id": "engines",
+   "title": "Engines, connector and devices",
+   "subtitle": "Control plane on top, data plane below, one engine per stage.",
+   "columns": 6,
+   "items": [
+    {
+     "type": "node",
+     "label": "Orchestrator",
+     "note": "control plane: request queues, stage manager, request metadata",
+     "short": "request queues, stage manager",
+     "tone": "sand",
+     "tip": {
+      "title": "Orchestrator",
+      "line": "Admits requests, tracks each one’s progress through the stage graph and tells engines what to run. Moves no tensors."
+     },
+     "col": 1,
+     "row": 1,
+     "cols": 6
+    },
+    {
+     "type": "arrow",
+     "dir": "down",
+     "col": 1,
+     "row": 2,
+     "cols": 2
+    },
+    {
+     "type": "group",
+     "tone": "blue",
+     "col": 1,
+     "cols": 2,
+     "row": 3,
+     "rows": 4
+    },
+    {
+     "type": "node",
+     "label": "Thinker engine",
+     "note": "vLLM · TP = 2",
+     "tone": "blue",
+     "look": "head",
+     "tip": {
+      "title": "Thinker engine",
+      "line": "Owns the Thinker’s scheduler and paged KV cache; its weights are split over two GPUs."
+     },
+     "col": 1,
+     "row": 3,
+     "cols": 2
+    },
+    {
+     "type": "node",
+     "label": "Scheduler, KV cache",
+     "look": "chip",
+     "tip": {
+      "title": "Scheduler, KV cache",
+      "line": "Continuous batching and paged KV memory, per stage."
+     },
+     "col": 1,
+     "row": 4,
+     "cols": 2
+    },
+    {
+     "type": "node",
+     "label": "Runner: preprocess, forward",
+     "look": "chip",
+     "tip": {
+      "title": "Runner: preprocess, forward",
+      "line": "Runs the stage’s preprocess hook, then the batched forward."
+     },
+     "col": 1,
+     "row": 5,
+     "cols": 2
+    },
+    {
+     "type": "node",
+     "label": "Output processor",
+     "look": "chip",
+     "tip": {
+      "title": "Output processor",
+      "line": "Detokenizes text and hands hidden states to the edge function."
+     },
+     "col": 1,
+     "row": 6,
+     "cols": 2
+    },
+    {
+     "type": "arrow",
+     "dir": "down",
+     "col": 1,
+     "row": 7,
+     "cols": 2
+    },
+    {
+     "type": "arrow",
+     "dir": "down",
+     "col": 3,
+     "row": 2,
+     "cols": 2
+    },
+    {
+     "type": "group",
+     "tone": "blue",
+     "col": 3,
+     "cols": 2,
+     "row": 3,
+     "rows": 4
+    },
+    {
+     "type": "node",
+     "label": "Talker engine",
+     "note": "vLLM · own scheduler",
+     "tone": "blue",
+     "look": "head",
+     "tip": {
+      "title": "Talker engine",
+      "line": "A second vLLM engine with its own batch and KV cache, so Talker steps never wait on Thinker steps."
+     },
+     "col": 3,
+     "row": 3,
+     "cols": 2
+    },
+    {
+     "type": "node",
+     "label": "Scheduler, KV cache",
+     "look": "chip",
+     "tip": {
+      "title": "Scheduler, KV cache",
+      "line": "Continuous batching and paged KV memory, per stage."
+     },
+     "col": 3,
+     "row": 4,
+     "cols": 2
+    },
+    {
+     "type": "node",
+     "label": "Runner: preprocess, forward",
+     "look": "chip",
+     "tip": {
+      "title": "Runner: preprocess, forward",
+      "line": "Runs the stage’s preprocess hook, then the batched forward."
+     },
+     "col": 3,
+     "row": 5,
+     "cols": 2
+    },
+    {
+     "type": "node",
+     "label": "Streaming output",
+     "look": "chip",
+     "tip": {
+      "title": "Streaming output",
+      "line": "Releases codec chunks as soon as they are decoded."
+     },
+     "col": 3,
+     "row": 6,
+     "cols": 2
+    },
+    {
+     "type": "arrow",
+     "dir": "both",
+     "col": 3,
+     "row": 7,
+     "cols": 2
+    },
+    {
+     "type": "arrow",
+     "dir": "down",
+     "col": 5,
+     "row": 2,
+     "cols": 2
+    },
+    {
+     "type": "group",
+     "tone": "saffron",
+     "col": 5,
+     "cols": 2,
+     "row": 3,
+     "rows": 4
+    },
+    {
+     "type": "node",
+     "label": "Vocoder engine",
+     "note": "diffusion engine",
+     "tone": "saffron",
+     "look": "head",
+     "tip": {
+      "title": "Vocoder engine",
+      "line": "Diffusion-specific speedups: step caching and sequence parallelism across GPUs."
+     },
+     "col": 5,
+     "row": 3,
+     "cols": 2
+    },
+    {
+     "type": "node",
+     "label": "Flash / SAGE attention",
+     "look": "chip",
+     "tip": {
+      "title": "Flash / SAGE attention",
+      "line": "Fused attention kernels for the DiT."
+     },
+     "col": 5,
+     "row": 4,
+     "cols": 2
+    },
+    {
+     "type": "node",
+     "label": "TeaCache, cache-DiT",
+     "look": "chip",
+     "tip": {
+      "title": "TeaCache, cache-DiT",
+      "line": "Reuses work across denoising steps when outputs barely change."
+     },
+     "col": 5,
+     "row": 5,
+     "cols": 2
+    },
+    {
+     "type": "node",
+     "label": "Ulysses / ring SP",
+     "look": "chip",
+     "tip": {
+      "title": "Ulysses / ring SP",
+      "line": "Splits one long sequence across GPUs."
+     },
+     "col": 5,
+     "row": 6,
+     "cols": 2
+    },
+    {
+     "type": "arrow",
+     "dir": "up",
+     "col": 5,
+     "row": 7,
+     "cols": 2
+    },
+    {
+     "type": "node",
+     "label": "Unified connector",
+     "note": "data plane, set per edge: shared memory on one node, Ray + Mooncake over TCP or RDMA across nodes",
+     "short": "shared memory or Mooncake",
+     "tone": "sand",
+     "tip": {
+      "title": "Unified connector",
+      "line": "Every edge function moves its tensors here; each edge picks its transport, so stages can live on different machines."
+     },
+     "col": 1,
+     "row": 8,
+     "cols": 6
+    },
+    {
+     "type": "arrow",
+     "dir": "down",
+     "col": 1,
+     "row": 9,
+     "cols": 3
+    },
+    {
+     "type": "arrow",
+     "dir": "down",
+     "col": 4,
+     "row": 9,
+     "cols": 3
+    },
+    {
+     "type": "node",
+     "label": "GPU 0 · 80 GB",
+     "note": "Thinker TP shard 0 + Vocoder",
+     "tip": {
+      "title": "GPU 0",
+      "line": "Half the Thinker’s weights, plus the whole Vocoder."
+     },
+     "col": 1,
+     "row": 10,
+     "cols": 3
+    },
+    {
+     "type": "node",
+     "label": "GPU 1 · 80 GB",
+     "note": "Thinker TP shard 1 + Talker",
+     "tip": {
+      "title": "GPU 1",
+      "line": "The other half of the Thinker, plus the Talker."
+     },
+     "col": 4,
+     "row": 10,
+     "cols": 3
+    }
+   ]
+  },
+  {
+   "kind": "timeline",
+   "id": "requests",
+   "title": "Two requests, A and B, through each design",
+   "subtitle": "Schematic timing, not measured.",
+   "max": 86,
+   "series": [
+    {
+     "id": "a",
+     "label": "request A",
+     "tone": "blue"
+    },
+    {
+     "id": "b",
+     "label": "request B",
+     "tone": "saffron"
+    }
+   ],
+   "panels": [
+    {
+     "title": "One generate() chain per request",
+     "note": "B waits for all of A",
+     "end": 82,
+     "endLabel": "both done at",
+     "lanes": [
+      {
+       "label": "Thinker",
+       "bars": [
+        {
+         "series": "a",
+         "start": 2,
+         "end": 10,
+         "tip": {
+          "title": "Request A · Thinker · 2–10",
+          "line": "prefill and decode text"
+         }
+        },
+        {
+         "series": "b",
+         "start": 42,
+         "end": 50,
+         "tip": {
+          "title": "Request B · Thinker · 42–50",
+          "line": "starts only when A is done"
+         }
+        }
+       ]
+      },
+      {
+       "label": "Talker",
+       "bars": [
+        {
+         "series": "a",
+         "start": 10,
+         "end": 34,
+         "tip": {
+          "title": "Request A · Talker · 10–34",
+          "line": "decode codec tokens"
+         }
+        },
+        {
+         "series": "b",
+         "start": 50,
+         "end": 74,
+         "tip": {
+          "title": "Request B · Talker · 50–74",
+          "line": "decode codec tokens"
+         }
+        }
+       ]
+      },
+      {
+       "label": "Vocoder",
+       "bars": [
+        {
+         "series": "a",
+         "start": 34,
+         "end": 42,
+         "tip": {
+          "title": "Request A · Vocoder · 34–42",
+          "line": "decode the waveform in one go"
+         }
+        },
+        {
+         "series": "b",
+         "start": 74,
+         "end": 82,
+         "tip": {
+          "title": "Request B · Vocoder · 74–82",
+          "line": "decode the waveform"
+         }
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "title": "An engine per stage, output streamed",
+     "note": "A and B share batches",
+     "end": 34,
+     "endLabel": "both done at",
+     "lanes": [
+      {
+       "label": "Thinker",
+       "bars": [
+        {
+         "series": "a",
+         "start": 2,
+         "end": 10,
+         "tip": {
+          "title": "Request A · Thinker · 2–10",
+          "line": "batched with B"
+         }
+        },
+        {
+         "series": "b",
+         "start": 3,
+         "end": 11,
+         "tip": {
+          "title": "Request B · Thinker · 3–11",
+          "line": "batched with A"
+         }
+        }
+       ]
+      },
+      {
+       "label": "Talker",
+       "bars": [
+        {
+         "series": "a",
+         "start": 9,
+         "end": 29,
+         "tip": {
+          "title": "Request A · Talker · 9–29",
+          "line": "starts on the Thinker’s hidden states"
+         }
+        },
+        {
+         "series": "b",
+         "start": 10,
+         "end": 30,
+         "tip": {
+          "title": "Request B · Talker · 10–30",
+          "line": "shares the Talker’s batch with A"
+         }
+        }
+       ]
+      },
+      {
+       "label": "Vocoder",
+       "bars": [
+        {
+         "series": "a",
+         "start": 13,
+         "end": 15.4,
+         "tip": {
+          "title": "Request A · Vocoder · 13–15.4",
+          "line": "audio chunk 1, decoded while the Talker still runs"
+         }
+        },
+        {
+         "series": "b",
+         "start": 14.6,
+         "end": 17,
+         "tip": {
+          "title": "Request B · Vocoder · 14.6–17",
+          "line": "audio chunk 1"
+         }
+        },
+        {
+         "series": "a",
+         "start": 17,
+         "end": 19.4,
+         "tip": {
+          "title": "Request A · Vocoder · 17–19.4",
+          "line": "audio chunk 2, decoded while the Talker still runs"
+         }
+        },
+        {
+         "series": "b",
+         "start": 18.6,
+         "end": 21,
+         "tip": {
+          "title": "Request B · Vocoder · 18.6–21",
+          "line": "audio chunk 2"
+         }
+        },
+        {
+         "series": "a",
+         "start": 21,
+         "end": 23.4,
+         "tip": {
+          "title": "Request A · Vocoder · 21–23.4",
+          "line": "audio chunk 3, decoded while the Talker still runs"
+         }
+        },
+        {
+         "series": "b",
+         "start": 22.6,
+         "end": 25,
+         "tip": {
+          "title": "Request B · Vocoder · 22.6–25",
+          "line": "audio chunk 3"
+         }
+        },
+        {
+         "series": "a",
+         "start": 25,
+         "end": 27.4,
+         "tip": {
+          "title": "Request A · Vocoder · 25–27.4",
+          "line": "audio chunk 4, decoded while the Talker still runs"
+         }
+        },
+        {
+         "series": "b",
+         "start": 26.6,
+         "end": 29,
+         "tip": {
+          "title": "Request B · Vocoder · 26.6–29",
+          "line": "audio chunk 4"
+         }
+        },
+        {
+         "series": "a",
+         "start": 29,
+         "end": 31.4,
+         "tip": {
+          "title": "Request A · Vocoder · 29–31.4",
+          "line": "audio chunk 5, decoded while the Talker still runs"
+         }
+        },
+        {
+         "series": "b",
+         "start": 30.6,
+         "end": 33,
+         "tip": {
+          "title": "Request B · Vocoder · 30.6–33",
+          "line": "audio chunk 5"
+         }
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "key": [
+    {
+     "label": "dashed line: both requests done",
+     "mark": "none"
+    }
+   ]
+  }
+ ]
+}

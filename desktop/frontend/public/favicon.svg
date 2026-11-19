@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <mask id="gap-x" maskUnits="userSpaceOnUse" x="0" y="0" width="120" height="120">
+    <rect width="120" height="120" fill="#000"></rect>
+    <circle cx="60" cy="40" r="21" fill="#fff"></circle>
+    <path d="M60 44 L98 98 H22 Z" fill="#000" stroke="#000" stroke-width="12" stroke-linejoin="round" stroke-linecap="round"></path>
+  </mask>
+  <circle cx="60" cy="40" r="21" fill="#ee9d66" mask="url(#gap-x)"></circle>
+  <path d="M60 44 L98 98 H22 Z" fill="#5a2620" stroke="#5a2620" stroke-width="4" stroke-linejoin="round"></path>
+</svg>

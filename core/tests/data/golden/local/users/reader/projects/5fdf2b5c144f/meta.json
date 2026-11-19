@@ -1,0 +1,194 @@
+{
+  "id": "5fdf2b5c144f",
+  "name": "Reading",
+  "slug": "reading",
+  "routeName": "Reading",
+  "owner": "reader",
+  "createdAt": "2026-10-23T06:57:29.375306+00:00",
+  "updatedAt": "2026-10-23T06:57:29.582843+00:00",
+  "papers": [
+    {
+      "id": "goldenpapera",
+      "title": "Shared Idea Study g7 A",
+      "filename": "goldenpapera.pdf",
+      "pages": 2,
+      "tokens": 20,
+      "bytes": 100,
+      "createdAt": "2026-10-23T06:57:29.376227+00:00",
+      "lastEngagedAt": "2026-10-23T06:57:29.376227+00:00",
+      "slug": "shared-idea-study-g7-a",
+      "routeTitle": "Shared Idea Study g7 A",
+      "openaiFileId": "file-goldenpapera",
+      "openaiFileUploadedAt": "2026-10-23T06:57:29.378898+00:00",
+      "sourceHash": "7108fc279d19628b69a5666492cc1cdb5c536b257073167489eed6f7c8719977",
+      "digest": {
+        "version": "research-digest-v8",
+        "model": "gpt-6.1-sol",
+        "sourceMode": "pdf-multimodal",
+        "sourceHash": "7108fc279d19628b69a5666492cc1cdb5c536b257073167489eed6f7c8719977",
+        "estimatedTokens": 114,
+        "status": "ready",
+        "evidenceIds": [],
+        "updatedAt": "2026-10-23T06:57:29.423691+00:00",
+        "telemetry": {
+          "totalDurationMs": 33,
+          "stageDurationsMs": [
+            {
+              "stage": "digest-author",
+              "durationMs": 27
+            }
+          ],
+          "callCount": 1,
+          "attempts": {
+            "author": 1,
+            "corrections": 0
+          },
+          "inputTokens": 100,
+          "outputTokens": 60,
+          "reasoningTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "requestedTier": "default",
+          "actualTier": "default",
+          "bodyCharacters": 310,
+          "calls": [
+            {
+              "stage": "digest-author",
+              "durationMs": 27,
+              "inputTokens": 100,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "outputTokens": 60,
+              "reasoningTokens": 0,
+              "requestedTier": "default",
+              "actualTier": "default",
+              "model": "gpt-6.1-sol"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "goldenpaperb",
+      "title": "Shared Idea Study g7 B",
+      "filename": "goldenpaperb.pdf",
+      "pages": 2,
+      "tokens": 20,
+      "bytes": 100,
+      "createdAt": "2026-10-23T06:57:29.379445+00:00",
+      "lastEngagedAt": "2026-10-23T06:57:29.379445+00:00",
+      "slug": "shared-idea-study-g7-b",
+      "routeTitle": "Shared Idea Study g7 B",
+      "openaiFileId": "file-goldenpaperb",
+      "openaiFileUploadedAt": "2026-10-23T06:57:29.381167+00:00",
+      "sourceHash": "7108fc279d19628b69a5666492cc1cdb5c536b257073167489eed6f7c8719977",
+      "digest": {
+        "version": "research-digest-v8",
+        "model": "gpt-6.1-sol",
+        "sourceMode": "pdf-multimodal",
+        "sourceHash": "7108fc279d19628b69a5666492cc1cdb5c536b257073167489eed6f7c8719977",
+        "estimatedTokens": 114,
+        "status": "ready",
+        "evidenceIds": [],
+        "updatedAt": "2026-10-23T06:57:29.501446+00:00",
+        "telemetry": {
+          "totalDurationMs": 27,
+          "stageDurationsMs": [
+            {
+              "stage": "digest-author",
+              "durationMs": 22
+            }
+          ],
+          "callCount": 1,
+          "attempts": {
+            "author": 1,
+            "corrections": 0
+          },
+          "inputTokens": 100,
+          "outputTokens": 60,
+          "reasoningTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "requestedTier": "default",
+          "actualTier": "default",
+          "bodyCharacters": 310,
+          "calls": [
+            {
+              "stage": "digest-author",
+              "durationMs": 22,
+              "inputTokens": 100,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "outputTokens": 60,
+              "reasoningTokens": 0,
+              "requestedTier": "default",
+              "actualTier": "default",
+              "model": "gpt-6.1-sol"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "goldenpaperc",
+      "title": "Cache Notes",
+      "filename": "goldenpaperc.pdf",
+      "pages": 2,
+      "tokens": 20,
+      "bytes": 100,
+      "createdAt": "2026-10-23T06:57:29.381612+00:00",
+      "lastEngagedAt": "2026-10-23T06:57:29.381612+00:00",
+      "slug": "cache-notes",
+      "routeTitle": "Cache Notes",
+      "openaiFileId": "file-goldenpaperc",
+      "openaiFileUploadedAt": "2026-10-23T06:57:29.383494+00:00",
+      "sourceHash": "7108fc279d19628b69a5666492cc1cdb5c536b257073167489eed6f7c8719977",
+      "digest": {
+        "version": "research-digest-v8",
+        "model": "gpt-6.1-sol",
+        "sourceMode": "pdf-multimodal",
+        "sourceHash": "7108fc279d19628b69a5666492cc1cdb5c536b257073167489eed6f7c8719977",
+        "estimatedTokens": 114,
+        "status": "ready",
+        "evidenceIds": [],
+        "updatedAt": "2026-10-23T06:57:29.582461+00:00",
+        "telemetry": {
+          "totalDurationMs": 29,
+          "stageDurationsMs": [
+            {
+              "stage": "digest-author",
+              "durationMs": 23
+            }
+          ],
+          "callCount": 1,
+          "attempts": {
+            "author": 1,
+            "corrections": 0
+          },
+          "inputTokens": 100,
+          "outputTokens": 60,
+          "reasoningTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "requestedTier": "default",
+          "actualTier": "default",
+          "bodyCharacters": 310,
+          "calls": [
+            {
+              "stage": "digest-author",
+              "durationMs": 23,
+              "inputTokens": 100,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "outputTokens": 60,
+              "reasoningTokens": 0,
+              "requestedTier": "default",
+              "actualTier": "default",
+              "model": "gpt-6.1-sol"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

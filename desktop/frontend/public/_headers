@@ -1,0 +1,17 @@
+# Cloudflare's asset server reads this file; it is never served.
+#
+# Content-Type on the built stylesheet. Cloudflare serves `/assets/*.css` as a
+# bare `text/css` with no `charset`, and a stylesheet that declares no encoding
+# of its own is decoded with whatever fallback the browser picks. Rendered
+# marks that used to live in `content:` are drawn now (a path has no encoding
+# to get wrong), but the file still contains non-ASCII in comments, so naming
+# the charset here — and again on the Worker response — is what keeps a
+# guessed Latin-1 fallback from ever applying. Escaping glyphs is not an
+# alternative: the minifier folds `\25B8` straight back to the literal.
+/assets/*.css
+  Content-Type: text/css; charset=utf-8
+
+# Cache content-hashed assets immutably. Restated from vinext's generated file:
+# a `_headers` in `public/` replaces that one wholesale rather than merging.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable

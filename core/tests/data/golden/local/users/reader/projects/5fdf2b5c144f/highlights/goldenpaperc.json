@@ -1,0 +1,18 @@
+[
+  {
+    "id": "48022fd0da31",
+    "type": "pdf",
+    "page": 2,
+    "rects": [
+      {
+        "x": 0.1,
+        "y": 0.2,
+        "w": 0.5,
+        "h": 0.03
+      }
+    ],
+    "text": "Stable prefix: 120 ms. Shuffled prefix: 240 ms.",
+    "color": "yellow",
+    "createdAt": "2026-10-23T06:57:29.724565+00:00"
+  }
+]

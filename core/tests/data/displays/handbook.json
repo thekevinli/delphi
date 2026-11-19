@@ -1,0 +1,92 @@
+{
+ "display": 1,
+ "title": "How a handbook entry is made and kept current",
+ "badge": "Simplified",
+ "figures": [
+  {
+   "kind": "flow",
+   "style": "chain",
+   "lanes": [
+    {
+     "label": "Create or change an entry",
+     "rows": [
+      {
+       "items": [
+        {
+         "type": "node",
+         "label": "Placement test",
+         "note": "5 questions"
+        },
+        {
+         "type": "node",
+         "label": "Draft",
+         "note": "Google Doc"
+        },
+        {
+         "type": "node",
+         "label": "Section DRI",
+         "note": "approves",
+         "tone": "blue"
+        },
+        {
+         "type": "node",
+         "label": "Manager",
+         "note": "approves",
+         "tone": "blue"
+        },
+        {
+         "type": "node",
+         "label": "Template",
+         "note": "Ops helps"
+        },
+        {
+         "type": "node",
+         "label": "COO",
+         "note": "places it",
+         "tone": "blue"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Use and maintain, every month",
+     "rows": [
+      {
+       "items": [
+        {
+         "type": "node",
+         "label": "Announce",
+         "note": "in the team channel"
+        },
+        {
+         "type": "node",
+         "label": "Readers comment",
+         "note": "publicly",
+         "tone": "dashed"
+        },
+        {
+         "type": "node",
+         "label": "Section DRI",
+         "note": "monthly review",
+         "tone": "blue"
+        }
+       ]
+      }
+     ],
+     "back": "A change found in review goes back to Draft and repeats the approvals"
+    }
+   ],
+   "key": [
+    {
+     "label": "blue edge: a person signs off",
+     "mark": "edge"
+    },
+    {
+     "label": "dashed: anyone",
+     "mark": "dashed"
+    }
+   ]
+  }
+ ]
+}

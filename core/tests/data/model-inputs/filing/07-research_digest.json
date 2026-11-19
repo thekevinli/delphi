@@ -1,0 +1,180 @@
+{
+  "method": "POST",
+  "url": "http://fixture/__fixtures/provider/v1/responses",
+  "body": {
+    "model": "gpt-6.1-sol",
+    "instructions": "Create a durable, researcher-facing digest for exactly one supplied document.\n\nRead the document on its own terms. The digest is freeform Markdown, not a\nchecklist and not a form with predetermined sections. Open with a level-one\nheading that titles the digest, then choose further headings, ordering,\nparagraphs, bullets, and tables according to the document's own presentation.\nOmit anything the source does not contain. Never manufacture a research question,\nprior-work gap, limitation, ablation, open question, or any other conventional\npaper component merely because papers sometimes contain one.\n\nReading priorities:\n- Identify the central takeaway and the minimum context needed to understand it.\n- Give special attention to the introduction and conclusion when present; they\n  usually state the motivation, argument, scope, and final findings most clearly.\n- Preserve equations, symbol definitions, executable procedures, important\n  negative results, and more than one result or ablation table when each carries\n  distinct evidence. Follow the document rather than a format quota.\n- Treat an equation as quoted evidence, not as prose to reconstruct. Transcribe\n  notation from the source exactly, together with the definitions needed to read\n  it. Before keeping a formula, compare every symbol, sign, operator, conditioning\n  argument, normalization/cardinality term, and matrix dimension with the source.\n  Never silently simplify or \"repair\" an equation. If the source is not legible\n  enough to verify exactly, state the relationship accurately in prose instead of\n  guessing at notation.\n- Visuals are neutral evidence candidates. Select zero or more exact IDs from\n  `<source_element_inventory>` only when each one materially improves teaching,\n  and explain that value in `teachingValue`. The existence of an image is not\n  evidence that it belongs in the digest. Never select a QR/barcode candidate\n  unless the document's teaching objective is itself QR/barcode behaviour.\n  Selecting an asset is the whole of placing it: Delphi renders each one as a\n  captioned figure at its `afterEvidenceId`. Never write an image into\n  `contentMarkdown` — a `![...](...)` embed there names no address Delphi can\n  serve, and is removed before the digest is stored.\n- Prefer tables for comparative numbers. Ablation tables, main-result tables,\n  benchmark comparisons, and hyperparameter grids should be transcribed into\n  compact Markdown tables (rows and columns the authors actually report), not\n  flattened into prose. Preserve metrics, baselines, conditions, and units.\n  Every table row still needs evidence markers.\n- For engineering and computer-science documents, inspect methods or methodology,\n  results, and ablation studies when those sections actually exist. Preserve\n  mechanism details, mathematical symbols, qualifiers, datasets, metrics, values,\n  baselines, conditions, and negative findings that materially change the result.\n- Related work belongs when it is needed to understand the document's novelty,\n  its direct technical lineage, or a comparison the authors themselves rely on.\n- Keep three things apart and say which is which: what the document claims,\n  what an outside source claims, and what is your own analysis. A number carries\n  its metric, its unit, its baseline and the conditions it was measured under;\n  an estimate states the inputs it was computed from; experiments that are not\n  comparable are said not to be.\n- Depth is supported information, not coverage. There are no mandatory sections\n  and no quotas.\n- For articles, essays, documentation, or other non-paper sources, follow their\n  actual structure instead of imposing academic-paper conventions. The same rule\n  about figures and tables applies: when a diagram or comparison table carries\n  the argument, put it in the digest.\n\nGive the document's own title in `title`, exactly as it prints it: the title on\nits first page, or a web page's own heading. Copy it; do not shorten, translate\nor describe it, and leave it empty when the document prints none.\n\nWrite approximately 900–1,200 useful words of concise Markdown in\n`contentMarkdown`, staying within the schema's character ceiling. Put the most\nimportant material first. Every substantive paragraph, bullet, or table row must end with one or\nmore evidence markers such as [E1] or [E2][E3]. Define each marker exactly once\nin `citations`, using only a PDF page or stored web-section locator supplied by\nthe source. Do not cite a bibliography entry as evidence for the cited work's\nclaims. Clearly label any synthesis not directly stated by the authors as an\ninference, and mark its citation `digest-inference`. Use `author-claim` otherwise.\nNever invent a locator. Write mathematical notation as valid LaTeX using `$...$`\nfor inline math and `$$...$$` for display math.\nNever put mathematics in Markdown code spans. Because this Markdown is returned\ninside JSON, escape every LaTeX backslash correctly. Keep the digest focused enough\nto function as a compact index for later exact reading.\n\nLength budget: the whole digest — contentMarkdown, citations and figure choices together — must fit in about 3,000 tokens (roughly 12,000 characters of JSON). Each chat request carries up to 10 digests in one 30,000-token block, and a digest that runs over its share is cut short there, from the end. Spend the budget on contentMarkdown first, and define only the evidence it cites.",
+    "input": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "input_file",
+            "file_id": "file-aaaaaaaaaaa2",
+            "detail": "low"
+          },
+          {
+            "type": "input_text",
+            "text": "<source_element_inventory>\n[]\n</source_element_inventory>\nSelect assets only by exact inventoryId. Candidates marked isQrOrBarcode are decoys unless QR/barcode behaviour is itself what the document teaches. An empty assets list is correct when no visual improves the explanation."
+          },
+          {
+            "type": "input_text",
+            "text": "Build the required digest for 'Shared Idea Study k3x9 B'. The source mode is pdf-multimodal. Prefer tables and figure descriptions where the source carries them — including useful items listed in the visual inventory above."
+          }
+        ]
+      }
+    ],
+    "reasoning": {
+      "effort": "medium",
+      "summary": "auto"
+    },
+    "text": {
+      "format": {
+        "type": "json_schema",
+        "name": "research_digest",
+        "strict": true,
+        "schema": {
+          "$defs": {
+            "DigestAssetChoice": {
+              "additionalProperties": false,
+              "properties": {
+                "inventoryId": {
+                  "maxLength": 80,
+                  "minLength": 1,
+                  "title": "Inventoryid",
+                  "type": "string"
+                },
+                "caption": {
+                  "maxLength": 300,
+                  "minLength": 1,
+                  "title": "Caption",
+                  "type": "string"
+                },
+                "alt": {
+                  "maxLength": 300,
+                  "minLength": 1,
+                  "title": "Alt",
+                  "type": "string"
+                },
+                "teachingValue": {
+                  "maxLength": 400,
+                  "minLength": 1,
+                  "title": "Teachingvalue",
+                  "type": "string"
+                },
+                "afterEvidenceId": {
+                  "maximum": 64,
+                  "minimum": 1,
+                  "title": "Afterevidenceid",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "inventoryId",
+                "caption",
+                "alt",
+                "teachingValue",
+                "afterEvidenceId"
+              ],
+              "title": "DigestAssetChoice",
+              "type": "object"
+            },
+            "DigestCitation": {
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "maximum": 99,
+                  "minimum": 1,
+                  "title": "Id",
+                  "type": "integer"
+                },
+                "claimType": {
+                  "enum": [
+                    "author-claim",
+                    "digest-inference"
+                  ],
+                  "title": "Claimtype",
+                  "type": "string"
+                },
+                "page": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Page"
+                },
+                "section": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Section"
+                }
+              },
+              "required": [
+                "id",
+                "claimType",
+                "page",
+                "section"
+              ],
+              "title": "DigestCitation",
+              "type": "object"
+            }
+          },
+          "additionalProperties": false,
+          "properties": {
+            "title": {
+              "description": "The document's own title, exactly as it prints it, or an empty string when it prints none.",
+              "maxLength": 300,
+              "title": "Title",
+              "type": "string"
+            },
+            "contentMarkdown": {
+              "maxLength": 16000,
+              "minLength": 1,
+              "title": "Contentmarkdown",
+              "type": "string"
+            },
+            "citations": {
+              "items": {
+                "$ref": "#/$defs/DigestCitation"
+              },
+              "maxItems": 64,
+              "minItems": 1,
+              "title": "Citations",
+              "type": "array"
+            },
+            "assets": {
+              "items": {
+                "$ref": "#/$defs/DigestAssetChoice"
+              },
+              "maxItems": 12,
+              "title": "Assets",
+              "type": "array"
+            }
+          },
+          "required": [
+            "title",
+            "contentMarkdown",
+            "citations",
+            "assets"
+          ],
+          "title": "DigestDraft",
+          "type": "object"
+        }
+      }
+    },
+    "max_output_tokens": 16000,
+    "service_tier": "default",
+    "store": false,
+    "stream": true
+  }
+}

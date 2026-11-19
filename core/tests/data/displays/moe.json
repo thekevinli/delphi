@@ -1,0 +1,485 @@
+{
+ "display": 1,
+ "title": "MoE forward pass",
+ "badge": "Toy scores",
+ "control": {
+  "id": "k",
+  "label": "Experts per token",
+  "caption": "Router scores, softmax over 4 experts",
+  "options": [
+   {
+    "value": "k1",
+    "label": "k = 1"
+   },
+   {
+    "value": "k2",
+    "label": "k = 2"
+   }
+  ],
+  "default": "k2"
+ },
+ "variants": {
+  "k1": {
+   "yA": {
+    "text": "E1 alone, gate 1"
+   },
+   "yB": {
+    "text": "E2 alone, gate 1"
+   },
+   "yC": {
+    "text": "E2 alone, gate 1"
+   },
+   "L1": {
+    "chips": [
+     "A"
+    ],
+    "note": "1 token"
+   },
+   "L2": {
+    "chips": [
+     "B",
+     "C"
+    ],
+    "note": "2 tokens"
+   },
+   "L3": {
+    "chips": [],
+    "note": "idle"
+   },
+   "L4": {
+    "chips": [],
+    "note": "idle"
+   }
+  },
+  "k2": {
+   "yA": {
+    "text": "0.65·E1 + 0.35·E3"
+   },
+   "yB": {
+    "text": "0.71·E2 + 0.29·E4"
+   },
+   "yC": {
+    "text": "0.53·E2 + 0.47·E1"
+   },
+   "L1": {
+    "chips": [
+     "A",
+     "C"
+    ],
+    "note": "2 tokens"
+   },
+   "L2": {
+    "chips": [
+     "B",
+     "C"
+    ],
+    "note": "2 tokens"
+   },
+   "L3": {
+    "chips": [
+     "A"
+    ],
+    "note": "1 token"
+   },
+   "L4": {
+    "chips": [
+     "B"
+    ],
+    "note": "1 token"
+   }
+  }
+ },
+ "steps": [
+  {
+   "name": "Route",
+   "note": "The router scores each token against every expert; each row sums to 1."
+  },
+  {
+   "name": {
+    "k1": "Pick top-1",
+    "k2": "Pick top-2"
+   },
+   "note": {
+    "k1": "Each token keeps its 1 highest scores; the kept scores are renormalized to sum to 1.",
+    "k2": "Each token keeps its 2 highest scores; the kept scores are renormalized to sum to 1."
+   },
+   "variants": {
+    "k1": {
+     "A1": {
+      "state": "pick",
+      "tip": {
+       "title": "Token A → E1: score 0.55",
+       "line": "kept · gate 1.00 after renormalizing"
+      }
+     },
+     "A2": {
+      "state": "faint",
+      "tip": {
+       "title": "Token A → E2: score 0.05",
+       "line": "not in token A’s top 1"
+      }
+     },
+     "A3": {
+      "state": "faint",
+      "tip": {
+       "title": "Token A → E3: score 0.30",
+       "line": "not in token A’s top 1"
+      }
+     },
+     "A4": {
+      "state": "faint",
+      "tip": {
+       "title": "Token A → E4: score 0.10",
+       "line": "not in token A’s top 1"
+      }
+     },
+     "B1": {
+      "state": "faint",
+      "tip": {
+       "title": "Token B → E1: score 0.10",
+       "line": "not in token B’s top 1"
+      }
+     },
+     "B2": {
+      "state": "pick",
+      "tip": {
+       "title": "Token B → E2: score 0.60",
+       "line": "kept · gate 1.00 after renormalizing"
+      }
+     },
+     "B3": {
+      "state": "faint",
+      "tip": {
+       "title": "Token B → E3: score 0.05",
+       "line": "not in token B’s top 1"
+      }
+     },
+     "B4": {
+      "state": "faint",
+      "tip": {
+       "title": "Token B → E4: score 0.25",
+       "line": "not in token B’s top 1"
+      }
+     },
+     "C1": {
+      "state": "faint",
+      "tip": {
+       "title": "Token C → E1: score 0.35",
+       "line": "not in token C’s top 1"
+      }
+     },
+     "C2": {
+      "state": "pick",
+      "tip": {
+       "title": "Token C → E2: score 0.40",
+       "line": "kept · gate 1.00 after renormalizing"
+      }
+     },
+     "C3": {
+      "state": "faint",
+      "tip": {
+       "title": "Token C → E3: score 0.15",
+       "line": "not in token C’s top 1"
+      }
+     },
+     "C4": {
+      "state": "faint",
+      "tip": {
+       "title": "Token C → E4: score 0.10",
+       "line": "not in token C’s top 1"
+      }
+     }
+    },
+    "k2": {
+     "A1": {
+      "state": "pick",
+      "tip": {
+       "title": "Token A → E1: score 0.55",
+       "line": "kept · gate 0.65 after renormalizing"
+      }
+     },
+     "A2": {
+      "state": "faint",
+      "tip": {
+       "title": "Token A → E2: score 0.05",
+       "line": "not in token A’s top 2"
+      }
+     },
+     "A3": {
+      "state": "pick",
+      "tip": {
+       "title": "Token A → E3: score 0.30",
+       "line": "kept · gate 0.35 after renormalizing"
+      }
+     },
+     "A4": {
+      "state": "faint",
+      "tip": {
+       "title": "Token A → E4: score 0.10",
+       "line": "not in token A’s top 2"
+      }
+     },
+     "B1": {
+      "state": "faint",
+      "tip": {
+       "title": "Token B → E1: score 0.10",
+       "line": "not in token B’s top 2"
+      }
+     },
+     "B2": {
+      "state": "pick",
+      "tip": {
+       "title": "Token B → E2: score 0.60",
+       "line": "kept · gate 0.71 after renormalizing"
+      }
+     },
+     "B3": {
+      "state": "faint",
+      "tip": {
+       "title": "Token B → E3: score 0.05",
+       "line": "not in token B’s top 2"
+      }
+     },
+     "B4": {
+      "state": "pick",
+      "tip": {
+       "title": "Token B → E4: score 0.25",
+       "line": "kept · gate 0.29 after renormalizing"
+      }
+     },
+     "C1": {
+      "state": "pick",
+      "tip": {
+       "title": "Token C → E1: score 0.35",
+       "line": "kept · gate 0.47 after renormalizing"
+      }
+     },
+     "C2": {
+      "state": "pick",
+      "tip": {
+       "title": "Token C → E2: score 0.40",
+       "line": "kept · gate 0.53 after renormalizing"
+      }
+     },
+     "C3": {
+      "state": "faint",
+      "tip": {
+       "title": "Token C → E3: score 0.15",
+       "line": "not in token C’s top 2"
+      }
+     },
+     "C4": {
+      "state": "faint",
+      "tip": {
+       "title": "Token C → E4: score 0.10",
+       "line": "not in token C’s top 2"
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "Dispatch and compute",
+   "note": {
+    "k1": "Tokens are grouped by expert and each expert runs its FFN once on its batch. With k = 1, E2 gets two tokens and E3, E4 sit idle.",
+    "k2": "Tokens are grouped by expert and each expert runs its FFN once on its batch. With k = 2 every expert gets work."
+   },
+   "set": {
+    "L1": {
+     "dim": false
+    },
+    "L2": {
+     "dim": false
+    },
+    "L3": {
+     "dim": false
+    },
+    "L4": {
+     "dim": false
+    }
+   }
+  },
+  {
+   "name": "Combine",
+   "note": "Each token’s output is the gate-weighted sum of its experts’ outputs, back in the original token order.",
+   "set": {
+    "yA": {
+     "on": true
+    },
+    "yB": {
+     "on": true
+    },
+    "yC": {
+     "on": true
+    }
+   }
+  }
+ ],
+ "figures": [
+  {
+   "kind": "matrix",
+   "id": "scores",
+   "cols": [
+    "E1",
+    "E2",
+    "E3",
+    "E4"
+   ],
+   "output": "Output y",
+   "rows": [
+    {
+     "label": "A",
+     "cells": [
+      {
+       "id": "A1",
+       "value": "0.55",
+       "tip": {
+        "title": "Token A → E1: score 0.55",
+        "line": "softmax over 4 experts"
+       }
+      },
+      {
+       "id": "A2",
+       "value": "0.05",
+       "tip": {
+        "title": "Token A → E2: score 0.05",
+        "line": "softmax over 4 experts"
+       }
+      },
+      {
+       "id": "A3",
+       "value": "0.30",
+       "tip": {
+        "title": "Token A → E3: score 0.30",
+        "line": "softmax over 4 experts"
+       }
+      },
+      {
+       "id": "A4",
+       "value": "0.10",
+       "tip": {
+        "title": "Token A → E4: score 0.10",
+        "line": "softmax over 4 experts"
+       }
+      }
+     ],
+     "output": {
+      "id": "yA",
+      "text": ""
+     }
+    },
+    {
+     "label": "B",
+     "cells": [
+      {
+       "id": "B1",
+       "value": "0.10",
+       "tip": {
+        "title": "Token B → E1: score 0.10",
+        "line": "softmax over 4 experts"
+       }
+      },
+      {
+       "id": "B2",
+       "value": "0.60",
+       "tip": {
+        "title": "Token B → E2: score 0.60",
+        "line": "softmax over 4 experts"
+       }
+      },
+      {
+       "id": "B3",
+       "value": "0.05",
+       "tip": {
+        "title": "Token B → E3: score 0.05",
+        "line": "softmax over 4 experts"
+       }
+      },
+      {
+       "id": "B4",
+       "value": "0.25",
+       "tip": {
+        "title": "Token B → E4: score 0.25",
+        "line": "softmax over 4 experts"
+       }
+      }
+     ],
+     "output": {
+      "id": "yB",
+      "text": ""
+     }
+    },
+    {
+     "label": "C",
+     "cells": [
+      {
+       "id": "C1",
+       "value": "0.35",
+       "tip": {
+        "title": "Token C → E1: score 0.35",
+        "line": "softmax over 4 experts"
+       }
+      },
+      {
+       "id": "C2",
+       "value": "0.40",
+       "tip": {
+        "title": "Token C → E2: score 0.40",
+        "line": "softmax over 4 experts"
+       }
+      },
+      {
+       "id": "C3",
+       "value": "0.15",
+       "tip": {
+        "title": "Token C → E3: score 0.15",
+        "line": "softmax over 4 experts"
+       }
+      },
+      {
+       "id": "C4",
+       "value": "0.10",
+       "tip": {
+        "title": "Token C → E4: score 0.10",
+        "line": "softmax over 4 experts"
+       }
+      }
+     ],
+     "output": {
+      "id": "yC",
+      "text": ""
+     }
+    }
+   ],
+   "foot": {
+    "label": "load",
+    "items": [
+     {
+      "id": "L1",
+      "chips": [],
+      "note": "",
+      "dim": true
+     },
+     {
+      "id": "L2",
+      "chips": [],
+      "note": "",
+      "dim": true
+     },
+     {
+      "id": "L3",
+      "chips": [],
+      "note": "",
+      "dim": true
+     },
+     {
+      "id": "L4",
+      "chips": [],
+      "note": "",
+      "dim": true
+     }
+    ]
+   }
+  }
+ ]
+}

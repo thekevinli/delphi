@@ -1,0 +1,22 @@
+{
+  "id": "2b2a7f710fd9407baf86650e",
+  "slug": "cache-research",
+  "createdAt": "2026-10-23T06:57:29.677396+00:00",
+  "revision": 1,
+  "kind": "domain",
+  "domain": "cache-research",
+  "title": "Cache research",
+  "summary": "How the pages of this domain connect.",
+  "body": "## How these pages connect\n\n[[cache-notes]] and [[shared-idea-study-g7-b]] and [[shared-idea-study-g7-a]] report on the same question, and [[prefix-reuse-goldenpaperc]], [[shared-idea-g7]] is where what they share is explained.\n\n## Reading paths\n\nStart with [[prefix-reuse-goldenpaperc]], then read the sources against it.",
+  "tags": [],
+  "aliases": [],
+  "citations": [],
+  "links": [
+    "cache-notes",
+    "shared-idea-study-g7-b",
+    "shared-idea-study-g7-a",
+    "prefix-reuse-goldenpaperc",
+    "shared-idea-g7"
+  ],
+  "updatedAt": "2026-10-23T06:57:29.677396+00:00"
+}

@@ -1,0 +1,86 @@
+[build-system]
+requires = ["setuptools==80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "delphi-core"
+version = "0.1.0"
+description = "Local-first API for the Delphi paper reading workspace"
+readme = {text = "Delphi backend runtime. The web frontend and cloud migration tooling are distributed separately.", content-type = "text/plain"}
+requires-python = ">=3.11"
+license = "Apache-2.0"
+# The repository's LICENSE and NOTICE, at its root rather than here: both wheel
+# builds (scripts/backend_release.py, desktop/build/backend-wheel.sh) copy them
+# beside this file, and `inspect_wheel` refuses a wheel without them.
+license-files = ["LICENSE", "NOTICE"]
+dependencies = [
+  "anyio>=4.4,<5",
+  "fastapi>=0.116,<1",
+  "httpx[http2]>=0.28,<1",
+  # httpx's own connection layer: web_fetch dials only the address it validated.
+  "httpcore>=1.0.9,<2",
+  "pydantic-settings>=2.10,<3",
+  # Snapshotting a web page into anchored sections. Both are pure Python and
+  # BeautifulSoup runs on the stdlib parser, so adding web documents does not
+  # add a build toolchain to a fresh clone.
+  "beautifulsoup4>=4.12,<5",
+  "markdownify>=0.13,<2",
+  # Published inline visuals must be in prose, outside code/quote/list blocks.
+  # Use CommonMark's block parser rather than a second delimiter grammar.
+  "markdown-it-py>=4,<5",
+  # Recompressing the figures in a large paper: pikepdf rewrites the image
+  # streams, Pillow re-encodes them. Both ship wheels, so no system toolchain.
+  "pikepdf>=9,<10",
+  "Pillow>=10,<12",
+  # Rendering a page so Memory capture can crop a Form/vector figure rather
+  # than taking the largest nested Image XObject (a soft-masked colour panel).
+  # Ships manylinux / macOS / Windows wheels; no system toolchain.
+  "pypdfium2>=4,<5",
+  # TeX's math fonts reach a PDF as CFF Type 1 fonts with their own encoding
+  # and no ToUnicode map. pypdf reads that encoding from 6.17, and only with
+  # fontTools; without both, the NTK paper's symbols extract as 954 control
+  # characters (θ, ∑ and ∈ as \x12, P and 2), in the text every read, search
+  # and citation check uses. Pure Python with optional wheels; no toolchain.
+  "pypdf>=6.17,<7",
+  "fonttools>=4.50,<5",
+  "python-multipart>=0.0.20,<1",
+  "uvicorn[standard]>=0.35,<1",
+  # The renderer drives Chromium over DevTools to read a page once it has
+  # settled; stated rather than inherited through uvicorn's extras.
+  "websockets>=12,<17",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.4,<9",
+  "pytest-asyncio>=1.1,<2",
+  # The E2E provider must obey the exact schema sent over the wire.
+  "jsonschema>=4,<5",
+  # scripts/check_pyflakes.py: the gate's undefined-name and redefinition check.
+  "pyflakes>=3.4,<4",
+]
+
+# Build frontends are development tooling, never runtime dependencies.
+release = ["build==1.3.0", "twine==6.2.0"]
+
+[tool.setuptools]
+include-package-data = false
+
+# Only `delphi_core` is the distribution's package, named rather than discovered:
+# the test kit beside it (`testkit/`) is a distribution of its own, and `tests/`
+# ships in neither.
+[tool.setuptools.packages.find]
+include = ["delphi_core", "delphi_core.*"]
+
+# The bridge script is served into proxied pages, so it has to travel with the
+# package rather than being treated as a stray file next to the Python.
+[tool.setuptools.package-data]
+delphi_core = ["*.js", "memory_maintenance/contracts/*.md", "artifacts/*.js"]
+
+[tool.pytest.ini_options]
+pythonpath = [".", "testkit"]
+testpaths = ["tests"]
+markers = [
+  "kb_maintenance: durable KB jobs, mastery, personalization, retrieval, and health contracts",
+  "live_web: imports and photographs real public pages; opt-in with DELPHI_LIVE_WEB=1",
+]

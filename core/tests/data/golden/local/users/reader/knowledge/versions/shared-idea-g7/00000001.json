@@ -1,0 +1,22 @@
+{
+  "slug": "shared-idea-g7",
+  "revision": 1,
+  "title": "Shared idea g7",
+  "summary": "Understand exact prefix reuse and test its limitations.",
+  "body": "## Problem and approach\n\nPrefix caching reuses exact matching tokens before the changing question. [E1]\n\n## Evidence and limitations\n\nA stable prefix can reduce repeated work. Measure hit rate and repeated latency rather than assuming a universal speedup.\n\n## Reading route\n\nInspect the controlled comparison in [[shared-idea-study-g7-a]] and ask which confounders remain.",
+  "citations": [
+    {
+      "id": 1,
+      "claimType": "author-claim",
+      "paperId": "goldenpapera",
+      "page": 1,
+      "section": null,
+      "noteId": null,
+      "evidenceId": null
+    }
+  ],
+  "createdAt": "2026-10-23T06:57:29.464796+00:00",
+  "eventId": "48ab93d554614b3a96b0af4adb7ada23",
+  "trigger": "document",
+  "note": "Filed an evidence-bound page on prefix reuse."
+}

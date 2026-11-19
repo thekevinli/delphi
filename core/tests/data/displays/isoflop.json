@@ -1,0 +1,2569 @@
+{
+ "display": 1,
+ "title": "IsoFLOP curves",
+ "badge": "Illustrative",
+ "figures": [
+  {
+   "kind": "chart",
+   "id": "iso",
+   "x": {
+    "scale": "log",
+    "min": 10000000.0,
+    "max": 100000000000.0,
+    "ticks": [
+     {
+      "at": 10000000.0,
+      "label": "10M"
+     },
+     {
+      "at": 100000000.0,
+      "label": "100M"
+     },
+     {
+      "at": 1000000000.0,
+      "label": "1B"
+     },
+     {
+      "at": 10000000000.0,
+      "label": "10B"
+     },
+     {
+      "at": 100000000000.0,
+      "label": "100B"
+     }
+    ]
+   },
+   "y": {
+    "min": 2.0,
+    "max": 4.2,
+    "ticks": [
+     {
+      "at": 2.0,
+      "label": "2.0"
+     },
+     {
+      "at": 2.5,
+      "label": "2.5"
+     },
+     {
+      "at": 3.0,
+      "label": "3.0"
+     },
+     {
+      "at": 3.5,
+      "label": "3.5"
+     },
+     {
+      "at": 4.0,
+      "label": "4.0"
+     }
+    ]
+   },
+   "series": [
+    {
+     "label": "10¹⁹",
+     "points": [
+      {
+       "x": 10000000.0,
+       "y": 3.6802,
+       "read": [
+        {
+         "label": "C",
+         "value": "10¹⁹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "10M"
+        },
+        {
+         "label": "D",
+         "value": "167B"
+        },
+        {
+         "label": "Loss",
+         "value": "3.680"
+        }
+       ],
+       "tip": {
+        "title": "10M params · 167B tokens",
+        "line": "loss 3.680 · +0.694 over this budget’s best"
+       }
+      },
+      {
+       "x": 14678000.0,
+       "y": 3.5066,
+       "read": [
+        {
+         "label": "C",
+         "value": "10¹⁹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "15M"
+        },
+        {
+         "label": "D",
+         "value": "114B"
+        },
+        {
+         "label": "Loss",
+         "value": "3.507"
+        }
+       ],
+       "tip": {
+        "title": "15M params · 114B tokens",
+        "line": "loss 3.507 · +0.521 over this budget’s best"
+       }
+      },
+      {
+       "x": 21544300.0,
+       "y": 3.3621,
+       "read": [
+        {
+         "label": "C",
+         "value": "10¹⁹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "22M"
+        },
+        {
+         "label": "D",
+         "value": "77B"
+        },
+        {
+         "label": "Loss",
+         "value": "3.362"
+        }
+       ],
+       "tip": {
+        "title": "22M params · 77B tokens",
+        "line": "loss 3.362 · +0.376 over this budget’s best"
+       }
+      },
+      {
+       "x": 31622800.0,
+       "y": 3.2441,
+       "read": [
+        {
+         "label": "C",
+         "value": "10¹⁹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "32M"
+        },
+        {
+         "label": "D",
+         "value": "53B"
+        },
+        {
+         "label": "Loss",
+         "value": "3.244"
+        }
+       ],
+       "tip": {
+        "title": "32M params · 53B tokens",
+        "line": "loss 3.244 · +0.258 over this budget’s best"
+       }
+      },
+      {
+       "x": 46415900.0,
+       "y": 3.1503,
+       "read": [
+        {
+         "label": "C",
+         "value": "10¹⁹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "46M"
+        },
+        {
+         "label": "D",
+         "value": "36B"
+        },
+        {
+         "label": "Loss",
+         "value": "3.150"
+        }
+       ],
+       "tip": {
+        "title": "46M params · 36B tokens",
+        "line": "loss 3.150 · +0.164 over this budget’s best"
+       }
+      },
+      {
+       "x": 68129200.0,
+       "y": 3.079,
+       "read": [
+        {
+         "label": "C",
+         "value": "10¹⁹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "68M"
+        },
+        {
+         "label": "D",
+         "value": "24B"
+        },
+        {
+         "label": "Loss",
+         "value": "3.079"
+        }
+       ],
+       "tip": {
+        "title": "68M params · 24B tokens",
+        "line": "loss 3.079 · +0.093 over this budget’s best"
+       }
+      },
+      {
+       "x": 100000000.0,
+       "y": 3.0285,
+       "read": [
+        {
+         "label": "C",
+         "value": "10¹⁹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "100M"
+        },
+        {
+         "label": "D",
+         "value": "17B"
+        },
+        {
+         "label": "Loss",
+         "value": "3.029"
+        }
+       ],
+       "tip": {
+        "title": "100M params · 17B tokens",
+        "line": "loss 3.029 · +0.043 over this budget’s best"
+       }
+      },
+      {
+       "x": 146780000.0,
+       "y": 2.9978,
+       "read": [
+        {
+         "label": "C",
+         "value": "10¹⁹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "147M"
+        },
+        {
+         "label": "D",
+         "value": "11B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.998"
+        }
+       ],
+       "tip": {
+        "title": "147M params · 11B tokens",
+        "line": "loss 2.998 · +0.012 over this budget’s best"
+       }
+      },
+      {
+       "x": 215443000.0,
+       "y": 2.9859,
+       "read": [
+        {
+         "label": "C",
+         "value": "10¹⁹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "215M"
+        },
+        {
+         "label": "D",
+         "value": "8B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.986"
+        }
+       ],
+       "tip": {
+        "title": "215M params · 8B tokens",
+        "line": "loss 2.986 · compute-optimal at this budget"
+       }
+      },
+      {
+       "x": 316228000.0,
+       "y": 2.9923,
+       "read": [
+        {
+         "label": "C",
+         "value": "10¹⁹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "316M"
+        },
+        {
+         "label": "D",
+         "value": "5B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.992"
+        }
+       ],
+       "tip": {
+        "title": "316M params · 5B tokens",
+        "line": "loss 2.992 · +0.006 over this budget’s best"
+       }
+      },
+      {
+       "x": 464159000.0,
+       "y": 3.0166,
+       "read": [
+        {
+         "label": "C",
+         "value": "10¹⁹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "464M"
+        },
+        {
+         "label": "D",
+         "value": "4B"
+        },
+        {
+         "label": "Loss",
+         "value": "3.017"
+        }
+       ],
+       "tip": {
+        "title": "464M params · 4B tokens",
+        "line": "loss 3.017 · +0.031 over this budget’s best"
+       }
+      },
+      {
+       "x": 681292000.0,
+       "y": 3.0588,
+       "read": [
+        {
+         "label": "C",
+         "value": "10¹⁹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "681M"
+        },
+        {
+         "label": "D",
+         "value": "2B"
+        },
+        {
+         "label": "Loss",
+         "value": "3.059"
+        }
+       ],
+       "tip": {
+        "title": "681M params · 2B tokens",
+        "line": "loss 3.059 · +0.073 over this budget’s best"
+       }
+      },
+      {
+       "x": 1000000000.0,
+       "y": 3.119,
+       "read": [
+        {
+         "label": "C",
+         "value": "10¹⁹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "1.0B"
+        },
+        {
+         "label": "D",
+         "value": "2B"
+        },
+        {
+         "label": "Loss",
+         "value": "3.119"
+        }
+       ],
+       "tip": {
+        "title": "1.0B params · 2B tokens",
+        "line": "loss 3.119 · +0.133 over this budget’s best"
+       }
+      },
+      {
+       "x": 1467800000.0,
+       "y": 3.1976,
+       "read": [
+        {
+         "label": "C",
+         "value": "10¹⁹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "1.5B"
+        },
+        {
+         "label": "D",
+         "value": "1B"
+        },
+        {
+         "label": "Loss",
+         "value": "3.198"
+        }
+       ],
+       "tip": {
+        "title": "1.5B params · 1B tokens",
+        "line": "loss 3.198 · +0.212 over this budget’s best"
+       }
+      },
+      {
+       "x": 2154430000.0,
+       "y": 3.2954,
+       "read": [
+        {
+         "label": "C",
+         "value": "10¹⁹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "2.2B"
+        },
+        {
+         "label": "D",
+         "value": "774M"
+        },
+        {
+         "label": "Loss",
+         "value": "3.295"
+        }
+       ],
+       "tip": {
+        "title": "2.2B params · 774M tokens",
+        "line": "loss 3.295 · +0.309 over this budget’s best"
+       }
+      },
+      {
+       "x": 3162280000.0,
+       "y": 3.4132,
+       "read": [
+        {
+         "label": "C",
+         "value": "10¹⁹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "3.2B"
+        },
+        {
+         "label": "D",
+         "value": "527M"
+        },
+        {
+         "label": "Loss",
+         "value": "3.413"
+        }
+       ],
+       "tip": {
+        "title": "3.2B params · 527M tokens",
+        "line": "loss 3.413 · +0.427 over this budget’s best"
+       }
+      },
+      {
+       "x": 4641590000.0,
+       "y": 3.5523,
+       "read": [
+        {
+         "label": "C",
+         "value": "10¹⁹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "4.6B"
+        },
+        {
+         "label": "D",
+         "value": "359M"
+        },
+        {
+         "label": "Loss",
+         "value": "3.552"
+        }
+       ],
+       "tip": {
+        "title": "4.6B params · 359M tokens",
+        "line": "loss 3.552 · +0.566 over this budget’s best"
+       }
+      },
+      {
+       "x": 6812920000.0,
+       "y": 3.714,
+       "read": [
+        {
+         "label": "C",
+         "value": "10¹⁹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "6.8B"
+        },
+        {
+         "label": "D",
+         "value": "245M"
+        },
+        {
+         "label": "Loss",
+         "value": "3.714"
+        }
+       ],
+       "tip": {
+        "title": "6.8B params · 245M tokens",
+        "line": "loss 3.714 · +0.728 over this budget’s best"
+       }
+      },
+      {
+       "x": 10000000000.0,
+       "y": 3.9002,
+       "read": [
+        {
+         "label": "C",
+         "value": "10¹⁹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "10B"
+        },
+        {
+         "label": "D",
+         "value": "167M"
+        },
+        {
+         "label": "Loss",
+         "value": "3.900"
+        }
+       ],
+       "tip": {
+        "title": "10B params · 167M tokens",
+        "line": "loss 3.900 · +0.914 over this budget’s best"
+       }
+      },
+      {
+       "x": 14678000000.0,
+       "y": 4.1127,
+       "read": [
+        {
+         "label": "C",
+         "value": "10¹⁹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "15B"
+        },
+        {
+         "label": "D",
+         "value": "114M"
+        },
+        {
+         "label": "Loss",
+         "value": "4.113"
+        }
+       ],
+       "tip": {
+        "title": "15B params · 114M tokens",
+        "line": "loss 4.113 · +1.127 over this budget’s best"
+       }
+      }
+     ]
+    },
+    {
+     "label": "10²⁰",
+     "points": [
+      {
+       "x": 10000000.0,
+       "y": 3.5395,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "10M"
+        },
+        {
+         "label": "D",
+         "value": "1.7T"
+        },
+        {
+         "label": "Loss",
+         "value": "3.540"
+        }
+       ],
+       "tip": {
+        "title": "10M params · 1.7T tokens",
+        "line": "loss 3.540 · +0.940 over this budget’s best"
+       }
+      },
+      {
+       "x": 14678000.0,
+       "y": 3.3499,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "15M"
+        },
+        {
+         "label": "D",
+         "value": "1.1T"
+        },
+        {
+         "label": "Loss",
+         "value": "3.350"
+        }
+       ],
+       "tip": {
+        "title": "15M params · 1.1T tokens",
+        "line": "loss 3.350 · +0.750 over this budget’s best"
+       }
+      },
+      {
+       "x": 21544300.0,
+       "y": 3.1877,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "22M"
+        },
+        {
+         "label": "D",
+         "value": "774B"
+        },
+        {
+         "label": "Loss",
+         "value": "3.188"
+        }
+       ],
+       "tip": {
+        "title": "22M params · 774B tokens",
+        "line": "loss 3.188 · +0.588 over this budget’s best"
+       }
+      },
+      {
+       "x": 31622800.0,
+       "y": 3.0499,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "32M"
+        },
+        {
+         "label": "D",
+         "value": "527B"
+        },
+        {
+         "label": "Loss",
+         "value": "3.050"
+        }
+       ],
+       "tip": {
+        "title": "32M params · 527B tokens",
+        "line": "loss 3.050 · +0.450 over this budget’s best"
+       }
+      },
+      {
+       "x": 46415900.0,
+       "y": 2.9341,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "46M"
+        },
+        {
+         "label": "D",
+         "value": "359B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.934"
+        }
+       ],
+       "tip": {
+        "title": "46M params · 359B tokens",
+        "line": "loss 2.934 · +0.334 over this budget’s best"
+       }
+      },
+      {
+       "x": 68129200.0,
+       "y": 2.8382,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "68M"
+        },
+        {
+         "label": "D",
+         "value": "245B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.838"
+        }
+       ],
+       "tip": {
+        "title": "68M params · 245B tokens",
+        "line": "loss 2.838 · +0.238 over this budget’s best"
+       }
+      },
+      {
+       "x": 100000000.0,
+       "y": 2.7605,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "100M"
+        },
+        {
+         "label": "D",
+         "value": "167B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.760"
+        }
+       ],
+       "tip": {
+        "title": "100M params · 167B tokens",
+        "line": "loss 2.760 · +0.160 over this budget’s best"
+       }
+      },
+      {
+       "x": 146780000.0,
+       "y": 2.6993,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "147M"
+        },
+        {
+         "label": "D",
+         "value": "114B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.699"
+        }
+       ],
+       "tip": {
+        "title": "147M params · 114B tokens",
+        "line": "loss 2.699 · +0.099 over this budget’s best"
+       }
+      },
+      {
+       "x": 215443000.0,
+       "y": 2.6536,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "215M"
+        },
+        {
+         "label": "D",
+         "value": "77B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.654"
+        }
+       ],
+       "tip": {
+        "title": "215M params · 77B tokens",
+        "line": "loss 2.654 · +0.054 over this budget’s best"
+       }
+      },
+      {
+       "x": 316228000.0,
+       "y": 2.6222,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "316M"
+        },
+        {
+         "label": "D",
+         "value": "53B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.622"
+        }
+       ],
+       "tip": {
+        "title": "316M params · 53B tokens",
+        "line": "loss 2.622 · +0.022 over this budget’s best"
+       }
+      },
+      {
+       "x": 464159000.0,
+       "y": 2.6046,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "464M"
+        },
+        {
+         "label": "D",
+         "value": "36B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.605"
+        }
+       ],
+       "tip": {
+        "title": "464M params · 36B tokens",
+        "line": "loss 2.605 · +0.005 over this budget’s best"
+       }
+      },
+      {
+       "x": 681292000.0,
+       "y": 2.6,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "681M"
+        },
+        {
+         "label": "D",
+         "value": "24B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.600"
+        }
+       ],
+       "tip": {
+        "title": "681M params · 24B tokens",
+        "line": "loss 2.600 · compute-optimal at this budget"
+       }
+      },
+      {
+       "x": 1000000000.0,
+       "y": 2.6081,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "1.0B"
+        },
+        {
+         "label": "D",
+         "value": "17B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.608"
+        }
+       ],
+       "tip": {
+        "title": "1.0B params · 17B tokens",
+        "line": "loss 2.608 · +0.008 over this budget’s best"
+       }
+      },
+      {
+       "x": 1467800000.0,
+       "y": 2.6288,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "1.5B"
+        },
+        {
+         "label": "D",
+         "value": "11B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.629"
+        }
+       ],
+       "tip": {
+        "title": "1.5B params · 11B tokens",
+        "line": "loss 2.629 · +0.029 over this budget’s best"
+       }
+      },
+      {
+       "x": 2154430000.0,
+       "y": 2.6621,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "2.2B"
+        },
+        {
+         "label": "D",
+         "value": "8B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.662"
+        }
+       ],
+       "tip": {
+        "title": "2.2B params · 8B tokens",
+        "line": "loss 2.662 · +0.062 over this budget’s best"
+       }
+      },
+      {
+       "x": 3162280000.0,
+       "y": 2.7081,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "3.2B"
+        },
+        {
+         "label": "D",
+         "value": "5B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.708"
+        }
+       ],
+       "tip": {
+        "title": "3.2B params · 5B tokens",
+        "line": "loss 2.708 · +0.108 over this budget’s best"
+       }
+      },
+      {
+       "x": 4641590000.0,
+       "y": 2.7671,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "4.6B"
+        },
+        {
+         "label": "D",
+         "value": "4B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.767"
+        }
+       ],
+       "tip": {
+        "title": "4.6B params · 4B tokens",
+        "line": "loss 2.767 · +0.167 over this budget’s best"
+       }
+      },
+      {
+       "x": 6812920000.0,
+       "y": 2.8398,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "6.8B"
+        },
+        {
+         "label": "D",
+         "value": "2B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.840"
+        }
+       ],
+       "tip": {
+        "title": "6.8B params · 2B tokens",
+        "line": "loss 2.840 · +0.240 over this budget’s best"
+       }
+      },
+      {
+       "x": 10000000000.0,
+       "y": 2.9268,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "10B"
+        },
+        {
+         "label": "D",
+         "value": "2B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.927"
+        }
+       ],
+       "tip": {
+        "title": "10B params · 2B tokens",
+        "line": "loss 2.927 · +0.327 over this budget’s best"
+       }
+      },
+      {
+       "x": 14678000000.0,
+       "y": 3.0289,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "15B"
+        },
+        {
+         "label": "D",
+         "value": "1B"
+        },
+        {
+         "label": "Loss",
+         "value": "3.029"
+        }
+       ],
+       "tip": {
+        "title": "15B params · 1B tokens",
+        "line": "loss 3.029 · +0.429 over this budget’s best"
+       }
+      },
+      {
+       "x": 21544300000.0,
+       "y": 3.1474,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "22B"
+        },
+        {
+         "label": "D",
+         "value": "774M"
+        },
+        {
+         "label": "Loss",
+         "value": "3.147"
+        }
+       ],
+       "tip": {
+        "title": "22B params · 774M tokens",
+        "line": "loss 3.147 · +0.547 over this budget’s best"
+       }
+      },
+      {
+       "x": 31622800000.0,
+       "y": 3.2833,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "32B"
+        },
+        {
+         "label": "D",
+         "value": "527M"
+        },
+        {
+         "label": "Loss",
+         "value": "3.283"
+        }
+       ],
+       "tip": {
+        "title": "32B params · 527M tokens",
+        "line": "loss 3.283 · +0.683 over this budget’s best"
+       }
+      },
+      {
+       "x": 46415900000.0,
+       "y": 3.4382,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "46B"
+        },
+        {
+         "label": "D",
+         "value": "359M"
+        },
+        {
+         "label": "Loss",
+         "value": "3.438"
+        }
+       ],
+       "tip": {
+        "title": "46B params · 359M tokens",
+        "line": "loss 3.438 · +0.838 over this budget’s best"
+       }
+      },
+      {
+       "x": 68129200000.0,
+       "y": 3.6139,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "68B"
+        },
+        {
+         "label": "D",
+         "value": "245M"
+        },
+        {
+         "label": "Loss",
+         "value": "3.614"
+        }
+       ],
+       "tip": {
+        "title": "68B params · 245M tokens",
+        "line": "loss 3.614 · +1.014 over this budget’s best"
+       }
+      },
+      {
+       "x": 100000000000.0,
+       "y": 3.8123,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²⁰ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "100B"
+        },
+        {
+         "label": "D",
+         "value": "167M"
+        },
+        {
+         "label": "Loss",
+         "value": "3.812"
+        }
+       ],
+       "tip": {
+        "title": "100B params · 167M tokens",
+        "line": "loss 3.812 · +1.212 over this budget’s best"
+       }
+      }
+     ]
+    },
+    {
+     "label": "10²¹",
+     "points": [
+      {
+       "x": 10000000.0,
+       "y": 3.4657,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "10M"
+        },
+        {
+         "label": "D",
+         "value": "16.7T"
+        },
+        {
+         "label": "Loss",
+         "value": "3.466"
+        }
+       ],
+       "tip": {
+        "title": "10M params · 16.7T tokens",
+        "line": "loss 3.466 · +1.136 over this budget’s best"
+       }
+      },
+      {
+       "x": 14678000.0,
+       "y": 3.2677,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "15M"
+        },
+        {
+         "label": "D",
+         "value": "11.4T"
+        },
+        {
+         "label": "Loss",
+         "value": "3.268"
+        }
+       ],
+       "tip": {
+        "title": "15M params · 11.4T tokens",
+        "line": "loss 3.268 · +0.938 over this budget’s best"
+       }
+      },
+      {
+       "x": 21544300.0,
+       "y": 3.0961,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "22M"
+        },
+        {
+         "label": "D",
+         "value": "7.7T"
+        },
+        {
+         "label": "Loss",
+         "value": "3.096"
+        }
+       ],
+       "tip": {
+        "title": "22M params · 7.7T tokens",
+        "line": "loss 3.096 · +0.766 over this budget’s best"
+       }
+      },
+      {
+       "x": 31622800.0,
+       "y": 2.948,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "32M"
+        },
+        {
+         "label": "D",
+         "value": "5.3T"
+        },
+        {
+         "label": "Loss",
+         "value": "2.948"
+        }
+       ],
+       "tip": {
+        "title": "32M params · 5.3T tokens",
+        "line": "loss 2.948 · +0.618 over this budget’s best"
+       }
+      },
+      {
+       "x": 46415900.0,
+       "y": 2.8206,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "46M"
+        },
+        {
+         "label": "D",
+         "value": "3.6T"
+        },
+        {
+         "label": "Loss",
+         "value": "2.821"
+        }
+       ],
+       "tip": {
+        "title": "46M params · 3.6T tokens",
+        "line": "loss 2.821 · +0.491 over this budget’s best"
+       }
+      },
+      {
+       "x": 68129200.0,
+       "y": 2.7119,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "68M"
+        },
+        {
+         "label": "D",
+         "value": "2.4T"
+        },
+        {
+         "label": "Loss",
+         "value": "2.712"
+        }
+       ],
+       "tip": {
+        "title": "68M params · 2.4T tokens",
+        "line": "loss 2.712 · +0.382 over this budget’s best"
+       }
+      },
+      {
+       "x": 100000000.0,
+       "y": 2.6198,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "100M"
+        },
+        {
+         "label": "D",
+         "value": "1.7T"
+        },
+        {
+         "label": "Loss",
+         "value": "2.620"
+        }
+       ],
+       "tip": {
+        "title": "100M params · 1.7T tokens",
+        "line": "loss 2.620 · +0.290 over this budget’s best"
+       }
+      },
+      {
+       "x": 146780000.0,
+       "y": 2.5427,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "147M"
+        },
+        {
+         "label": "D",
+         "value": "1.1T"
+        },
+        {
+         "label": "Loss",
+         "value": "2.543"
+        }
+       ],
+       "tip": {
+        "title": "147M params · 1.1T tokens",
+        "line": "loss 2.543 · +0.213 over this budget’s best"
+       }
+      },
+      {
+       "x": 215443000.0,
+       "y": 2.4792,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "215M"
+        },
+        {
+         "label": "D",
+         "value": "774B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.479"
+        }
+       ],
+       "tip": {
+        "title": "215M params · 774B tokens",
+        "line": "loss 2.479 · +0.149 over this budget’s best"
+       }
+      },
+      {
+       "x": 316228000.0,
+       "y": 2.428,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "316M"
+        },
+        {
+         "label": "D",
+         "value": "527B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.428"
+        }
+       ],
+       "tip": {
+        "title": "316M params · 527B tokens",
+        "line": "loss 2.428 · +0.098 over this budget’s best"
+       }
+      },
+      {
+       "x": 464159000.0,
+       "y": 2.3883,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "464M"
+        },
+        {
+         "label": "D",
+         "value": "359B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.388"
+        }
+       ],
+       "tip": {
+        "title": "464M params · 359B tokens",
+        "line": "loss 2.388 · +0.059 over this budget’s best"
+       }
+      },
+      {
+       "x": 681292000.0,
+       "y": 2.3592,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "681M"
+        },
+        {
+         "label": "D",
+         "value": "245B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.359"
+        }
+       ],
+       "tip": {
+        "title": "681M params · 245B tokens",
+        "line": "loss 2.359 · +0.029 over this budget’s best"
+       }
+      },
+      {
+       "x": 1000000000.0,
+       "y": 2.34,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "1.0B"
+        },
+        {
+         "label": "D",
+         "value": "167B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.340"
+        }
+       ],
+       "tip": {
+        "title": "1.0B params · 167B tokens",
+        "line": "loss 2.340 · +0.010 over this budget’s best"
+       }
+      },
+      {
+       "x": 1467800000.0,
+       "y": 2.3303,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "1.5B"
+        },
+        {
+         "label": "D",
+         "value": "114B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.330"
+        }
+       ],
+       "tip": {
+        "title": "1.5B params · 114B tokens",
+        "line": "loss 2.330 · +0.001 over this budget’s best"
+       }
+      },
+      {
+       "x": 2154430000.0,
+       "y": 2.3297,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "2.2B"
+        },
+        {
+         "label": "D",
+         "value": "77B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.330"
+        }
+       ],
+       "tip": {
+        "title": "2.2B params · 77B tokens",
+        "line": "loss 2.330 · compute-optimal at this budget"
+       }
+      },
+      {
+       "x": 3162280000.0,
+       "y": 2.338,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "3.2B"
+        },
+        {
+         "label": "D",
+         "value": "53B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.338"
+        }
+       ],
+       "tip": {
+        "title": "3.2B params · 53B tokens",
+        "line": "loss 2.338 · +0.008 over this budget’s best"
+       }
+      },
+      {
+       "x": 4641590000.0,
+       "y": 2.3551,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "4.6B"
+        },
+        {
+         "label": "D",
+         "value": "36B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.355"
+        }
+       ],
+       "tip": {
+        "title": "4.6B params · 36B tokens",
+        "line": "loss 2.355 · +0.025 over this budget’s best"
+       }
+      },
+      {
+       "x": 6812920000.0,
+       "y": 2.381,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "6.8B"
+        },
+        {
+         "label": "D",
+         "value": "24B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.381"
+        }
+       ],
+       "tip": {
+        "title": "6.8B params · 24B tokens",
+        "line": "loss 2.381 · +0.051 over this budget’s best"
+       }
+      },
+      {
+       "x": 10000000000.0,
+       "y": 2.416,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "10B"
+        },
+        {
+         "label": "D",
+         "value": "17B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.416"
+        }
+       ],
+       "tip": {
+        "title": "10B params · 17B tokens",
+        "line": "loss 2.416 · +0.086 over this budget’s best"
+       }
+      },
+      {
+       "x": 14678000000.0,
+       "y": 2.4602,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "15B"
+        },
+        {
+         "label": "D",
+         "value": "11B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.460"
+        }
+       ],
+       "tip": {
+        "title": "15B params · 11B tokens",
+        "line": "loss 2.460 · +0.130 over this budget’s best"
+       }
+      },
+      {
+       "x": 21544300000.0,
+       "y": 2.5141,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "22B"
+        },
+        {
+         "label": "D",
+         "value": "8B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.514"
+        }
+       ],
+       "tip": {
+        "title": "22B params · 8B tokens",
+        "line": "loss 2.514 · +0.184 over this budget’s best"
+       }
+      },
+      {
+       "x": 31622800000.0,
+       "y": 2.5782,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "32B"
+        },
+        {
+         "label": "D",
+         "value": "5B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.578"
+        }
+       ],
+       "tip": {
+        "title": "32B params · 5B tokens",
+        "line": "loss 2.578 · +0.248 over this budget’s best"
+       }
+      },
+      {
+       "x": 46415900000.0,
+       "y": 2.6531,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "46B"
+        },
+        {
+         "label": "D",
+         "value": "4B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.653"
+        }
+       ],
+       "tip": {
+        "title": "46B params · 4B tokens",
+        "line": "loss 2.653 · +0.323 over this budget’s best"
+       }
+      },
+      {
+       "x": 68129200000.0,
+       "y": 2.7397,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "68B"
+        },
+        {
+         "label": "D",
+         "value": "2B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.740"
+        }
+       ],
+       "tip": {
+        "title": "68B params · 2B tokens",
+        "line": "loss 2.740 · +0.410 over this budget’s best"
+       }
+      },
+      {
+       "x": 100000000000.0,
+       "y": 2.8389,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²¹ FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "100B"
+        },
+        {
+         "label": "D",
+         "value": "2B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.839"
+        }
+       ],
+       "tip": {
+        "title": "100B params · 2B tokens",
+        "line": "loss 2.839 · +0.509 over this budget’s best"
+       }
+      }
+     ]
+    },
+    {
+     "label": "10²²",
+     "points": [
+      {
+       "x": 10000000.0,
+       "y": 3.427,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "10M"
+        },
+        {
+         "label": "D",
+         "value": "166.7T"
+        },
+        {
+         "label": "Loss",
+         "value": "3.427"
+        }
+       ],
+       "tip": {
+        "title": "10M params · 166.7T tokens",
+        "line": "loss 3.427 · +1.288 over this budget’s best"
+       }
+      },
+      {
+       "x": 14678000.0,
+       "y": 3.2246,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "15M"
+        },
+        {
+         "label": "D",
+         "value": "113.5T"
+        },
+        {
+         "label": "Loss",
+         "value": "3.225"
+        }
+       ],
+       "tip": {
+        "title": "15M params · 113.5T tokens",
+        "line": "loss 3.225 · +1.086 over this budget’s best"
+       }
+      },
+      {
+       "x": 21544300.0,
+       "y": 3.0481,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "22M"
+        },
+        {
+         "label": "D",
+         "value": "77.4T"
+        },
+        {
+         "label": "Loss",
+         "value": "3.048"
+        }
+       ],
+       "tip": {
+        "title": "22M params · 77.4T tokens",
+        "line": "loss 3.048 · +0.909 over this budget’s best"
+       }
+      },
+      {
+       "x": 31622800.0,
+       "y": 2.8945,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "32M"
+        },
+        {
+         "label": "D",
+         "value": "52.7T"
+        },
+        {
+         "label": "Loss",
+         "value": "2.894"
+        }
+       ],
+       "tip": {
+        "title": "32M params · 52.7T tokens",
+        "line": "loss 2.894 · +0.756 over this budget’s best"
+       }
+      },
+      {
+       "x": 46415900.0,
+       "y": 2.7611,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "46M"
+        },
+        {
+         "label": "D",
+         "value": "35.9T"
+        },
+        {
+         "label": "Loss",
+         "value": "2.761"
+        }
+       ],
+       "tip": {
+        "title": "46M params · 35.9T tokens",
+        "line": "loss 2.761 · +0.622 over this budget’s best"
+       }
+      },
+      {
+       "x": 68129200.0,
+       "y": 2.6455,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "68M"
+        },
+        {
+         "label": "D",
+         "value": "24.5T"
+        },
+        {
+         "label": "Loss",
+         "value": "2.646"
+        }
+       ],
+       "tip": {
+        "title": "68M params · 24.5T tokens",
+        "line": "loss 2.646 · +0.507 over this budget’s best"
+       }
+      },
+      {
+       "x": 100000000.0,
+       "y": 2.5459,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "100M"
+        },
+        {
+         "label": "D",
+         "value": "16.7T"
+        },
+        {
+         "label": "Loss",
+         "value": "2.546"
+        }
+       ],
+       "tip": {
+        "title": "100M params · 16.7T tokens",
+        "line": "loss 2.546 · +0.407 over this budget’s best"
+       }
+      },
+      {
+       "x": 146780000.0,
+       "y": 2.4605,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "147M"
+        },
+        {
+         "label": "D",
+         "value": "11.4T"
+        },
+        {
+         "label": "Loss",
+         "value": "2.460"
+        }
+       ],
+       "tip": {
+        "title": "147M params · 11.4T tokens",
+        "line": "loss 2.460 · +0.322 over this budget’s best"
+       }
+      },
+      {
+       "x": 215443000.0,
+       "y": 2.3876,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "215M"
+        },
+        {
+         "label": "D",
+         "value": "7.7T"
+        },
+        {
+         "label": "Loss",
+         "value": "2.388"
+        }
+       ],
+       "tip": {
+        "title": "215M params · 7.7T tokens",
+        "line": "loss 2.388 · +0.249 over this budget’s best"
+       }
+      },
+      {
+       "x": 316228000.0,
+       "y": 2.3261,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "316M"
+        },
+        {
+         "label": "D",
+         "value": "5.3T"
+        },
+        {
+         "label": "Loss",
+         "value": "2.326"
+        }
+       ],
+       "tip": {
+        "title": "316M params · 5.3T tokens",
+        "line": "loss 2.326 · +0.187 over this budget’s best"
+       }
+      },
+      {
+       "x": 464159000.0,
+       "y": 2.2748,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "464M"
+        },
+        {
+         "label": "D",
+         "value": "3.6T"
+        },
+        {
+         "label": "Loss",
+         "value": "2.275"
+        }
+       ],
+       "tip": {
+        "title": "464M params · 3.6T tokens",
+        "line": "loss 2.275 · +0.136 over this budget’s best"
+       }
+      },
+      {
+       "x": 681292000.0,
+       "y": 2.2328,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "681M"
+        },
+        {
+         "label": "D",
+         "value": "2.4T"
+        },
+        {
+         "label": "Loss",
+         "value": "2.233"
+        }
+       ],
+       "tip": {
+        "title": "681M params · 2.4T tokens",
+        "line": "loss 2.233 · +0.094 over this budget’s best"
+       }
+      },
+      {
+       "x": 1000000000.0,
+       "y": 2.1993,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "1.0B"
+        },
+        {
+         "label": "D",
+         "value": "1.7T"
+        },
+        {
+         "label": "Loss",
+         "value": "2.199"
+        }
+       ],
+       "tip": {
+        "title": "1.0B params · 1.7T tokens",
+        "line": "loss 2.199 · +0.060 over this budget’s best"
+       }
+      },
+      {
+       "x": 1467800000.0,
+       "y": 2.1737,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "1.5B"
+        },
+        {
+         "label": "D",
+         "value": "1.1T"
+        },
+        {
+         "label": "Loss",
+         "value": "2.174"
+        }
+       ],
+       "tip": {
+        "title": "1.5B params · 1.1T tokens",
+        "line": "loss 2.174 · +0.035 over this budget’s best"
+       }
+      },
+      {
+       "x": 2154430000.0,
+       "y": 2.1553,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "2.2B"
+        },
+        {
+         "label": "D",
+         "value": "774B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.155"
+        }
+       ],
+       "tip": {
+        "title": "2.2B params · 774B tokens",
+        "line": "loss 2.155 · +0.016 over this budget’s best"
+       }
+      },
+      {
+       "x": 3162280000.0,
+       "y": 2.1438,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "3.2B"
+        },
+        {
+         "label": "D",
+         "value": "527B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.144"
+        }
+       ],
+       "tip": {
+        "title": "3.2B params · 527B tokens",
+        "line": "loss 2.144 · +0.005 over this budget’s best"
+       }
+      },
+      {
+       "x": 4641590000.0,
+       "y": 2.1389,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "4.6B"
+        },
+        {
+         "label": "D",
+         "value": "359B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.139"
+        }
+       ],
+       "tip": {
+        "title": "4.6B params · 359B tokens",
+        "line": "loss 2.139 · compute-optimal at this budget"
+       }
+      },
+      {
+       "x": 6812920000.0,
+       "y": 2.1403,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "6.8B"
+        },
+        {
+         "label": "D",
+         "value": "245B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.140"
+        }
+       ],
+       "tip": {
+        "title": "6.8B params · 245B tokens",
+        "line": "loss 2.140 · +0.001 over this budget’s best"
+       }
+      },
+      {
+       "x": 10000000000.0,
+       "y": 2.1479,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "10B"
+        },
+        {
+         "label": "D",
+         "value": "167B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.148"
+        }
+       ],
+       "tip": {
+        "title": "10B params · 167B tokens",
+        "line": "loss 2.148 · +0.009 over this budget’s best"
+       }
+      },
+      {
+       "x": 14678000000.0,
+       "y": 2.1617,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "15B"
+        },
+        {
+         "label": "D",
+         "value": "114B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.162"
+        }
+       ],
+       "tip": {
+        "title": "15B params · 114B tokens",
+        "line": "loss 2.162 · +0.023 over this budget’s best"
+       }
+      },
+      {
+       "x": 21544300000.0,
+       "y": 2.1817,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "22B"
+        },
+        {
+         "label": "D",
+         "value": "77B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.182"
+        }
+       ],
+       "tip": {
+        "title": "22B params · 77B tokens",
+        "line": "loss 2.182 · +0.043 over this budget’s best"
+       }
+      },
+      {
+       "x": 31622800000.0,
+       "y": 2.2081,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "32B"
+        },
+        {
+         "label": "D",
+         "value": "53B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.208"
+        }
+       ],
+       "tip": {
+        "title": "32B params · 53B tokens",
+        "line": "loss 2.208 · +0.069 over this budget’s best"
+       }
+      },
+      {
+       "x": 46415900000.0,
+       "y": 2.2411,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "46B"
+        },
+        {
+         "label": "D",
+         "value": "36B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.241"
+        }
+       ],
+       "tip": {
+        "title": "46B params · 36B tokens",
+        "line": "loss 2.241 · +0.102 over this budget’s best"
+       }
+      },
+      {
+       "x": 68129200000.0,
+       "y": 2.2809,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "68B"
+        },
+        {
+         "label": "D",
+         "value": "24B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.281"
+        }
+       ],
+       "tip": {
+        "title": "68B params · 24B tokens",
+        "line": "loss 2.281 · +0.142 over this budget’s best"
+       }
+      },
+      {
+       "x": 100000000000.0,
+       "y": 2.3281,
+       "read": [
+        {
+         "label": "C",
+         "value": "10²² FLOPs"
+        },
+        {
+         "label": "N",
+         "value": "100B"
+        },
+        {
+         "label": "D",
+         "value": "17B"
+        },
+        {
+         "label": "Loss",
+         "value": "2.328"
+        }
+       ],
+       "tip": {
+        "title": "100B params · 17B tokens",
+        "line": "loss 2.328 · +0.189 over this budget’s best"
+       }
+      }
+     ]
+    }
+   ],
+   "minimum": true,
+   "frontier": true,
+   "hint": "Hover a curve for N, D and loss",
+   "key": [
+    {
+     "label": "One budget C: loss across model sizes",
+     "mark": "line"
+    },
+    {
+     "label": "Each budget’s minimum: the compute-optimal size",
+     "mark": "dash"
+    }
+   ]
+  }
+ ]
+}

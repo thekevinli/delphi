@@ -1,0 +1,123 @@
+{
+  "name": "delphi-macos",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A research reading workspace with a local library.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "build": "bash build/frontend.sh && bash build/python-runtime.sh && bash build/mcp-bridge.sh && bash build/main.sh && bash build/notices.sh",
+    "build:frontend": "bash build/frontend.sh",
+    "build:python": "bash build/python-runtime.sh",
+    "build:main": "bash build/main.sh",
+    "build:notices": "bash build/notices.sh",
+    "start": "bash build/frontend.sh && bash build/main.sh && electron .",
+    "dist": "npm run build && bash build/check-backend-runtime.sh --release && electron-builder --mac",
+    "check": "bash check.sh",
+    "test": "node --test --experimental-strip-types tests/*.test.mts",
+    "typecheck": "tsc --noEmit",
+    "smoke:packaged": "node build/smoke-packaged.mjs",
+    "build:mcp": "bash build/mcp-bridge.sh"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.19",
+    "electron": "^44.2.0",
+    "electron-builder": "^26.15.3",
+    "esbuild": "^0.28.2",
+    "typescript": "5.9.3"
+  },
+  "main": ".delphi-build/app/main.js",
+  "productName": "Delphi",
+  "build": {
+    "appId": "com.delphiml.desktop",
+    "electronLanguages": ["en"],
+    "productName": "Delphi",
+    "copyright": "Copyright 2026 Kevin Li",
+    "directories": {
+      "output": ".delphi-build/release",
+      "buildResources": "build"
+    },
+    "files": [
+      ".delphi-build/app/**/*",
+      "onboarding/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": ".delphi-build/python",
+        "to": "python"
+      },
+      {
+        "from": ".delphi-build/dist",
+        "to": "dist"
+      },
+      {
+        "from": ".delphi-build/artifact-validator",
+        "to": "artifact-validator"
+      },
+      {
+        "from": ".delphi-build/app/preload.cjs",
+        "to": "preload.cjs"
+      },
+      {
+        "from": "onboarding",
+        "to": "onboarding"
+      },
+      {
+        "from": "frontend/public/brand",
+        "to": "frontend/public/brand",
+        "filter": ["chatgpt.png", "claude.png"]
+      },
+      {
+        "from": "frontend/public/fonts",
+        "to": "frontend/public/fonts",
+        "filter": [
+          "plus-jakarta-sans-variable.woff2",
+          "plus-jakarta-sans-OFL.txt",
+          "bricolage-grotesque-latin.woff2",
+          "bricolage-grotesque-OFL.txt"
+        ]
+      },
+      {
+        "from": ".delphi-build/notices",
+        "to": "."
+      },
+      {
+        "from": ".delphi-build/native",
+        "to": "native",
+        "filter": [
+          "delphi-mcp"
+        ]
+      }
+    ],
+    "asar": true,
+    "mac": {
+      "icon": "build/Delphi.icns",
+      "category": "public.app-category.productivity",
+      "target": [
+        {
+          "target": "dir",
+          "arch": [
+            "arm64"
+          ]
+        },
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ],
+      "identity": "-",
+      "hardenedRuntime": false
+    }
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "1.3.0",
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "zod": "4.5.4"
+  }
+}

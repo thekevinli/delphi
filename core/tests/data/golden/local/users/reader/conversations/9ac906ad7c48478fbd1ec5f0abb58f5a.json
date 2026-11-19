@@ -1,0 +1,133 @@
+{
+  "memoryFiledThrough": "golden_ask_memory",
+  "id": "9ac906ad7c48478fbd1ec5f0abb58f5a",
+  "kind": "knowledge_base_chat",
+  "projectId": null,
+  "paperId": null,
+  "title": "What have I read about prefix reuse?",
+  "createdAt": "2026-10-23T06:57:29.808773+00:00",
+  "lastEngagedAt": "2026-10-23T06:57:29.891634+00:00",
+  "messages": [
+    {
+      "role": "user",
+      "content": "What have I read about prefix reuse?",
+      "selectedText": null,
+      "referencedPapers": [],
+      "referencedImages": [],
+      "createdAt": "2026-10-23T06:57:29.811337+00:00",
+      "model": "gpt-6.1-sol",
+      "reasoningEffort": "medium",
+      "requestId": "golden_ask_memory"
+    },
+    {
+      "role": "assistant",
+      "content": "Prefix caching reuses the unchanged token prefix. A different question suffix leaves that prefix reusable. Keep source ordering stable and measure hit rate separately from latency. [[shared-idea-g7]]",
+      "createdAt": "2026-10-23T06:57:29.830782+00:00",
+      "model": "gpt-6.1-sol",
+      "reasoningEffort": "medium",
+      "requestId": "golden_ask_memory",
+      "trace": [
+        {
+          "offset": 0,
+          "startedAt": 0,
+          "entries": [
+            {
+              "kind": "thought",
+              "at": 2,
+              "text": "I will check the stored evidence and distinguish reuse from latency."
+            },
+            {
+              "kind": "tool",
+              "at": 3,
+              "tool": "open_memory",
+              "args": {},
+              "ms": 2,
+              "ok": true,
+              "results": [
+                {
+                  "slug": "shared-idea-g7",
+                  "title": "Shared idea g7",
+                  "kind": "concept"
+                }
+              ]
+            },
+            {
+              "kind": "thought",
+              "at": 17,
+              "text": "I will check the stored evidence and distinguish reuse from latency."
+            }
+          ],
+          "context": {
+            "start": {
+              "kind": "question"
+            },
+            "index": {
+              "pages": 6,
+              "documents": 3,
+              "projects": 1,
+              "chats": 2
+            }
+          },
+          "endedAt": 18
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Plan an experiment that measures prefix reuse.",
+      "selectedText": null,
+      "referencedPapers": [],
+      "referencedImages": [],
+      "createdAt": "2026-10-23T06:57:29.835728+00:00",
+      "model": "gpt-6.1-sol",
+      "reasoningEffort": "medium",
+      "requestId": "golden_ask_plan"
+    },
+    {
+      "role": "assistant",
+      "content": "Saved [Measure prefix cache reuse](/api/plans/d3491ca9dd3c48aaa4f2949786927d9e/view).\n\nThis plan is ready for your coding agent. Review its Table 1 and Setup before implementation.",
+      "createdAt": "2026-10-23T06:57:29.891634+00:00",
+      "model": "gpt-6.1-sol",
+      "reasoningEffort": "medium",
+      "requestId": "golden_ask_plan",
+      "plan": {
+        "id": "d3491ca9dd3c48aaa4f2949786927d9e",
+        "title": "Measure prefix cache reuse",
+        "revision": 1,
+        "createdAt": "2026-10-23T06:57:29.890753+00:00",
+        "archived": false,
+        "url": "/api/plans/d3491ca9dd3c48aaa4f2949786927d9e/view"
+      },
+      "trace": [
+        {
+          "offset": 0,
+          "startedAt": 0,
+          "entries": [
+            {
+              "kind": "thought",
+              "at": 51,
+              "text": "I will check the stored evidence and distinguish reuse from latency."
+            }
+          ],
+          "context": {
+            "start": {
+              "kind": "question"
+            },
+            "index": {
+              "pages": 6,
+              "documents": 3,
+              "projects": 1,
+              "chats": 2
+            }
+          },
+          "endedAt": 52
+        }
+      ]
+    }
+  ],
+  "generation": 0,
+  "threadKey": "conversation-9ac906ad7c48478fbd1ec5f0abb58f5a-0",
+  "creationKey": "golden_memory_chat",
+  "lastChatModel": "gpt-6.1-sol",
+  "personaId": "mentor"
+}

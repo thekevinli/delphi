@@ -1,0 +1,12 @@
+{
+  "slug": "cache-research",
+  "revision": 1,
+  "title": "Cache research",
+  "summary": "How the pages of this domain connect.",
+  "body": "## How these pages connect\n\n[[cache-notes]] and [[shared-idea-study-g7-b]] and [[shared-idea-study-g7-a]] report on the same question, and [[prefix-reuse-goldenpaperc]], [[shared-idea-g7]] is where what they share is explained.\n\n## Reading paths\n\nStart with [[prefix-reuse-goldenpaperc]], then read the sources against it.",
+  "citations": [],
+  "createdAt": "2026-10-23T06:57:29.677396+00:00",
+  "eventId": "3417079716e74f0ca3fb1d82f906e728",
+  "trigger": "domain",
+  "note": "Composed from the domain's members."
+}

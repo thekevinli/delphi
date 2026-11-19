@@ -1,0 +1,90 @@
+{
+  "memoryFiledThrough": "golden_ask_document",
+  "id": "2e4ee33a26ec426b813d4c67dddc50c1",
+  "kind": "document_chat",
+  "projectId": "5fdf2b5c144f",
+  "paperId": "goldenpaperc",
+  "title": "Worth keeping: does the prefix survive a new question?",
+  "createdAt": "2026-10-23T06:57:29.771936+00:00",
+  "lastEngagedAt": "2026-10-23T06:57:29.803739+00:00",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Worth keeping: does the prefix survive a new question?",
+      "selectedText": null,
+      "referencedPapers": [],
+      "referencedImages": [],
+      "createdAt": "2026-10-23T06:57:29.775681+00:00",
+      "model": "gpt-6.1-sol",
+      "reasoningEffort": "medium",
+      "requestId": "golden_ask_document"
+    },
+    {
+      "role": "assistant",
+      "content": "Prefix caching reuses the unchanged token prefix. A different question suffix leaves that prefix reusable. Keep source ordering stable and measure hit rate separately from latency. [[shared-idea-g7]]",
+      "createdAt": "2026-10-23T06:57:29.803739+00:00",
+      "model": "gpt-6.1-sol",
+      "reasoningEffort": "medium",
+      "requestId": "golden_ask_document",
+      "trace": [
+        {
+          "offset": 0,
+          "startedAt": 0,
+          "entries": [
+            {
+              "kind": "thought",
+              "at": 9,
+              "text": "I will check the stored evidence and distinguish reuse from latency."
+            },
+            {
+              "kind": "tool",
+              "at": 10,
+              "tool": "open_memory",
+              "args": {},
+              "ms": 2,
+              "ok": true,
+              "results": [
+                {
+                  "slug": "shared-idea-g7",
+                  "title": "Shared idea g7",
+                  "kind": "concept"
+                }
+              ]
+            },
+            {
+              "kind": "thought",
+              "at": 24,
+              "text": "I will check the stored evidence and distinguish reuse from latency."
+            }
+          ],
+          "context": {
+            "start": {
+              "kind": "document",
+              "title": "Cache Notes",
+              "paperId": "goldenpaperc"
+            },
+            "index": {
+              "pages": 6,
+              "documents": 3,
+              "projects": 1
+            },
+            "given": [
+              {
+                "slug": "shared-idea-g7",
+                "title": "Shared idea g7",
+                "kind": "concept"
+              }
+            ],
+            "memoryMs": 7
+          },
+          "endedAt": 25
+        }
+      ]
+    }
+  ],
+  "generation": 0,
+  "threadKey": "conversation-2e4ee33a26ec426b813d4c67dddc50c1-0",
+  "creationKey": "golden_document_chat",
+  "lastChatModel": "gpt-6.1-sol",
+  "personaId": "mentor"
+}

@@ -1,0 +1,13 @@
+[
+  {
+    "id": "3e9965bd5856",
+    "highlightId": "48022fd0da31",
+    "page": 2,
+    "anchorY": 0.2,
+    "quotedText": "Stable prefix: 120 ms. Shuffled prefix: 240 ms.",
+    "body": "One comparison, twenty requests: too few to call it a speedup.",
+    "createdAt": "2026-10-23T06:57:29.729062+00:00",
+    "updatedAt": "2026-10-23T06:57:29.729062+00:00",
+    "filedAt": "2026-10-23T06:57:29.980405+00:00"
+  }
+]
